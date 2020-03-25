@@ -16,8 +16,8 @@ namespace Utilities.Mapper
             v2Direction = value2Right > value2Left;
             reverseMap = IsSameDirection();
 
-            Range1 = ValueInterval.CloseClose(Math.Max(value1Right, value1Left), Math.Min(value1Right, value1Left));
-            Range2 = ValueInterval.CloseClose(Math.Max(value2Right, value2Left), Math.Min(value2Right, value2Left));
+            Range1 = ValueInterval.CloseClose(Math.Min(value1Right, value1Left), Math.Max(value1Right, value1Left));
+            Range2 = ValueInterval.CloseClose(Math.Min(value2Right, value2Left), Math.Max(value2Right, value2Left));
             CalculateRatos();
         }
 
@@ -31,7 +31,7 @@ namespace Utilities.Mapper
             Value1Right = right;
             v1Direction = right > left;
             reverseMap = IsSameDirection();
-            Range1 = ValueInterval.CloseClose(Math.Max(right, left), Math.Min(right, left));
+            Range1 = ValueInterval.CloseClose(Math.Min(right, left), Math.Max(right, left));
             CalculateRatos();
         }
         private void AssertValidRange(double left, double right)
@@ -47,7 +47,7 @@ namespace Utilities.Mapper
             Value2Right = right;
             v2Direction = right > left;
             reverseMap = IsSameDirection();
-            Range2 = ValueInterval.CloseClose(Math.Max(right, left), Math.Min(right, left));
+            Range2 = ValueInterval.CloseClose(Math.Min(right, left), Math.Max(right, left));
             CalculateRatos();
         }
         private bool IsSameDirection()

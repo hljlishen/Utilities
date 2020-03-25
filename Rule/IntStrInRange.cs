@@ -10,7 +10,7 @@ namespace Utilities.Rules
             this.interval = interval;
         }
 
-        public IntStrInRange(int max, int min) : this(ValueInterval.CloseClose(max, min))
+        public IntStrInRange(int min, int max) : this(ValueInterval.CloseClose(min, max))
         {
 
         }

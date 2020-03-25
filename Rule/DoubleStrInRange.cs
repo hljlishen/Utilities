@@ -9,7 +9,7 @@ namespace Utilities.Rules
         {
             this.interval = interval;
         }
-        public DoubleStrInRange(double max, double min) : this(ValueInterval.CloseClose(max, min))
+        public DoubleStrInRange(double min, double max) : this(ValueInterval.CloseClose(min, max))
         {
 
         }

@@ -5,7 +5,7 @@ namespace Utilities.Rules
     public class LetterLengthRule : StringRule
     {
         private uint max, min;
-        public LetterLengthRule(uint maxLength, uint minLength) : base("")
+        public LetterLengthRule(uint minLength, uint maxLength) : base("")
         {
             max = maxLength;
             min = minLength;

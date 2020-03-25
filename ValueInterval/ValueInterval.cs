@@ -11,7 +11,7 @@ namespace Utilities.ValueIntervals
     }
     public abstract class ValueInterval
     {
-        protected ValueInterval(double max, double min, RangeType type)
+        protected ValueInterval(double min, double max, RangeType type)
         {
             if (max < min)
                 throw new MaxNotBiggerThanMin($"最大值{max}不大于最小值{min}");
@@ -38,10 +38,10 @@ namespace Utilities.ValueIntervals
             return NumericDistance(Min, value);
         }
         public abstract bool IsInRange(double value);
-        public static ValueInterval OpenOpen(double max = 1, double min = 0, bool allowOutRangeMap = true) => new OpenOpenInterval() { Max = max, Min = min, Type = RangeType.OpenOpen, AllowOutRangeMap = allowOutRangeMap };
-        public static ValueInterval OpenClose(double max = 1, double min = 0, bool allowOutRangeMap = true) => new OpenCloseInterval() { Max = max, Min = min, Type = RangeType.OpenClose, AllowOutRangeMap = allowOutRangeMap };
-        public static ValueInterval CloseClose(double max = 1, double min = 0, bool allowOutRangeMap = true) => new CloseCloseInterval() { Max = max, Min = min, Type = RangeType.CloseClose, AllowOutRangeMap = allowOutRangeMap };
-        public static ValueInterval CloseOpen(double max = 1, double min = 0, bool allowOutRangeMap = true) => new CloseOpenInterval() { Max = max, Min = min, Type = RangeType.CloseOpen, AllowOutRangeMap = allowOutRangeMap };
+        public static ValueInterval OpenOpen(double min = 0, double max = 1, bool allowOutRangeMap = true) => new OpenOpenInterval() { Max = max, Min = min, Type = RangeType.OpenOpen, AllowOutRangeMap = allowOutRangeMap };
+        public static ValueInterval OpenClose(double min = 0, double max = 1, bool allowOutRangeMap = true) => new OpenCloseInterval() { Max = max, Min = min, Type = RangeType.OpenClose, AllowOutRangeMap = allowOutRangeMap };
+        public static ValueInterval CloseClose(double min = 0, double max = 1, bool allowOutRangeMap = true) => new CloseCloseInterval() { Max = max, Min = min, Type = RangeType.CloseClose, AllowOutRangeMap = allowOutRangeMap };
+        public static ValueInterval CloseOpen(double min = 0, double max = 1, bool allowOutRangeMap = true) => new CloseOpenInterval() { Max = max, Min = min, Type = RangeType.CloseOpen, AllowOutRangeMap = allowOutRangeMap };
     }
 
     class OpenOpenInterval : ValueInterval
