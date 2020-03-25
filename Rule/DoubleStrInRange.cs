@@ -5,7 +5,7 @@ namespace Utilities.Rules
     public class DoubleStrInRange : StringRule
     {
         private ValueInterval interval;
-        public DoubleStrInRange(ValueInterval interval) : base(@"^[0-9]*\.?[0-9]+")
+        public DoubleStrInRange(ValueInterval interval) : base(@"^[+-]*[0-9]+(\.[0-9]{1,2})?$")
         {
             this.interval = interval;
         }
