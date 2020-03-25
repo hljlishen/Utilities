@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BCE36124-179E-45A2-8B0A-D4DB9597277B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Utilities</RootNamespace>
+    <AssemblyName>Utilities</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>C:\Users\JYTEK\Documents\visual studio 2015\Projects\Simulator\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>C:\Users\JYTEK\Documents\visual studio 2015\Projects\Simulator\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Unity.Abstractions, Version=5.11.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>C:\Users\JYTEK\Documents\visual studio 2015\Projects\Simulator\packages\Unity.Abstractions.5.11.4\lib\net47\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.11.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>C:\Users\JYTEK\Documents\visual studio 2015\Projects\Simulator\packages\Unity.Container.5.11.5\lib\net47\Unity.Container.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>C:\Users\JYTEK\Documents\visual studio 2015\Projects\Simulator\packages\Unity.Interception.5.11.1\lib\net47\Unity.Interception.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IniBind\AttributeInterception\AttributeStrategy.cs" />
+    <Compile Include="IniBind\AttributeInterception\IniKeyAttribute.cs" />
+    <Compile Include="IniBind\AttributeInterception\NoAttributeAppliedException.cs" />
+    <Compile Include="IniBind\BindIniBehavior.cs" />
+    <Compile Include="IniBind\BindStrategy.cs" />
+    <Compile Include="IniBind\IniFileObjectFactory.cs" />
+    <Compile Include="IniBind\IniFileOperator.cs" />
+    <Compile Include="IniBind\InterfaceInterception\IIniBindInterface.cs" />
+    <Compile Include="IniBind\InterfaceInterception\InterfaceStrategy.cs" />
+    <Compile Include="IniBind\InterfaceInterception\NotIIniBindInterfaceInstanceException.cs" />
+    <Compile Include="InputValidation\TextBoxValueDoesntMatchRuleException.cs" />
+    <Compile Include="Rule\AndRule.cs" />
+    <Compile Include="Rule\CompositeRule.cs" />
+    <Compile Include="Rule\DoubleStrInRange.cs" />
+    <Compile Include="InputValidation\InputValidator.cs" />
+    <Compile Include="Rule\IntStrInRange.cs" />
+    <Compile Include="Rule\IRule.cs" />
+    <Compile Include="Rule\LetterLengthRule.cs" />
+    <Compile Include="Rule\OrRule.cs" />
+    <Compile Include="Rule\StringRule.cs" />
+    <Compile Include="Mapper\IMapperDecorator.cs" />
+    <Compile Include="Mapper\IScreenToCoordinateMapper.cs" />
+    <Compile Include="Mapper\MapperFactory.cs" />
+    <Compile Include="ValueInterval\MaxNotBiggerThanMin.cs" />
+    <Compile Include="Mapper\ScreenToCoordinateMapper.cs" />
+    <Compile Include="Mapper\SquaredScreenRectDecorator.cs" />
+    <Compile Include="Mapper\ValueMapper.cs" />
+    <Compile Include="ValueInterval\ValueNotInRange.cs" />
+    <Compile Include="ValueInterval\ValueInterval.cs" />
+    <Compile Include="Functions\Functions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
