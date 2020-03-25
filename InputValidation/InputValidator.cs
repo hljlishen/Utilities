@@ -12,18 +12,24 @@ namespace Utilities.InputValidation
         public ErrorProvider errorProvider = new ErrorProvider() {BlinkStyle = ErrorBlinkStyle.NeverBlink };
         public event Action<Control, StringRule> UnvalidatedInput;
         public Control CueControl { get; set; }
-        public void AddValidation(Control tb, StringRule rule)
+        public void AddValidation(Control c, StringRule rule)
         {
-            if (ruleMap.ContainsKey(tb))
+            if (ruleMap.ContainsKey(c))
                 return;
 
-            tb.TextChanged += Tb_TextChanged;
-            ruleMap.Add(tb, rule);
+            c.TextChanged += Tb_TextChanged;
+            ruleMap.Add(c, rule);
         }
 
-        private void Tb_TextChanged(object sender, System.EventArgs e)
+        public void RemoveValidation(Control c)
         {
-            TextBox tb = sender as TextBox;
+            if (ruleMap.ContainsKey(c))
+                ruleMap.Remove(c);
+        }
+
+        private void Tb_TextChanged(object sender, EventArgs e)
+        {
+            var tb = sender as Control;
             StringRule rule = ruleMap[tb];
 
             if (rule.Pass(tb.Text))
