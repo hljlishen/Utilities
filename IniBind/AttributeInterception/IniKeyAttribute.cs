@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IniBind.AttributeInterception
+namespace Utilities.IniBind.AttributeInterception
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class IniKeyAttribute : Attribute

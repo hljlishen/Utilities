@@ -2,7 +2,7 @@
 using System.Reflection;
 using Unity.Interception.PolicyInjection.Pipeline;
 
-namespace IniBind.InterfaceInterception
+namespace Utilities.IniBind.InterfaceInterception
 {
     class InterfaceStrategy : BindStrategy
     {

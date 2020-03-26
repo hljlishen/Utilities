@@ -23,7 +23,6 @@ namespace Utilities.Mapper
         public PointF ScreenCenter => Mapper.ScreenCenter;
         public virtual double ScreenWidth => Mapper.ScreenWidth;
         public virtual double ScreenHeight => Mapper.ScreenHeight;
-
         public virtual PointF GetCoordinateLocation(double screenX, double screenY) => Mapper.GetCoordinateLocation(screenX, screenY);
         public virtual double GetCoordinateX(double screenX) => Mapper.GetCoordinateX(screenX);
         public virtual double GetCoordinateY(double screenY) => Mapper.GetCoordinateY(screenY);

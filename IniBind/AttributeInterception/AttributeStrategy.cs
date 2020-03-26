@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Unity.Interception.PolicyInjection.Pipeline;
 
-namespace IniBind.AttributeInterception
+namespace Utilities.IniBind.AttributeInterception
 {
     class AttributeStrategy : BindStrategy
     {

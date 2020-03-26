@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IniBind.InterfaceInterception
+namespace Utilities.IniBind.InterfaceInterception
 {
     [Serializable]
     internal class NotIIniBindInterfaceInstanceException : Exception

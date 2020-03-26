@@ -1,4 +1,4 @@
-﻿namespace IniBind.InterfaceInterception
+﻿namespace Utilities.IniBind.InterfaceInterception
 {
     public interface IIniBindInterface
     {

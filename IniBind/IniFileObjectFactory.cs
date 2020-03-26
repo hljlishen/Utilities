@@ -2,11 +2,11 @@
 using Unity.Interception;
 using Unity.Interception.ContainerIntegration;
 using Unity.Interception.Interceptors.TypeInterceptors.VirtualMethodInterception;
-using IniBind.InterfaceInterception;
-using IniBind.AttributeInterception;
 using Unity.Lifetime;
+using Utilities.IniBind.InterfaceInterception;
+using Utilities.IniBind.AttributeInterception;
 
-namespace IniBind
+namespace Utilities.IniBind
 {
     public class IniFileObjectFactory<T>
     {

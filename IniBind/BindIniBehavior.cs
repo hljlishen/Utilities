@@ -5,7 +5,7 @@ using System.Reflection;
 using Unity.Interception.InterceptionBehaviors;
 using Unity.Interception.PolicyInjection.Pipeline;
 
-namespace IniBind
+namespace Utilities.IniBind
 {
     public class BindIniBehavior : IInterceptionBehavior
     {

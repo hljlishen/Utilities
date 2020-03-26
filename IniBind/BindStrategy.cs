@@ -3,7 +3,7 @@ using System.Reflection;
 using Unity.Interception.PolicyInjection.Pipeline;
 using System.Linq;
 
-namespace IniBind
+namespace Utilities.IniBind
 {
     public abstract class BindStrategy
     {

@@ -54,16 +54,18 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Unity.Abstractions, Version=5.11.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>C:\Users\JYTEK\Documents\visual studio 2015\Projects\Simulator\packages\Unity.Abstractions.5.11.4\lib\net47\Unity.Abstractions.dll</HintPath>
+      <HintPath>..\NewRadar\packages\Unity.5.11.4\lib\net47\Unity.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Container, Version=5.11.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>C:\Users\JYTEK\Documents\visual studio 2015\Projects\Simulator\packages\Unity.Container.5.11.5\lib\net47\Unity.Container.dll</HintPath>
+      <HintPath>..\NewRadar\packages\Unity.5.11.4\lib\net47\Unity.Container.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Interception, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>C:\Users\JYTEK\Documents\visual studio 2015\Projects\Simulator\packages\Unity.Interception.5.11.1\lib\net47\Unity.Interception.dll</HintPath>
+      <HintPath>..\NewRadar\packages\Unity.Interception.5.11.1\lib\net47\Unity.Interception.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Coordinates\PolarCoordinate.cs" />
+    <Compile Include="Coordinates\RectangularCoordinate.cs" />
     <Compile Include="IniBind\AttributeInterception\AttributeStrategy.cs" />
     <Compile Include="IniBind\AttributeInterception\IniKeyAttribute.cs" />
     <Compile Include="IniBind\AttributeInterception\NoAttributeAppliedException.cs" />

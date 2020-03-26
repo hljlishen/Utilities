@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace IniBind.AttributeInterception
+namespace Utilities.IniBind.AttributeInterception
 {
     [Serializable]
     public class NoAttributeAppliedException : Exception
