@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utilities.Guards
 {
@@ -12,6 +8,14 @@ namespace Utilities.Guards
         {
             if (obj == null)
                 throw new ArgumentNullException();
+        }
+
+        public static T ConvertToType<T>(object o) where T:class
+        {
+            var ret = o as T;
+            if (ret == null)
+                throw new Exception($"参数类型错误，需要{typeof(T)}类型的参数");
+            return ret;
         }
     }
 }

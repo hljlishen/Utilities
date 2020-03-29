@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
+    <Compile Include="Display\DynamicElement.cs" />
     <Compile Include="Display\Layer.cs" />
     <Compile Include="Display\SmartElement.cs" />
     <Compile Include="Display\ThreadSafeProxy.cs" />

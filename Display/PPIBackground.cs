@@ -46,10 +46,5 @@ namespace Utilities.Display
             graphics.DrawLine(p, new Point((int)mapper.ScreenLeft, (int)center.Y), new Point((int)mapper.ScreenRight, (int)center.Y));
             graphics.DrawLine(p, new Point((int)center.X, (int)mapper.ScreenTop), new Point((int)center.X, (int)mapper.ScreenBottom));
         }
-
-        protected override void DoUpdate(object data)
-        {
-            
-        }
     }
 }

@@ -8,7 +8,7 @@ using Utilities.Tools;
 
 namespace Utilities.Display
 {
-    public class TacanStateElement : ThreadSafeElement
+    public class TacanStateElement : DynamicElement<PolarCoordinate>
     {
         public PointF screenLocation;
         public PointF CoordinateLocation;
@@ -87,9 +87,10 @@ namespace Utilities.Display
 
         protected override void ProcessMouseUp(object sender, MouseEventArgs e, Displayer displayer) => mouseDown = false;
 
-        protected override void DoUpdate(object data)
+        protected override void DoUpdate(PolarCoordinate data)
         {
-            
+            pLoc = data;
+            rLoc = pLoc.Rectangular;
         }
     }
 }

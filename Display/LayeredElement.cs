@@ -69,10 +69,5 @@ namespace Utilities.Display
                 DrawLayer(key, g, mapper);
             }
         }
-
-        protected override void DoUpdate(object data)
-        {
-            
-        }
     }
 }

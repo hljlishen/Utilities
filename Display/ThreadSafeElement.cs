@@ -1,14 +1,13 @@
 ﻿using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 using Utilities.Mapper;
 
 namespace Utilities.Display
 {
-    public abstract class ThreadSafeElement : IGraphicElement
+    public abstract class ThreadSafeElement : SmartElement
     {
         protected readonly object Locker = new object();
-        public void Draw(Graphics g, IScreenToCoordinateMapper mapper)
+        public sealed override void Draw(Graphics g, IScreenToCoordinateMapper mapper)
         {
             lock(Locker)
             {
@@ -18,7 +17,7 @@ namespace Utilities.Display
 
         protected abstract void DoDraw(Graphics g, IScreenToCoordinateMapper mapper);
 
-        public void MouseDown(object sender, MouseEventArgs e, Displayer displayer)
+        public sealed override void MouseDown(object sender, MouseEventArgs e, Displayer displayer)
         {
             lock(Locker)
             {
@@ -28,7 +27,7 @@ namespace Utilities.Display
 
         protected virtual void ProcessMouseDown(object sender, MouseEventArgs e, Displayer displayer) { }
 
-        public void MouseMove(object sender, MouseEventArgs e, Displayer displayer)
+        public sealed override void MouseMove(object sender, MouseEventArgs e, Displayer displayer)
         {
             lock (Locker)
             {
@@ -38,7 +37,7 @@ namespace Utilities.Display
 
         protected virtual void ProcessMouseMove(object sender, MouseEventArgs e, Displayer displayer) { }
 
-        public void MouseUp(object sender, MouseEventArgs e, Displayer displayer)
+        public sealed override void MouseUp(object sender, MouseEventArgs e, Displayer displayer)
         {
             lock (Locker)
             {
@@ -48,14 +47,14 @@ namespace Utilities.Display
 
         protected virtual void ProcessMouseUp(object sender, MouseEventArgs e, Displayer displayer) { }
 
-        public void Update(object data)
-        {
-            lock(Locker)
-            {
-                DoUpdate(data);
-            }
-        }
+        //public sealed override void Update(object data)
+        //{
+        //    lock(Locker)
+        //    {
+        //        DoUpdate(data);
+        //    }
+        //}
 
-        protected abstract void DoUpdate(object data);
+        //protected abstract void DoUpdate(object data);
     }
 }

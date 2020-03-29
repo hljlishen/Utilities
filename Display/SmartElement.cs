@@ -30,9 +30,9 @@ namespace Utilities.Display
         {
         }
 
-        public virtual void Update(object data)
-        {
-            Changed = true;
-        }
+        //public virtual void Update(object data)
+        //{
+        //    Changed = true;
+        //}
     }
 }

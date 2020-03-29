@@ -4,7 +4,7 @@ using Utilities.Mapper;
 
 namespace Utilities.Display
 {
-    public class Layer : SmartElement
+    public class Layer : ThreadSafeElement
     {
         public List<SmartElement> elements = new List<SmartElement>();
         protected Bitmap bmp;
@@ -14,7 +14,7 @@ namespace Utilities.Display
             Id = id;
         }
 
-        public override void Draw(Graphics g, IScreenToCoordinateMapper mapper)
+        protected override void DoDraw(Graphics g, IScreenToCoordinateMapper mapper)
         {
             base.Draw(g, mapper);
 
