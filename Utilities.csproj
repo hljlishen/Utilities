@@ -66,6 +66,10 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
+    <Compile Include="Display\Layer.cs" />
+    <Compile Include="Display\SmartElement.cs" />
+    <Compile Include="Display\ThreadSafeProxy.cs" />
+    <Compile Include="Guard\Guard.cs" />
     <Compile Include="IniBind\AttributeInterception\AttributeStrategy.cs" />
     <Compile Include="IniBind\AttributeInterception\IniKeyAttribute.cs" />
     <Compile Include="IniBind\AttributeInterception\NoAttributeAppliedException.cs" />
@@ -77,6 +81,13 @@
     <Compile Include="IniBind\InterfaceInterception\InterfaceStrategy.cs" />
     <Compile Include="IniBind\InterfaceInterception\NotIIniBindInterfaceInstanceException.cs" />
     <Compile Include="InputValidation\TextBoxValueDoesntMatchRuleException.cs" />
+    <Compile Include="Display\Background.cs" />
+    <Compile Include="Display\Displayer.cs" />
+    <Compile Include="Display\IGraphicElement.cs" />
+    <Compile Include="Display\LayeredElement.cs" />
+    <Compile Include="Display\PPIBackground.cs" />
+    <Compile Include="Display\TacanStateElement.cs" />
+    <Compile Include="Display\ThreadSafeElement.cs" />
     <Compile Include="Rule\AndRule.cs" />
     <Compile Include="Rule\CompositeRule.cs" />
     <Compile Include="Rule\DoubleStrInRange.cs" />

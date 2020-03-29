@@ -10,8 +10,6 @@ namespace Utilities.Mapper
         }
 
         protected IScreenToCoordinateMapper Mapper { get; private set; }
-        //public virtual ValueMapper XAxisMapper => Mapper.XAxisMapper;
-        //public virtual ValueMapper YAxisMapper => Mapper.YAxisMapper;
         public double ScreenLeft => Mapper.ScreenLeft;
         public double ScreenRight => Mapper.ScreenRight;
         public double ScreenTop => Mapper.ScreenTop;

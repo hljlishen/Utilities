@@ -5,8 +5,6 @@ namespace Utilities.Mapper
 {
     public class ScreenToCoordinateMapper : IScreenToCoordinateMapper
     {
-        //public ValueMapper XAxisMapper { get; protected set; } = new ValueMapper();
-        //public ValueMapper YAxisMapper { get; protected set; } = new ValueMapper();
         private ValueMapper XAxisMapper { get;  set; } = new ValueMapper();
         private ValueMapper YAxisMapper { get;  set; } = new ValueMapper();
 
@@ -32,15 +30,8 @@ namespace Utilities.Mapper
 
         public double ScreenHeight => Math.Abs(ScreenTop - ScreenBottom);
 
-        //public ScreenToCoordinateMapper(ValueMapper xAxis, ValueMapper yAxis)
-        //{
-        //    XAxisMapper = xAxis ?? throw new Exception("映射器为null");
-        //    YAxisMapper = yAxis ?? throw new Exception("映射器为null");
-        //}
         public ScreenToCoordinateMapper(double screenLeft, double screenRight, double coordinateXLeft, double coordinateXRight, double screenTop, double screenBottom, double coordinateYTop, double coordinateYBottom)
         {
-            //XAxisMapper = new ValueMapper(screenLeft, screenRight, coordinateXLeft, coordinateXRight);
-            //YAxisMapper = new ValueMapper(screenTop, screenBottom, coordinateYTop, coordinateYBottom);
             SetCoordinateXRange(coordinateXLeft, coordinateXRight);
             SetCoordinateYRange(coordinateYTop, coordinateYBottom);
             SetScreenArea(screenLeft, screenRight, screenTop, screenBottom);
