@@ -34,11 +34,11 @@ namespace Utilities.Display
 
         public static RectangularCoordinate PointFToRCoordinate(PointF p) => new RectangularCoordinate(p.X, p.Y, 0);
 
-        protected override void DoDraw(Graphics graphics, IScreenToCoordinateMapper mapper)
+        protected override void DoDraw(Graphics graphics)
         {
             Pen p = new Pen(Color.Red, 1f);
-            var point = mapper.GetScreenLocation(rLoc.X, rLoc.Y);
-            var center = mapper.ScreenCenter;
+            var point = Mapper.GetScreenLocation(rLoc.X, rLoc.Y);
+            var center = Mapper.ScreenCenter;
             var xPoint = new PointF(point.X, center.Y);
             var yPoint = new PointF(center.X, point.Y);
             var xmPoint = new PointF(point.X, center.Y - (center.Y - point.Y) / 2);
@@ -71,9 +71,17 @@ namespace Utilities.Display
             #endregion
         }
 
-        protected override void ProcessMouseDown(object sender, MouseEventArgs e, Displayer displayer) => mouseDown = true;
+        public override void SetDisplayer(Displayer d)
+        {
+            base.SetDisplayer(d);
+            PictureBox.MouseDown += ProcessMouseDown;
+            PictureBox.MouseUp += ProcessMouseUp;
+            PictureBox.MouseMove += ProcessMouseMove;
+        }
 
-        protected override void ProcessMouseMove(object sender, MouseEventArgs e, Displayer displayer)
+        protected void ProcessMouseDown(object sender, MouseEventArgs e) => mouseDown = true;
+
+        protected void ProcessMouseMove(object sender, MouseEventArgs e)
         {
             if (!mouseDown)
                 return;
@@ -82,15 +90,22 @@ namespace Utilities.Display
             var r = PointFToRCoordinate(displayer.Mapper.GetCoordinateLocation(e.X, e.Y)).Polar.Dis;
             if (r > range)
                 return;
-            Update(e.Location, displayer.Mapper); throw new NotImplementedException();
+            Update(e.Location, displayer.Mapper);
         }
 
-        protected override void ProcessMouseUp(object sender, MouseEventArgs e, Displayer displayer) => mouseDown = false;
+        protected void ProcessMouseUp(object sender, MouseEventArgs e) => mouseDown = false;
 
         protected override void DoUpdate(PolarCoordinate data)
         {
             pLoc = data;
             rLoc = pLoc.Rectangular;
+        }
+
+        public override void Dispose()
+        {
+            PictureBox.MouseDown -= ProcessMouseDown;
+            PictureBox.MouseUp -= ProcessMouseUp;
+            PictureBox.MouseMove -= ProcessMouseMove;
         }
     }
 }

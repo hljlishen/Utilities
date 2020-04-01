@@ -4,24 +4,54 @@ using Utilities.Mapper;
 
 namespace Utilities.Display
 {
-    public abstract class Background : ThreadSafeElement
+    public class BackgroundModel
+    {
+        public double XLeft;
+        public double XRight;
+        public double YTop;
+        public double YBottom;
+
+        public BackgroundModel(double xLeft, double xRight, double yTop, double yBottom)
+        {
+            XLeft = xLeft;
+            XRight = xRight;
+            YTop = yTop;
+            YBottom = yBottom;
+        }
+
+        public BackgroundModel(BackgroundModel m) : this(m.XLeft, m.XRight, m.YTop, m.YBottom)
+        {
+
+        }
+    }
+    public class Background : DynamicElement<BackgroundModel>
     {
         public double XLeft { get; set; }
         public double XRight { get; set; }
         public double YTop { get; set; }
         public double YBottom { get; set; }
 
+        public BackgroundModel Model {get; protected set;}
+
         public Color BackgroundColor { get; set; } = Color.Black;
-        protected override void DoDraw(Graphics graphics, IScreenToCoordinateMapper mapper)
+        protected override void DoDraw(Graphics graphics)
         {
-            SetMapperCoordinate(mapper);
+            SetMapperCoordinate(Mapper);
             graphics.Clear(BackgroundColor);
         }
 
-        protected override void ProcessMouseDown(object sender, MouseEventArgs e, Displayer displayer) { }
-        protected override void ProcessMouseMove(object sender, MouseEventArgs e, Displayer displayer) { }
-        protected override void ProcessMouseUp(object sender, MouseEventArgs e, Displayer displayer) { }
-        public void SizeChanged(Size s, IScreenToCoordinateMapper mapper) => mapper.SetScreenArea(0, s.Width, 0, s.Height);
+        public override void SetDisplayer(Displayer d)
+        {
+            d.PictureBox.SizeChanged += PictureBox_SizeChanged;
+            base.SetDisplayer(d);
+        }
+
+        private void PictureBox_SizeChanged(object sender, System.EventArgs e)
+        {
+            Mapper.SetScreenArea(0, PictureBox.Size.Width, 0, PictureBox.Size.Height);
+            Changed = true;
+        }
+
         protected virtual void SetMapperCoordinate(IScreenToCoordinateMapper mapper)
         {
             if (mapper.CoordinateLeft != XLeft || mapper.CoordinateRight != XRight)
@@ -29,5 +59,7 @@ namespace Utilities.Display
             if (mapper.CoordinateTop != YTop || mapper.CoordinateBottom != YBottom)
                 mapper.SetCoordinateYRange(YTop, YBottom);
         }
+
+        protected override void DoUpdate(BackgroundModel t) => Model = new BackgroundModel(t);
     }
 }

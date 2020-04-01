@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 using Utilities.Mapper;
 
 namespace Utilities.Display
@@ -13,28 +12,32 @@ namespace Utilities.Display
         }
 
         public double Range 
-        {
-            get => XRight;
+        { 
+            get => XLeft;
             set
             {
-                XLeft = -value;
+                XLeft = value;
                 XRight = value;
                 YTop = value;
-                YBottom = -value;
-            }
+                YBottom = value;
+            } 
         }
         public uint MarkerCount { get; set; } = 5;
 
-        protected override void DoDraw(Graphics graphics, IScreenToCoordinateMapper mapper)
+        public override void Dispose()
         {
-            base.Draw(graphics, mapper);
+        }
+
+        public override void Draw(Graphics graphics)
+        {
+            base.Draw(graphics);
             var disStep = Range / (MarkerCount + 1);
-            var center = mapper.ScreenCenter;
+            var center = Mapper.ScreenCenter;
 
             for (int i = 1; i <= MarkerCount + 1; i++)
             {
                 var dis = disStep * i;
-                var x = mapper.GetScreenX(dis);
+                var x = Mapper.GetScreenX(dis);
                 var r = Math.Abs(x - center.X);
                 var rect = new RectangleF((float)(center.X - r), (float)(center.Y - r), (float)(r * 2), (float)(r * 2));
                 graphics.DrawEllipse(new Pen(Color.Green, 1), rect);
@@ -43,8 +46,8 @@ namespace Utilities.Display
             }
 
             var p = new Pen(Color.White, 1);
-            graphics.DrawLine(p, new Point((int)mapper.ScreenLeft, (int)center.Y), new Point((int)mapper.ScreenRight, (int)center.Y));
-            graphics.DrawLine(p, new Point((int)center.X, (int)mapper.ScreenTop), new Point((int)center.X, (int)mapper.ScreenBottom));
+            graphics.DrawLine(p, new Point((int)Mapper.ScreenLeft, (int)center.Y), new Point((int)Mapper.ScreenRight, (int)center.Y));
+            graphics.DrawLine(p, new Point((int)center.X, (int)Mapper.ScreenTop), new Point((int)center.X, (int)Mapper.ScreenBottom));
         }
     }
 }

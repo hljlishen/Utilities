@@ -6,12 +6,13 @@ namespace Utilities.Display
 {
     public class Displayer
     {
-        private PictureBox pb;
+        public PictureBox PictureBox;
         public IScreenToCoordinateMapper Mapper { get; }
         private Timer updateTimer;
-        public Background Background { get; set; }
         private Bitmap canvas;
-        public LayeredElement Elements { get; set; }
+        public Background Background { get; protected set; }
+        public LayeredElement Elements { get; private set; }
+        private readonly object Locker = new object();
         public int UpdateInterval 
         {
             get => updateTimer.Interval;
@@ -22,19 +23,20 @@ namespace Utilities.Display
                 updateTimer.Start();
             }
         }
-
-        public Displayer(PictureBox pb, IScreenToCoordinateMapper mapper)
+        public Displayer(PictureBox pb, IScreenToCoordinateMapper mapper, Background background)
         {
-            this.pb = pb;
-            this.Mapper = mapper;
+            PictureBox = pb;
+            Mapper = mapper;
             mapper.SetScreenArea(0, pb.Size.Width, 0, pb.Size.Height);
+            mapper.SetCoordinateXRange(background.Model.XLeft, background.Model.XRight);
+            mapper.SetCoordinateYRange(background.Model.YTop, background.Model.YBottom);
+            Elements = new LayeredElement();
+            Elements.SetDisplayer(this);
+            background.SetDisplayer(this);
+            Background = background;
 
             canvas = new Bitmap(pb.Width, pb.Height);
             pb.Image = canvas;
-
-            pb.MouseDown += Pb_MouseDown;
-            pb.MouseMove += Pb_MouseMove;
-            pb.MouseUp += Pb_MouseUp;
             pb.SizeChanged += Pb_SizeChanged;
 
             updateTimer = new Timer
@@ -47,28 +49,36 @@ namespace Utilities.Display
 
         private void Pb_SizeChanged(object sender, System.EventArgs e)
         {
-            canvas.Dispose();
-            canvas = new Bitmap(pb.Size.Width, pb.Size.Height);
-            pb.Image = canvas;
-            Background.SizeChanged(pb.Size, Mapper);
+            lock (Locker)
+            {
+                var bmp = PictureBox.Image;
+                canvas = new Bitmap(PictureBox.Width, PictureBox.Height);
+                PictureBox.Image = canvas;
+                bmp.Dispose();
+            }
         }
-
-        private void Pb_MouseUp(object sender, MouseEventArgs e) => Elements?.MouseUp(sender, e, this);
-
-        private void Pb_MouseMove(object sender, MouseEventArgs e) => Elements?.MouseMove(sender, e, this);
-
-        private void Pb_MouseDown(object sender, MouseEventArgs e) => Elements?.MouseDown(sender, e, this);
 
         private void UpdateTimer_Tick(object sender, System.EventArgs e)
         {
-            using (Graphics graphics = Graphics.FromImage(canvas))
+            lock(Locker)
             {
-                InitializeGraphics(graphics);
-                Background?.Draw(graphics, Mapper);
-                Elements?.Draw(graphics, Mapper);
+                using (Graphics graphics = Graphics.FromImage(canvas))
+                {
+                    InitializeGraphics(graphics);
+                    if (Background.HasChanged())
+                    {
+                        Background.Draw(graphics);
+                        Elements?.Draw(graphics);
+                    }
+                    else
+                    {
+                        Elements.DrawChangedLayers(graphics);
+                    }
+                }
+
+                PictureBox.Refresh();
             }
 
-            pb.Refresh();
         }
         private static void InitializeGraphics(Graphics graphics)
         {

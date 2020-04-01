@@ -1,72 +1,65 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
-using Utilities.Mapper;
 
 namespace Utilities.Display
 {
-    public class LayeredElement : ThreadSafeElement
+    public class LayeredElement : GraphicElement
     {
-        protected Dictionary<uint, List<IGraphicElement>> layers = new Dictionary<uint, List<IGraphicElement>>();
+        protected Dictionary<int, Layer> layers = new Dictionary<int, Layer>();
 
-        protected virtual void DrawLayer(uint key, Graphics g, IScreenToCoordinateMapper mapper)
+        public override void Draw(Graphics g)
         {
-            foreach (var e in layers[key])
+            lock (Locker)
             {
-                e?.Draw(g, mapper);
+                var keys = (from k in layers.Keys select k).ToList();
+                keys.Sort();
+
+                foreach (var key in keys)
+                {
+                    layers[key].Draw(g);
+                }
+                base.Draw(g);
             }
         }
 
-        public void AddElement(uint layer, IGraphicElement element)
+        public void DrawChangedLayers(Graphics g)
         {
-            if (layers.ContainsKey(layer))
-                layers[layer].Add(element);
-            else
-                layers.Add(layer, new List<IGraphicElement>() { element });
-        }
-
-        protected override void ProcessMouseDown(object sender, MouseEventArgs e, Displayer displayer)
-        {
-            foreach(var k in layers.Keys)
+            lock (Locker)
             {
-                foreach (var el in layers[k])
+                var keys = (from k in layers.Keys select k).ToList();
+                keys.Sort();
+
+                foreach (var key in keys)
                 {
-                    el.MouseDown(sender, e, displayer);
+                    layers[key].DrawIfChanged(g);
                 }
             }
         }
 
-        protected override void ProcessMouseUp(object sender, MouseEventArgs e, Displayer displayer)
+        public void AddElement(int layerId, GraphicElement e)
         {
-            foreach (var k in layers.Keys)
+            lock(Locker)
             {
-                foreach (var el in layers[k])
+                if (!layers.ContainsKey(layerId))
                 {
-                    el.MouseUp(sender, e, displayer);
+                    Layer layer = new Layer(layerId);
+                    layer.SetDisplayer(displayer);
+                    layers[layerId] = layer;
                 }
+                layers[layerId].AddElement(e);
+                Changed = true;
             }
         }
 
-        protected override void ProcessMouseMove(object sender, MouseEventArgs e, Displayer displayer)
+        public override void Dispose()
         {
-            foreach (var k in layers.Keys)
+            lock (Locker)
             {
-                foreach (var el in layers[k])
+                foreach (var key in layers.Keys)
                 {
-                    el.MouseMove(sender, e, displayer);
+                    layers[key].Dispose();
                 }
-            }
-        }
-
-        protected override void DoDraw(Graphics g, IScreenToCoordinateMapper mapper)
-        {
-            var keys = (from k in layers.Keys select k).ToList();
-            keys.Sort();
-
-            foreach (var key in keys)
-            {
-                DrawLayer(key, g, mapper);
             }
         }
     }

@@ -1,16 +1,30 @@
-﻿namespace Utilities.Display
+﻿using System.Drawing;
+using Utilities.Mapper;
+
+namespace Utilities.Display
 {
-    public abstract class DynamicElement<T> : ThreadSafeElement
+    public abstract class DynamicElement<T> : GraphicElement
     {
-        public void Update(T data)
+        public override void Draw(Graphics g)
         {
             lock(Locker)
             {
-                DoUpdate(data);
+                DoDraw(g);
+                base.Draw(g);
+            }
+        }
+
+        protected abstract void DoDraw(Graphics g);
+
+        public virtual void Update(T t)
+        {
+            lock(Locker)
+            {
+                DoUpdate(t);
                 Changed = true;
             }
         }
 
-        protected abstract void DoUpdate(T data);
+        protected abstract void DoUpdate(T t);
     }
 }

@@ -4,9 +4,9 @@ using Utilities.Mapper;
 
 namespace Utilities.Display
 {
-    public class Layer : ThreadSafeElement
+    public class Layer : GraphicElement
     {
-        public List<SmartElement> elements = new List<SmartElement>();
+        public List<GraphicElement> elements = new List<GraphicElement>();
         protected Bitmap bmp;
         public int Id { get; protected set; }
         public Layer(int id)
@@ -14,61 +14,96 @@ namespace Utilities.Display
             Id = id;
         }
 
-        protected override void DoDraw(Graphics g, IScreenToCoordinateMapper mapper)
+        public override void Draw(Graphics g)
         {
-            base.Draw(g, mapper);
-
-            if(HasChanged())
-            {
-                bmp?.Dispose();
-                bmp = new Bitmap((int)mapper.ScreenWidth, (int)mapper.ScreenHeight);
-                var graphics = Graphics.FromImage(bmp);
-                DrawElements(graphics, mapper);
-            }                
-            g.DrawImage(bmp, new Point(0, 0));
+            DrawElements(Mapper);
+            DrawBitmap(g);
+            base.Draw(g);
             return;
         }
 
-        protected virtual void DrawElements(Graphics g, IScreenToCoordinateMapper mapper)
+        private void DrawBitmap(Graphics g) => g.DrawImage(bmp, new Point(0, 0));
+
+        private void DrawElements(IScreenToCoordinateMapper mapper)
         {
-            foreach (var e in elements)
+            bmp?.Dispose();
+            bmp = new Bitmap((int)mapper.ScreenWidth, (int)mapper.ScreenHeight);
+            bmp.MakeTransparent();
+            using(var graphics = Graphics.FromImage(bmp))
             {
-                e.Draw(g, mapper);
+                lock (Locker)
+                {
+                    foreach (var e in elements)
+                    {
+                        e.Draw(graphics);
+                    }
+                }
             }
+            base.Draw(null);
         }
 
-        public override bool HasChanged()
+        public void DrawIfChanged(Graphics g)
         {
-            if (base.HasChanged())
-                return true;
-            return ElementsChanged();
+            if (HasChanged())
+                Draw(g);
+            else
+                DrawBitmap(g);
         }
+
+        public override bool HasChanged() => base.HasChanged() ? true : ElementsChanged();
 
         private bool ElementsChanged()
         {
             if (elements.Count == 0)
                 return false;
-            foreach (var e in elements)
+            lock (Locker)
             {
-                if (e.HasChanged())
-                    return true;
+                foreach (var e in elements)
+                {
+                    if (e.HasChanged())
+                        return true;
+                }
             }
+
             return false;
         }
 
-        public void AddElement(SmartElement e)
+        public void AddElement(GraphicElement e)
         {
-            elements.Add(e);
+            lock (Locker)
+                elements.Add(e);
+            e.SetDisplayer(displayer);
             Changed = true;
         }
 
-        public void RemoveElement(SmartElement e)
+        public void RemoveElement(GraphicElement e)
         {
-            if(elements.Contains(e))
+            lock (Locker)
             {
-                elements.Remove(e);
-                Changed = true;
+                if (elements.Contains(e))
+                {
+                    elements.Remove(e);
+                    Changed = true;
+                }
             }
+        }
+
+        public void Clear()
+        {
+            lock (Locker)
+            {
+                elements.Clear();
+            }
+        }
+
+
+        public override void Dispose()
+        {
+            foreach (var e in elements)
+            {
+                e.Dispose();
+            }
+            elements.Clear();
         }
     }
 }
