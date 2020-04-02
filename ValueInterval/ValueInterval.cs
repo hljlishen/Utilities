@@ -27,7 +27,7 @@ namespace Utilities.ValueIntervals
         public double Min { get; private set; } = 0;
         public RangeType Type { get; set; }
         public double Coverage => NumericDistance(Min, Max);
-        public static double NumericDistance(double min, double max) => Math.Abs(max - min);
+        public static double NumericDistance(double min, double max) => /*Math.Abs(*/max - min/*)*/;
         public double NumericDistanceToMin(double value)
         {
             if (!AllowOutRangeMap)

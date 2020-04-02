@@ -85,7 +85,6 @@
     <Compile Include="Display\Displayer.cs" />
     <Compile Include="Display\LayeredElement.cs" />
     <Compile Include="Display\PPIBackground.cs" />
-    <Compile Include="Display\TacanStateElement.cs" />
     <Compile Include="Rule\AndRule.cs" />
     <Compile Include="Rule\CompositeRule.cs" />
     <Compile Include="Rule\DoubleStrInRange.cs" />
