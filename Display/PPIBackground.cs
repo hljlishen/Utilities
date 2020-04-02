@@ -13,13 +13,13 @@ namespace Utilities.Display
 
         public double Range 
         { 
-            get => XLeft;
+            get => XRight;
             set
             {
-                XLeft = value;
+                XLeft = -value;
                 XRight = value;
                 YTop = value;
-                YBottom = value;
+                YBottom = -value;
             } 
         }
         public uint MarkerCount { get; set; } = 5;

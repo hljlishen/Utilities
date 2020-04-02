@@ -34,6 +34,7 @@ namespace Utilities.Display
             Elements.SetDisplayer(this);
             background.SetDisplayer(this);
             Background = background;
+            Elements.AddElement(0, background);
 
             canvas = new Bitmap(pb.Width, pb.Height);
             pb.Image = canvas;
@@ -65,9 +66,9 @@ namespace Utilities.Display
                 using (Graphics graphics = Graphics.FromImage(canvas))
                 {
                     InitializeGraphics(graphics);
+                    graphics.Clear(Color.Black);
                     if (Background.HasChanged())
                     {
-                        Background.Draw(graphics);
                         Elements?.Draw(graphics);
                     }
                     else
@@ -80,7 +81,7 @@ namespace Utilities.Display
             }
 
         }
-        private static void InitializeGraphics(Graphics graphics)
+        public static void InitializeGraphics(Graphics graphics)
         {
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;

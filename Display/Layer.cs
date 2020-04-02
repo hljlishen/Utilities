@@ -27,10 +27,11 @@ namespace Utilities.Display
         private void DrawElements(IScreenToCoordinateMapper mapper)
         {
             bmp?.Dispose();
-            bmp = new Bitmap((int)mapper.ScreenWidth, (int)mapper.ScreenHeight);
+            bmp = new Bitmap(PictureBox.Width, PictureBox.Height);
             bmp.MakeTransparent();
             using(var graphics = Graphics.FromImage(bmp))
             {
+                Displayer.InitializeGraphics(graphics);
                 lock (Locker)
                 {
                     foreach (var e in elements)

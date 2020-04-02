@@ -26,12 +26,44 @@ namespace Utilities.Display
     }
     public class Background : DynamicElement<BackgroundModel>
     {
-        public double XLeft { get; set; }
-        public double XRight { get; set; }
-        public double YTop { get; set; }
-        public double YBottom { get; set; }
+        public double XLeft
+        {
+            get => Model.XLeft;
+            set
+            {
+                Model.XLeft = value;
+                Changed = true;
+            }
+        }
+        public double XRight
+        {
+            get => Model.XRight;
+            set
+            {
+                Model.XRight = value;
+                Changed = true;
+            }
+        }
+        public double YTop
+        {
+            get => Model.YTop;
+            set
+            {
+                Model.YTop = value;
+                Changed = true;
+            }
+        }
+        public double YBottom
+        {
+            get => Model.YBottom;
+            set
+            {
+                Model.YBottom = value;
+                Changed = true;
+            }
+        }
 
-        public BackgroundModel Model {get; protected set;}
+        public BackgroundModel Model { get; protected set; } = new BackgroundModel(-1, 1, 1, -1);
 
         public Color BackgroundColor { get; set; } = Color.Black;
         protected override void DoDraw(Graphics graphics)

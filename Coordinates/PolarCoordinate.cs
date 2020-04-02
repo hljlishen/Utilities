@@ -37,7 +37,7 @@ namespace Utilities.Coordinates
         {
             Dis = Math.Sqrt(r.X * r.X + r.Y * r.Y + r.Z * r.Z);
             El = 90 - Functions.RadianToDegree(Math.Acos(r.Z / Dis));
-            Az = 90 - Functions.RadianToDegree(Math.Atan(r.Y / r.X));
+            Az = 90 - Functions.RadianToDegree(Math.Atan2(r.Y, r.X));
         }
 
         public PolarCoordinate(PolarCoordinate c)
