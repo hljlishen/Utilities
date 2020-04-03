@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using Utilities.Mapper;
 
 namespace Utilities.Display
 {
@@ -32,7 +31,7 @@ namespace Utilities.Display
         {
             base.Draw(graphics);
             var disStep = Range / (MarkerCount + 1);
-            var center = Mapper.ScreenCenter;
+            var center = Mapper.GetScreenLocation(0, 0);
 
             for (int i = 1; i <= MarkerCount + 1; i++)
             {
@@ -46,8 +45,8 @@ namespace Utilities.Display
             }
 
             var p = new Pen(Color.White, 1);
-            graphics.DrawLine(p, new Point((int)Mapper.ScreenLeft, (int)center.Y), new Point((int)Mapper.ScreenRight, (int)center.Y));
-            graphics.DrawLine(p, new Point((int)center.X, (int)Mapper.ScreenTop), new Point((int)center.X, (int)Mapper.ScreenBottom));
+            graphics.DrawLine(p, Mapper.GetScreenLocation(-Range, 0), Mapper.GetScreenLocation(Range, 0));
+            graphics.DrawLine(p, Mapper.GetScreenLocation(0, Range), Mapper.GetScreenLocation(0, -Range));
         }
     }
 }

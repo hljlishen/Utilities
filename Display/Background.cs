@@ -32,6 +32,7 @@ namespace Utilities.Display
             set
             {
                 Model.XLeft = value;
+                Mapper?.SetCoordinateXRange(XLeft, XRight);
                 Changed = true;
             }
         }
@@ -41,6 +42,7 @@ namespace Utilities.Display
             set
             {
                 Model.XRight = value;
+                Mapper?.SetCoordinateXRange(XLeft, XRight);
                 Changed = true;
             }
         }
@@ -50,6 +52,7 @@ namespace Utilities.Display
             set
             {
                 Model.YTop = value;
+                Mapper?.SetCoordinateYRange(YTop, YBottom);
                 Changed = true;
             }
         }
@@ -59,6 +62,7 @@ namespace Utilities.Display
             set
             {
                 Model.YBottom = value;
+                Mapper?.SetCoordinateYRange(YTop, YBottom);
                 Changed = true;
             }
         }
@@ -66,11 +70,7 @@ namespace Utilities.Display
         public BackgroundModel Model { get; protected set; } = new BackgroundModel(-1, 1, 1, -1);
 
         public Color BackgroundColor { get; set; } = Color.Black;
-        protected override void DoDraw(Graphics graphics)
-        {
-            SetMapperCoordinate(Mapper);
-            graphics.Clear(BackgroundColor);
-        }
+        protected override void DoDraw(Graphics graphics) => graphics.Clear(BackgroundColor);
 
         public override void SetDisplayer(Displayer d)
         {
@@ -82,14 +82,6 @@ namespace Utilities.Display
         {
             Mapper.SetScreenArea(0, PictureBox.Size.Width, 0, PictureBox.Size.Height);
             Changed = true;
-        }
-
-        protected virtual void SetMapperCoordinate(IScreenToCoordinateMapper mapper)
-        {
-            if (mapper.CoordinateLeft != XLeft || mapper.CoordinateRight != XRight)
-                mapper.SetCoordinateXRange(XLeft, XRight);
-            if (mapper.CoordinateTop != YTop || mapper.CoordinateBottom != YBottom)
-                mapper.SetCoordinateYRange(YTop, YBottom);
         }
 
         protected override void DoUpdate(BackgroundModel t) => Model = new BackgroundModel(t);

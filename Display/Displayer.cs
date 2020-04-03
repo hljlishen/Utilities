@@ -28,8 +28,8 @@ namespace Utilities.Display
             PictureBox = pb;
             Mapper = mapper;
             mapper.SetScreenArea(0, pb.Size.Width, 0, pb.Size.Height);
-            mapper.SetCoordinateXRange(background.Model.XLeft, background.Model.XRight);
-            mapper.SetCoordinateYRange(background.Model.YTop, background.Model.YBottom);
+            mapper.SetCoordinateXRange(background.Model.XLeft/2 - 250, background.Model.XRight/2 - 250);
+            mapper.SetCoordinateYRange(background.Model.YTop/2, background.Model.YBottom/2);
             Elements = new LayeredElement();
             Elements.SetDisplayer(this);
             background.SetDisplayer(this);

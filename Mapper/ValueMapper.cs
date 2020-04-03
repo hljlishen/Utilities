@@ -79,9 +79,7 @@ namespace Utilities.Mapper
             var value2Dis = Range2.NumericDistanceToMin(value2);
             var value1Dis = value2Dis * Value1ToValue2Rato;
             if (reverseMap)
-            {
                 return Range1.Max - value1Dis;
-            }
             else
                 return value1Dis + Range1.Min;
         }

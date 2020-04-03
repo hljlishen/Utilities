@@ -17,7 +17,8 @@ namespace Utilities.Display
         public virtual bool HasChanged()=> Changed;
         public virtual void SetDisplayer(Displayer d) => displayer = d;
         protected PictureBox PictureBox => displayer.PictureBox;
-        protected IScreenToCoordinateMapper Mapper => displayer.Mapper;
+        protected IScreenToCoordinateMapper Mapper => displayer?.Mapper;
+        protected Background Background => displayer.Background;
         public virtual void Dispose() { }
     }
 }
