@@ -69,6 +69,8 @@
     <Compile Include="Display\DynamicElement.cs" />
     <Compile Include="Display\GraphicElement.cs" />
     <Compile Include="Display\Layer.cs" />
+    <Compile Include="Display\PpiFactory.cs" />
+    <Compile Include="Display\ZoomController.cs" />
     <Compile Include="Guard\Guard.cs" />
     <Compile Include="IniBind\AttributeInterception\AttributeStrategy.cs" />
     <Compile Include="IniBind\AttributeInterception\IniKeyAttribute.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="Display\Displayer.cs" />
     <Compile Include="Display\LayeredElement.cs" />
     <Compile Include="Display\PPIBackground.cs" />
+    <Compile Include="Display\AbstractDisplayerFactory.cs" />
     <Compile Include="Rule\AndRule.cs" />
     <Compile Include="Rule\CompositeRule.cs" />
     <Compile Include="Rule\DoubleStrInRange.cs" />

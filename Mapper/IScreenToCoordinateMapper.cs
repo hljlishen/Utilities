@@ -1,11 +1,11 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Utilities.Mapper
 {
     public interface IScreenToCoordinateMapper
     {
-        //ValueMapper XAxisMapper { get; }
-        //ValueMapper YAxisMapper { get; }
+        event Action<IScreenToCoordinateMapper> MapperStateChanged;
         double ScreenLeft { get; }
         double ScreenRight { get; }
         double ScreenTop { get; }

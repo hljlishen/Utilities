@@ -7,6 +7,7 @@ namespace Utilities.Mapper
     {
         private ValueMapper XAxisMapper { get;  set; } = new ValueMapper();
         private ValueMapper YAxisMapper { get;  set; } = new ValueMapper();
+        private bool isInitializing = true;
 
         public double ScreenLeft => XAxisMapper.Value1Left;
 
@@ -35,22 +36,40 @@ namespace Utilities.Mapper
             SetCoordinateXRange(coordinateXLeft, coordinateXRight);
             SetCoordinateYRange(coordinateYTop, coordinateYBottom);
             SetScreenArea(screenLeft, screenRight, screenTop, screenBottom);
+            isInitializing = false;
         }
 
         public ScreenToCoordinateMapper() : this(screenLeft: 0, screenRight: 1, coordinateXLeft: 0, coordinateXRight: 1, screenTop: 0, screenBottom: 1, coordinateYTop: 1, coordinateYBottom: 0)
         { }
+
+        public event Action<IScreenToCoordinateMapper> MapperStateChanged;
+
         public double GetScreenX(double coordinateX) => XAxisMapper.MapToValue1(coordinateX);
         public double GetScreenY(double coordinateY) => YAxisMapper.MapToValue1(coordinateY);
         public double GetCoordinateX(double screenX) => XAxisMapper.MapToValue2(screenX);
         public double GetCoordinateY(double screenY) => YAxisMapper.MapToValue2(screenY);
         public PointF GetScreenLocation(double coordinateX, double coordinateY) => new PointF((int)GetScreenX(coordinateX), (int)GetScreenY(coordinateY));
         public PointF GetCoordinateLocation(double screenX, double screenY) => new PointF((int)GetCoordinateX(screenX), (int)GetCoordinateY(screenY));
-        public void SetCoordinateXRange(double xLeft, double xRight) => XAxisMapper.SetRange2(xLeft, xRight);
-        public void SetCoordinateYRange(double yTop, double yBottom) => YAxisMapper.SetRange2(yTop, yBottom);
+        public void SetCoordinateXRange(double xLeft, double xRight)
+        {
+            XAxisMapper.SetRange2(xLeft, xRight);
+            if(!isInitializing)
+                MapperStateChanged?.Invoke(this);
+        }
+
+        public void SetCoordinateYRange(double yTop, double yBottom)
+        {
+            YAxisMapper.SetRange2(yTop, yBottom);
+            if (!isInitializing)
+                MapperStateChanged?.Invoke(this);
+        }
+
         public void SetScreenArea(double left, double right, double top, double bottom)
         {
             XAxisMapper.SetRange1(left, right);
             YAxisMapper.SetRange1(top, bottom);
+            if (!isInitializing)
+                MapperStateChanged?.Invoke(this);
         }
     }
 }

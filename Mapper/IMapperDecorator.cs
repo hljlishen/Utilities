@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Utilities.Mapper
 {
@@ -7,8 +8,9 @@ namespace Utilities.Mapper
         public MapperDecorator(IScreenToCoordinateMapper mapper)
         {
             Mapper = mapper;
+            Mapper.MapperStateChanged += Mapper_MapperStateChanged;
         }
-
+        private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => MapperStateChanged?.Invoke(obj);
         protected IScreenToCoordinateMapper Mapper { get; private set; }
         public double ScreenLeft => Mapper.ScreenLeft;
         public double ScreenRight => Mapper.ScreenRight;
@@ -21,6 +23,9 @@ namespace Utilities.Mapper
         public PointF ScreenCenter => Mapper.ScreenCenter;
         public virtual double ScreenWidth => Mapper.ScreenWidth;
         public virtual double ScreenHeight => Mapper.ScreenHeight;
+
+        public event Action<IScreenToCoordinateMapper> MapperStateChanged;
+
         public virtual PointF GetCoordinateLocation(double screenX, double screenY) => Mapper.GetCoordinateLocation(screenX, screenY);
         public virtual double GetCoordinateX(double screenX) => Mapper.GetCoordinateX(screenX);
         public virtual double GetCoordinateY(double screenY) => Mapper.GetCoordinateY(screenY);

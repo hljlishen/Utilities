@@ -10,6 +10,13 @@ namespace Utilities.Display
             Range = range;
         }
 
+        public PPIBackground(BackgroundModel model)
+        {
+            if (Math.Abs(model.XLeft) != Math.Abs(model.XRight) || Math.Abs(model.YTop) != Math.Abs(model.YBottom))
+                throw new BackgroundModelDoesntFillPpi();
+            Range = Math.Abs(model.XLeft);
+        }
+
         public double Range 
         { 
             get => XRight;
@@ -47,6 +54,13 @@ namespace Utilities.Display
             var p = new Pen(Color.White, 1);
             graphics.DrawLine(p, Mapper.GetScreenLocation(-Range, 0), Mapper.GetScreenLocation(Range, 0));
             graphics.DrawLine(p, Mapper.GetScreenLocation(0, Range), Mapper.GetScreenLocation(0, -Range));
+        }
+    }
+
+    public class BackgroundModelDoesntFillPpi : Exception
+    {
+        public BackgroundModelDoesntFillPpi() : base("ppi背景要求XLeft和XRight绝对值相等；YTop和YBottom绝对值相等")
+        {
         }
     }
 }

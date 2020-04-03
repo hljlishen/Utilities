@@ -23,13 +23,22 @@ namespace Utilities.Display
                 updateTimer.Start();
             }
         }
+
+        public bool Redraw { get; set; }
+
+        public Displayer(PictureBox pb, AbstractDisplayerFactory factory) : this(pb, factory.GetMapper(), factory.GetBackground())
+        {
+
+        }
+
         public Displayer(PictureBox pb, IScreenToCoordinateMapper mapper, Background background)
         {
             PictureBox = pb;
             Mapper = mapper;
             mapper.SetScreenArea(0, pb.Size.Width, 0, pb.Size.Height);
-            mapper.SetCoordinateXRange(background.Model.XLeft/2 - 250, background.Model.XRight/2 - 250);
-            mapper.SetCoordinateYRange(background.Model.YTop/2, background.Model.YBottom/2);
+            mapper.SetCoordinateXRange(background.Model.XLeft, background.Model.XRight);
+            mapper.SetCoordinateYRange(background.Model.YTop, background.Model.YBottom);
+            mapper.MapperStateChanged += Mapper_MapperStateChanged;
             Elements = new LayeredElement();
             Elements.SetDisplayer(this);
             background.SetDisplayer(this);
@@ -47,6 +56,8 @@ namespace Utilities.Display
             updateTimer.Tick += UpdateTimer_Tick;
             updateTimer.Start();
         }
+
+        private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => Redraw = true;
 
         private void Pb_SizeChanged(object sender, System.EventArgs e)
         {
@@ -67,9 +78,10 @@ namespace Utilities.Display
                 {
                     InitializeGraphics(graphics);
                     graphics.Clear(Color.Black);
-                    if (Background.HasChanged())
+                    if (Redraw)
                     {
                         Elements?.Draw(graphics);
+                        Redraw = false;
                     }
                     else
                     {
@@ -79,7 +91,6 @@ namespace Utilities.Display
 
                 PictureBox.Refresh();
             }
-
         }
         public static void InitializeGraphics(Graphics graphics)
         {
