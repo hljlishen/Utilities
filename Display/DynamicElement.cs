@@ -1,20 +1,19 @@
-﻿using System.Drawing;
-using Utilities.Mapper;
+﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 
 namespace Utilities.Display
 {
     public abstract class DynamicElement<T> : GraphicElement
     {
-        public override void Draw(Graphics g)
+        public override void Draw(RenderTarget rt)
         {
             lock(Locker)
             {
-                DoDraw(g);
-                base.Draw(g);
+                base.Draw(rt);
+                DoDraw(rt);
             }
         }
 
-        protected abstract void DoDraw(Graphics g);
+        protected abstract void DoDraw(RenderTarget rt);
 
         public virtual void Update(T t)
         {

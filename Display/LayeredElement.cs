@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace Utilities.Display
     {
         protected Dictionary<int, Layer> layers = new Dictionary<int, Layer>();
 
-        public override void Draw(Graphics g)
+        public override void Draw(RenderTarget rt)
         {
             lock (Locker)
             {
@@ -17,13 +18,13 @@ namespace Utilities.Display
 
                 foreach (var key in keys)
                 {
-                    layers[key].Draw(g);
+                    layers[key].Draw(rt);
                 }
-                base.Draw(g);
+                base.Draw(rt);
             }
         }
 
-        public void DrawChangedLayers(Graphics g)
+        public void DrawChangedLayers(RenderTarget rt)
         {
             lock (Locker)
             {
@@ -32,7 +33,7 @@ namespace Utilities.Display
 
                 foreach (var key in keys)
                 {
-                    layers[key].DrawIfChanged(g);
+                    layers[key].DrawIfChanged(rt);
                 }
             }
         }

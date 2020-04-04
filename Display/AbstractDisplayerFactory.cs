@@ -15,17 +15,7 @@ namespace Utilities.Display
         }
 
         public BackgroundModel InitialBackgroundModel { get; set; }
-        public virtual Background GetBackground()
-        {
-            if (firstTimeGetBackground)
-            {
-                firstTimeGetBackground = false;
-                background.Update(InitialBackgroundModel);
-            }
-            return background;
-        }
-
-
+        public virtual Background GetBackground() => background;
         public virtual IScreenToCoordinateMapper GetMapper() => mapper;
         public virtual ZoomController GetZoomController() => zoomCtrl;
     }

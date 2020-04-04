@@ -1,6 +1,6 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-using Utilities.Mapper;
+﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using System.Drawing;
+using Utilities.Tools;
 
 namespace Utilities.Display
 {
@@ -24,7 +24,7 @@ namespace Utilities.Display
 
         }
     }
-    public class Background : DynamicElement<BackgroundModel>
+    public abstract class Background : DynamicElement<BackgroundModel>
     {
         public double XLeft
         {
@@ -70,7 +70,7 @@ namespace Utilities.Display
         public BackgroundModel Model { get; protected set; } = new BackgroundModel(-1, 1, 1, -1);
 
         public Color BackgroundColor { get; set; } = Color.Black;
-        protected override void DoDraw(Graphics graphics) => graphics.Clear(BackgroundColor);
+        protected override void DoDraw(RenderTarget rt) => rt.Clear(Functions.GetColorFFromRgb(0, 0, 0));
 
         public override void SetDisplayer(Displayer d)
         {

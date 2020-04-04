@@ -1,16 +1,19 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
+using System;
+using Utilities.Tools;
 using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class PPIBackground : Background
+    public class PpiBackground : Background
     {
-        public PPIBackground(double range = 100)
+        public PpiBackground(double range = 100)
         {
             Range = range;
         }
 
-        public PPIBackground(BackgroundModel model)
+        public PpiBackground(BackgroundModel model)
         {
             if (Math.Abs(model.XLeft) != Math.Abs(model.XRight) || Math.Abs(model.YTop) != Math.Abs(model.YBottom))
                 throw new BackgroundModelDoesntFillPpi();
@@ -29,14 +32,21 @@ namespace Utilities.Display
             } 
         }
         public uint MarkerCount { get; set; } = 5;
+        public TextFormat distanceMarkTextFormat { get; private set; }
+        public SolidColorBrush textBrush { get; private set; } = null;
+
+        public SolidColorBrush antennaBrush { get; private set; } = null;
 
         public override void Dispose()
         {
+            distanceMarkTextFormat?.Dispose();
+            textBrush?.Dispose();
+            antennaBrush?.Dispose();
         }
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(RenderTarget rt)
         {
-            base.Draw(graphics);
+            base.Draw(rt);                
             var disStep = Range / (MarkerCount + 1);
             var center = Mapper.GetScreenLocation(0, 0);
 
@@ -45,15 +55,22 @@ namespace Utilities.Display
                 var dis = disStep * i;
                 var x = Mapper.GetScreenX(dis);
                 var r = Math.Abs(x - center.X);
-                var rect = new RectangleF((float)(center.X - r), (float)(center.Y - r), (float)(r * 2), (float)(r * 2));
-                graphics.DrawEllipse(new Pen(Color.Green, 1), rect);
+                Ellipse e = new Ellipse(new Point2F(center.X, center.Y), (float)r, (float)r);
+                rt.DrawEllipse(e, rt.CreateSolidColorBrush(new ColorF(0, 255, 0)), 2);
 
-                graphics.DrawString(dis.ToString("0.0"), new Font("宋体", 12), new SolidBrush(Color.Gray), new Point((int)center.X, (int)(center.Y - r + 5)));
+                RectF rect = new RectF(center.X, center.Y - (float)r, center.X + 80, center.Y - (float)r + 80);
+                rt.DrawText(dis.ToString("0.0"), distanceMarkTextFormat, rect, textBrush);
             }
+            rt.DrawLine(Mapper.GetScreenLocation(-Range, 0).ToPoint2F(), Mapper.GetScreenLocation(Range, 0).ToPoint2F(), antennaBrush, 2);
+            rt.DrawLine(Mapper.GetScreenLocation(0, Range).ToPoint2F(), Mapper.GetScreenLocation(0, -Range).ToPoint2F(), antennaBrush, 2);
+        }
 
-            var p = new Pen(Color.White, 1);
-            graphics.DrawLine(p, Mapper.GetScreenLocation(-Range, 0), Mapper.GetScreenLocation(Range, 0));
-            graphics.DrawLine(p, Mapper.GetScreenLocation(0, Range), Mapper.GetScreenLocation(0, -Range));
+        protected override void InitializeComponents(RenderTarget rt)
+        {
+            textBrush = rt.CreateSolidColorBrush(new ColorF(new ColorI(128, 138, 135)));
+            DWriteFactory dw = DWriteFactory.CreateFactory();
+            distanceMarkTextFormat = dw.CreateTextFormat("Berlin Sans FB Demi", 15);
+            antennaBrush = rt.CreateSolidColorBrush(Functions.GetColorFFromRgb(255, 255, 255));
         }
     }
 

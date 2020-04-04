@@ -74,6 +74,7 @@
     <Compile Include="Display\PpiAntenna.cs" />
     <Compile Include="Display\PpiFactory.cs" />
     <Compile Include="Display\ZoomController.cs" />
+    <Compile Include="Extentions\DrawingExtionFuncs.cs" />
     <Compile Include="Guard\Guard.cs" />
     <Compile Include="IniBind\AttributeInterception\AttributeStrategy.cs" />
     <Compile Include="IniBind\AttributeInterception\IniKeyAttribute.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Display\Background.cs" />
     <Compile Include="Display\Displayer.cs" />
     <Compile Include="Display\LayeredElement.cs" />
-    <Compile Include="Display\PPIBackground.cs" />
+    <Compile Include="Display\PpiBackground.cs" />
     <Compile Include="Display\AbstractDisplayerFactory.cs" />
     <Compile Include="Rule\AndRule.cs" />
     <Compile Include="Rule\CompositeRule.cs" />

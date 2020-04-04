@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using System.Collections.Generic;
 using System.Drawing;
 using Utilities.Mapper;
 
@@ -8,61 +9,50 @@ namespace Utilities.Display
     {
         public List<GraphicElement> elements = new List<GraphicElement>();
         protected Bitmap bmp;
+        protected BitmapRenderTarget bitmapRt;
         public int Id { get; protected set; }
         public Layer(int id)
         {
             Id = id;
         }
 
-        public override void Draw(Graphics g)
+        public override void Draw(RenderTarget rt)
         {
-            DrawElements(Mapper);
-            DrawBitmap(g);
-            base.Draw(g);
+            if (bitmapRt == null)
+                bitmapRt = rt.CreateCompatibleRenderTarget(new CompatibleRenderTargetOptions(), new Microsoft.WindowsAPICodePack.DirectX.Direct2D1.SizeF(PictureBox.Width, PictureBox.Height));
+            DrawElements(rt, Mapper);
+            DrawBitmap(rt);
+            base.Draw(rt);
             return;
         }
 
-        private void DrawBitmap(Graphics g)
+        private void DrawBitmap(RenderTarget rt)
         {
-            g.DrawImage(bmp, new Point(0, 0));
-
-            //bmp.MakeTransparent();
-            //var gra = Graphics.FromImage(bmp);
-            //IntPtr desHdc = g.GetHdc();
-            //var bitmapDc = GDI.CreateCompatibleDC(desHdc);
-            //_ = GDI.SelectObject(bitmapDc, bmp.GetHbitmap());
-            //GDI.BitBlt(desHdc, 0, 0, PictureBox.Width, PictureBox.Height, bitmapDc, 0, 0, 0xcc0020);
-            //g.ReleaseHdc(desHdc);
-            //GDI.DeleteDC(bitmapDc);
-            //gra.Dispose();
+            rt.DrawBitmap(bitmapRt.Bitmap);
         }
 
-        private void DrawElements(IScreenToCoordinateMapper mapper)
+        private void DrawElements(RenderTarget rt, IScreenToCoordinateMapper mapper)
         {
-            bmp?.Dispose();
-            bmp = new Bitmap(PictureBox.Width, PictureBox.Height);
-            bmp.MakeTransparent();
-            using (var g = Graphics.FromImage(bmp))
-            {
-                Displayer.InitializeGraphics(g);
+            bitmapRt.BeginDraw();
+            bitmapRt.Clear();
 
-                lock (Locker)
+            lock (Locker)
+            {
+                foreach (var e in elements)
                 {
-                    foreach (var e in elements)
-                    {
-                        e.Draw(g);
-                    }
+                    e.Draw(bitmapRt);
                 }
             }
+            bitmapRt.EndDraw();
             base.Draw(null);
         }
 
-        public void DrawIfChanged(Graphics g)
+        public void DrawIfChanged(RenderTarget rt)
         {
             if (HasChanged())
-                Draw(g);
+                Draw(rt);
             else
-                DrawBitmap(g);
+                DrawBitmap(rt);
         }
 
         public override bool HasChanged() => base.HasChanged() ? true : ElementsChanged();
@@ -118,6 +108,7 @@ namespace Utilities.Display
                 e.Dispose();
             }
             elements.Clear();
+            bitmapRt?.Dispose();
         }
     }
 }

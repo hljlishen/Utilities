@@ -7,7 +7,7 @@ namespace Utilities.Display
     {
         public PpiFactory(BackgroundModel initialBackgroundModel) : base(initialBackgroundModel)
         {
-            background = new PPIBackground();
+            background = new PpiBackground();
             background.Update(initialBackgroundModel);
             mapper = new SquaredScreenRectDecorator(new ScreenToCoordinateMapper());
             zoomCtrl = new ZoomController(RectSelectType.Square);

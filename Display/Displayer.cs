@@ -1,21 +1,24 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using System;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Utilities.Mapper;
 
 namespace Utilities.Display
 {
-    public class Displayer
+    public class Displayer : IDisposable
     {
-        public PictureBox PictureBox;
+        public Panel PictureBox;
         public IScreenToCoordinateMapper Mapper { get; }
         private System.Windows.Forms.Timer updateTimer;
-        private Bitmap canvas;
+        private RenderTarget rt;
+        public D2DFactory Factory { get; private set; }
         public Background Background { get; protected set; }
         public LayeredElement Elements { get; private set; }
         private readonly object Locker = new object();
-        public int UpdateInterval 
+        public int UpdateInterval
         {
             get => updateTimer.Interval;
             set
@@ -28,71 +31,86 @@ namespace Utilities.Display
 
         public bool Redraw { get; set; }
 
-        public Displayer(PictureBox pb, AbstractDisplayerFactory factory) : this(pb, factory.GetMapper(), factory.GetBackground())
+        public Displayer(Panel pb, AbstractDisplayerFactory factory) : this(pb, factory.GetMapper(), factory.GetBackground())
         {
 
         }
 
-        public Displayer(PictureBox pb, IScreenToCoordinateMapper mapper, Background background)
+        public Displayer(Panel pb, IScreenToCoordinateMapper mapper, Background background)
         {
             PictureBox = pb;
+            #region Mapper
             Mapper = mapper;
             mapper.SetScreenArea(0, pb.Size.Width, 0, pb.Size.Height);
             mapper.SetCoordinateXRange(background.Model.XLeft, background.Model.XRight);
             mapper.SetCoordinateYRange(background.Model.YTop, background.Model.YBottom);
             mapper.MapperStateChanged += Mapper_MapperStateChanged;
+            #endregion
+
+            #region Background
             Elements = new LayeredElement();
             Elements.SetDisplayer(this);
             background.SetDisplayer(this);
             Background = background;
             Elements.AddElement(0, background);
+            #endregion
 
-            canvas = new Bitmap(pb.Width, pb.Height);
-            pb.Image = canvas;
             pb.SizeChanged += Pb_SizeChanged;
+            Factory = D2DFactory.CreateFactory(D2DFactoryType.Multithreaded);   //创建工厂
+            var rtps = new RenderTargetProperties();
+            var hrtp = new HwndRenderTargetProperties(pb.Handle, new SizeU((uint)pb.Width, (uint)pb.Height), PresentOptions.None);
+            rt = Factory.CreateHwndRenderTarget(rtps, hrtp);
 
             updateTimer = new System.Windows.Forms.Timer
             {
                 Interval = 30
             };
             updateTimer.Tick += UpdateTimer_Tick;
-            updateTimer.Start();
+            //updateTimer.Start();
+
+            Task.Run(Draw);
         }
 
         private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => Redraw = true;
 
-        private void Pb_SizeChanged(object sender, System.EventArgs e)
+        private void Pb_SizeChanged(object sender, EventArgs e)
         {
-            lock (Locker)
+            //Mapper.SetScreenArea(0, PictureBox.Width, 0, PictureBox.Height);
+            //lock(Locker)
+            //{
+            //    rt?.Dispose();
+            //    var rtps = new RenderTargetProperties();
+            //    var hrtp = new HwndRenderTargetProperties(PictureBox.Handle, new SizeU((uint)PictureBox.Width, (uint)PictureBox.Height), PresentOptions.None);
+            //    rt = Factory.CreateHwndRenderTarget(rtps, hrtp);
+            //}
+        }
+
+        private void Draw()
+        {
+            while (true)
             {
-                var bmp = PictureBox.Image;
-                canvas = new Bitmap(PictureBox.Width, PictureBox.Height);
-                PictureBox.Image = canvas;
-                bmp.Dispose();
+                UpdateTimer_Tick(null, null);
+                Thread.Sleep(30);
             }
         }
 
         private void UpdateTimer_Tick(object sender, System.EventArgs e)
         {
-            lock(Locker)
+            lock (Locker)
             {
-                using (Graphics graphics = Graphics.FromImage(canvas))
+                rt.BeginDraw();
+                rt.Clear();
+                if (Redraw)
                 {
-                    InitializeGraphics(graphics);
-                    graphics.Clear(Color.Black);
-
-                    if (Redraw)
-                    {
-                        Elements?.Draw(graphics);
-                        Redraw = false;
-                    }
-                    else
-                    {
-                        Elements.DrawChangedLayers(graphics);
-                    }
+                    Elements?.Draw(rt);
+                    Redraw = false;
+                }
+                else
+                {
+                    Elements.DrawChangedLayers(rt);
                 }
 
-                PictureBox.Refresh();
+                rt.EndDraw();
             }
         }
         public static void InitializeGraphics(Graphics graphics)
@@ -100,6 +118,11 @@ namespace Utilities.Display
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
             graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+        }
+
+        public void Dispose()
+        {
+            rt.Dispose();
         }
     }
 }
