@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using Utilities.Mapper;
 
@@ -8,7 +10,7 @@ namespace Utilities.Display
     {
         public PictureBox PictureBox;
         public IScreenToCoordinateMapper Mapper { get; }
-        private Timer updateTimer;
+        private System.Windows.Forms.Timer updateTimer;
         private Bitmap canvas;
         public Background Background { get; protected set; }
         public LayeredElement Elements { get; private set; }
@@ -49,7 +51,7 @@ namespace Utilities.Display
             pb.Image = canvas;
             pb.SizeChanged += Pb_SizeChanged;
 
-            updateTimer = new Timer
+            updateTimer = new System.Windows.Forms.Timer
             {
                 Interval = 30
             };
@@ -78,6 +80,7 @@ namespace Utilities.Display
                 {
                     InitializeGraphics(graphics);
                     graphics.Clear(Color.Black);
+
                     if (Redraw)
                     {
                         Elements?.Draw(graphics);

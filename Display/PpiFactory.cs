@@ -1,13 +1,16 @@
-﻿using Utilities.Mapper;
+﻿using System;
+using Utilities.Mapper;
 
 namespace Utilities.Display
 {
     public class PpiFactory : AbstractDisplayerFactory
     {
-        public override Background GetBackground() => new PPIBackground(InitialBackgroundModel);
-
-        public override IScreenToCoordinateMapper GetMapper() => new SquaredScreenRectDecorator(new ScreenToCoordinateMapper());
-
-        public override ZoomController GetZoomController() => new ZoomController(RectSelectType.Square);
+        public PpiFactory(BackgroundModel initialBackgroundModel) : base(initialBackgroundModel)
+        {
+            background = new PPIBackground();
+            background.Update(initialBackgroundModel);
+            mapper = new SquaredScreenRectDecorator(new ScreenToCoordinateMapper());
+            zoomCtrl = new ZoomController(RectSelectType.Square);
+        }
     }
 }

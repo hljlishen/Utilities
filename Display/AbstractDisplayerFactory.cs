@@ -2,13 +2,31 @@
 
 namespace Utilities.Display
 {
-    public abstract class AbstractDisplayerFactory
+    public class AbstractDisplayerFactory
     {
+        protected Background background;
+        protected bool firstTimeGetBackground = true;
+        protected IScreenToCoordinateMapper mapper;
+        protected ZoomController zoomCtrl;
+
+        public AbstractDisplayerFactory(BackgroundModel initialBackgroundModel)
+        {
+            InitialBackgroundModel = initialBackgroundModel;
+        }
+
         public BackgroundModel InitialBackgroundModel { get; set; }
-        public abstract Background GetBackground();
+        public virtual Background GetBackground()
+        {
+            if (firstTimeGetBackground)
+            {
+                firstTimeGetBackground = false;
+                background.Update(InitialBackgroundModel);
+            }
+            return background;
+        }
 
-        public abstract IScreenToCoordinateMapper GetMapper();
 
-        public abstract ZoomController GetZoomController();
+        public virtual IScreenToCoordinateMapper GetMapper() => mapper;
+        public virtual ZoomController GetZoomController() => zoomCtrl;
     }
 }

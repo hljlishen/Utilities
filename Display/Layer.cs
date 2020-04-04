@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.Drawing;
 using Utilities.Mapper;
 
@@ -22,21 +23,35 @@ namespace Utilities.Display
             return;
         }
 
-        private void DrawBitmap(Graphics g) => g.DrawImage(bmp, new Point(0, 0));
+        private void DrawBitmap(Graphics g)
+        {
+            g.DrawImage(bmp, new Point(0, 0));
+
+            //bmp.MakeTransparent();
+            //var gra = Graphics.FromImage(bmp);
+            //IntPtr desHdc = g.GetHdc();
+            //var bitmapDc = GDI.CreateCompatibleDC(desHdc);
+            //_ = GDI.SelectObject(bitmapDc, bmp.GetHbitmap());
+            //GDI.BitBlt(desHdc, 0, 0, PictureBox.Width, PictureBox.Height, bitmapDc, 0, 0, 0xcc0020);
+            //g.ReleaseHdc(desHdc);
+            //GDI.DeleteDC(bitmapDc);
+            //gra.Dispose();
+        }
 
         private void DrawElements(IScreenToCoordinateMapper mapper)
         {
             bmp?.Dispose();
             bmp = new Bitmap(PictureBox.Width, PictureBox.Height);
             bmp.MakeTransparent();
-            using(var graphics = Graphics.FromImage(bmp))
+            using (var g = Graphics.FromImage(bmp))
             {
-                Displayer.InitializeGraphics(graphics);
+                Displayer.InitializeGraphics(g);
+
                 lock (Locker)
                 {
                     foreach (var e in elements)
                     {
-                        e.Draw(graphics);
+                        e.Draw(g);
                     }
                 }
             }
@@ -96,7 +111,6 @@ namespace Utilities.Display
                 elements.Clear();
             }
         }
-
 
         public override void Dispose()
         {
