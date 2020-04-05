@@ -11,16 +11,17 @@ namespace Utilities.Display
         protected Displayer displayer;
         protected readonly object Locker = new object();
         protected bool firstTimeDraw = true;
-        public virtual void Draw(RenderTarget rt)
+        public void Draw(RenderTarget rt)
         {
             if(firstTimeDraw)
             {
                 firstTimeDraw = false;
                 InitializeComponents(rt);
             }
+            DrawElement(rt);
             Changed = false;
         }
-
+        protected abstract void DrawElement(RenderTarget rt);
         protected virtual void InitializeComponents(RenderTarget rt) { }
         public virtual bool HasChanged()=> Changed;
         public virtual void SetDisplayer(Displayer d) => displayer = d;

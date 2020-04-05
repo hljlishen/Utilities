@@ -79,15 +79,14 @@ namespace Utilities.Display
             mouseDownPos = e.Location;
         }
 
-        public override void Draw(RenderTarget rt)
+        public void Reset() => SetMapperRange(displayer.Background.XLeft, displayer.Background.XRight, displayer.Background.YTop, displayer.Background.YBottom);
+
+        protected override void DrawElement(RenderTarget rt)
         {
-            base.Draw(rt);
             if (!mouseDown)
                 return;
             selectStrategy.DrawZoomView(coverRect.ToRectF(), rt, fillBrush, frameBrush, 2);
         }
-
-        public void Reset() => SetMapperRange(displayer.Background.XLeft, displayer.Background.XRight, displayer.Background.YTop, displayer.Background.YBottom);
     }
 
     public abstract class SelectStrategy

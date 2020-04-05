@@ -68,10 +68,8 @@ namespace Utilities.Display
         }
 
         public BackgroundModel Model { get; protected set; } = new BackgroundModel(-1, 1, 1, -1);
-
         public Color BackgroundColor { get; set; } = Color.Black;
-        protected override void DoDraw(RenderTarget rt) => rt.Clear(Functions.GetColorFFromRgb(0, 0, 0));
-
+        protected override void DrawDynamicElement(RenderTarget rt) => rt.Clear(Functions.GetColorFFromRgb(0, 0, 0));
         public override void SetDisplayer(Displayer d)
         {
             d.Panel.SizeChanged += PictureBox_SizeChanged;

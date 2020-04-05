@@ -9,20 +9,20 @@ namespace Utilities.Display
     {
         protected Dictionary<int, Layer> layers = new Dictionary<int, Layer>();
 
-        public override void Draw(RenderTarget rt)
-        {
-            lock (Locker)
-            {
-                var keys = (from k in layers.Keys select k).ToList();
-                keys.Sort();
+        //public override void Draw(RenderTarget rt)
+        //{
+        //    lock (Locker)
+        //    {
+        //        var keys = (from k in layers.Keys select k).ToList();
+        //        keys.Sort();
 
-                foreach (var key in keys)
-                {
-                    layers[key].Draw(rt);
-                }
-                base.Draw(rt);
-            }
-        }
+        //        foreach (var key in keys)
+        //        {
+        //            layers[key].Draw(rt);
+        //        }
+        //        base.Draw(rt);
+        //    }
+        //}
 
         public void DrawChangedLayers(RenderTarget rt)
         {
@@ -61,6 +61,21 @@ namespace Utilities.Display
                 {
                     layers[key].Dispose();
                 }
+            }
+        }
+
+        protected override void DrawElement(RenderTarget rt)
+        {
+            lock (Locker)
+            {
+                var keys = (from k in layers.Keys select k).ToList();
+                keys.Sort();
+
+                foreach (var key in keys)
+                {
+                    layers[key].Draw(rt);
+                }
+                //base.Draw(rt);
             }
         }
     }

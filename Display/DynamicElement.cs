@@ -4,16 +4,15 @@ namespace Utilities.Display
 {
     public abstract class DynamicElement<T> : GraphicElement
     {
-        public override void Draw(RenderTarget rt)
+        protected override void DrawElement(RenderTarget rt)
         {
-            lock(Locker)
+            lock (Locker)
             {
-                base.Draw(rt);
-                DoDraw(rt);
+                DrawDynamicElement(rt);
             }
         }
 
-        protected abstract void DoDraw(RenderTarget rt);
+        protected abstract void DrawDynamicElement(RenderTarget rt);
 
         public virtual void Update(T t)
         {

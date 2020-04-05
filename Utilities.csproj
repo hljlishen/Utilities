@@ -66,15 +66,18 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
-    <Compile Include="Display\RectangularLocationElement.cs" />
+    <Compile Include="Display\Elements\LocationDisplayer\CoordinateLocation.cs" />
+    <Compile Include="Display\Elements\LocationDisplayer\CoordinateType.cs" />
+    <Compile Include="Display\Elements\LocationDisplayer\LocationDisplay.cs" />
+    <Compile Include="Display\Elements\LocationDisplayer\LocationDisplayModel.cs" />
     <Compile Include="Display\TernaryRasterOperations.cs" />
     <Compile Include="Display\DynamicElement.cs" />
     <Compile Include="Display\GDI.cs" />
     <Compile Include="Display\GraphicElement.cs" />
     <Compile Include="Display\Layer.cs" />
-    <Compile Include="Display\PpiAntenna.cs" />
-    <Compile Include="Display\PpiFactory.cs" />
-    <Compile Include="Display\ZoomController.cs" />
+    <Compile Include="Display\Elements\Ppi\PpiAntenna.cs" />
+    <Compile Include="Display\Elements\Ppi\PpiFactory.cs" />
+    <Compile Include="Display\Elements\ZoomController\ZoomController.cs" />
     <Compile Include="Extentions\DrawingExtionFuncs.cs" />
     <Compile Include="Guard\Guard.cs" />
     <Compile Include="IniBind\AttributeInterception\AttributeStrategy.cs" />
@@ -91,7 +94,7 @@
     <Compile Include="Display\Background.cs" />
     <Compile Include="Display\Displayer.cs" />
     <Compile Include="Display\LayeredElement.cs" />
-    <Compile Include="Display\PpiBackground.cs" />
+    <Compile Include="Display\Elements\Ppi\PpiBackground.cs" />
     <Compile Include="Display\AbstractDisplayerFactory.cs" />
     <Compile Include="Rule\AndRule.cs" />
     <Compile Include="Rule\CompositeRule.cs" />

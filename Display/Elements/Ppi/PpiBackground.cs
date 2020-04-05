@@ -43,9 +43,9 @@ namespace Utilities.Display
             antennaBrush?.Dispose();
         }
 
-        public override void Draw(RenderTarget rt)
+        protected override void DrawDynamicElement(RenderTarget rt)
         {
-            base.Draw(rt);                
+            base.DrawDynamicElement(rt);
             var disStep = Range / (MarkerCount + 1);
             var center = Mapper.GetScreenLocation(0, 0);
 

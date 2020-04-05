@@ -16,18 +16,6 @@ namespace Utilities.Display
             Id = id;
         }
 
-        public override void Draw(RenderTarget rt)
-        {
-            if (bitmapRt == null)
-                //bitmapRt = rt.CreateCompatibleRenderTarget(new CompatibleRenderTargetOptions(), new Microsoft.WindowsAPICodePack.DirectX.Direct2D1.SizeF(Panel.Width, Panel.Height));
-                bitmapRt = rt.CreateCompatibleRenderTarget(new CompatibleRenderTargetOptions(), rt.Size);
-            bitmapRt.Transform = rt.Transform;
-            DrawElements(rt, Mapper);
-            DrawBitmap(rt);
-            base.Draw(rt);
-            return;
-        }
-
         private void DrawBitmap(RenderTarget rt)
         {
             //var m = rt.Transform;
@@ -49,7 +37,6 @@ namespace Utilities.Display
                 }
             }
             bitmapRt.EndDraw();
-            base.Draw(null);
         }
 
         public void DrawIfChanged(RenderTarget rt)
@@ -114,6 +101,16 @@ namespace Utilities.Display
             }
             elements.Clear();
             bitmapRt?.Dispose();
+        }
+
+        protected override void DrawElement(RenderTarget rt)
+        {
+            if (bitmapRt == null)
+                bitmapRt = rt.CreateCompatibleRenderTarget(new CompatibleRenderTargetOptions(), rt.Size);
+            bitmapRt.Transform = rt.Transform;
+            DrawElements(rt, Mapper);
+            DrawBitmap(rt);
+            return;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Utilities.Display
     {
         private double degree = 0;
         public Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush AntennaPen = null;
-        protected override void DoDraw(RenderTarget g)
+        protected override void DrawDynamicElement(RenderTarget g)
         {
             RectangularCoordinate p = new PolarCoordinate(degree, 0, (Background as PpiBackground).Range).Rectangular;
             PointF endPoint = Mapper.GetScreenLocation(p.X, p.Y);
