@@ -1,5 +1,4 @@
-﻿using System;
-using Utilities.Mapper;
+﻿using Utilities.Mapper;
 
 namespace Utilities.Display
 {
