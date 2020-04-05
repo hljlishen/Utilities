@@ -34,11 +34,13 @@ namespace Utilities.Mapper
             Range1 = ValueInterval.CloseClose(Math.Min(right, left), Math.Max(right, left));
             CalculateRatos();
         }
-        private void AssertValidRange(double left, double right)
+        private static void AssertValidRange(double left, double right)
         {
-            if (Math.Abs(left - right) < 0.001)
+            if (IsIntervalTooSmall(left, right))
                 throw new Exception($"{left}--{right}过于接近，无法形成取值范围");
         }
+
+        public static bool IsIntervalTooSmall(double left, double right) => Math.Abs(left - right) < 0.00001;
         public ValueInterval Range2 { get; private set; }
         public void SetRange2(double left, double right)
         {

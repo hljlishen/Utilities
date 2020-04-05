@@ -74,13 +74,13 @@ namespace Utilities.Display
 
         public override void SetDisplayer(Displayer d)
         {
-            d.PictureBox.SizeChanged += PictureBox_SizeChanged;
+            d.Panel.SizeChanged += PictureBox_SizeChanged;
             base.SetDisplayer(d);
         }
 
         private void PictureBox_SizeChanged(object sender, System.EventArgs e)
         {
-            Mapper.SetScreenArea(0, PictureBox.Size.Width, 0, PictureBox.Size.Height);
+            Mapper.SetScreenArea(0, Panel.Size.Width, 0, Panel.Size.Height);
             Changed = true;
         }
 

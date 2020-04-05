@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
+using Utilities.Mapper;
 
 namespace Utilities.Display
 {
@@ -39,14 +40,19 @@ namespace Utilities.Display
         public override void SetDisplayer(Displayer d)
         {
             base.SetDisplayer(d);
-            PictureBox.MouseDown += PictureBox_MouseDown;
-            PictureBox.MouseMove += PictureBox_MouseMove;
-            PictureBox.MouseUp += PictureBox_MouseUp;
+            Panel.MouseDown += PictureBox_MouseDown;
+            Panel.MouseMove += PictureBox_MouseMove;
+            Panel.MouseUp += PictureBox_MouseUp;
         }
 
         private void PictureBox_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             mouseDown = false;
+            if (!selectStrategy.IsRectBigEnough(coverRect, Mapper))
+            {
+                Changed = true;
+                return;
+            }
             SetMapperRange(Mapper.GetCoordinateX(coverRect.Left), Mapper.GetCoordinateX(coverRect.Right), Mapper.GetCoordinateY(coverRect.Top), Mapper.GetCoordinateY(coverRect.Bottom));
         }
 
@@ -54,7 +60,6 @@ namespace Utilities.Display
         {
             Mapper.SetCoordinateXRange(xLeft, xRight);
             Mapper.SetCoordinateYRange(yTop, yBottom);
-            displayer.Redraw = true;
             Changed = true;
         }
 
@@ -62,6 +67,7 @@ namespace Utilities.Display
         {
             if (!mouseDown)
                 return;
+            var p = Panel;
             mouseCurrentPos = e.Location;
             coverRect = selectStrategy.CalRect(mouseDownPos, mouseCurrentPos);
             Changed = true;
@@ -88,6 +94,19 @@ namespace Utilities.Display
     {
         public abstract Rectangle CalRect(Point centerPoint, Point CornerPoint);
         public abstract void DrawZoomView(RectF coverRect, RenderTarget rt, Brush fillBrush, Brush frameBrush, float strokeWidth);
+
+        public virtual bool IsRectBigEnough(Rectangle r, IScreenToCoordinateMapper mapper)
+        {
+            if (r.Right - r.Left < 5 || r.Bottom - r.Top < 5)
+                return false;
+            var xLeft = mapper.GetCoordinateX(r.Left);
+            var xRight = mapper.GetCoordinateX(r.Right);
+            var yTop = mapper.GetCoordinateY(r.Top);
+            var yBottom = mapper.GetCoordinateY(r.Bottom);
+            if(ValueMapper.IsIntervalTooSmall(xLeft, xRight) || ValueMapper.IsIntervalTooSmall(yTop, yBottom))
+                return false;
+            return true;
+        }
         public static SelectStrategy Instance(RectSelectType type)
         {
             switch (type)

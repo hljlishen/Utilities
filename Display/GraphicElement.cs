@@ -24,7 +24,7 @@ namespace Utilities.Display
         protected virtual void InitializeComponents(RenderTarget rt) { }
         public virtual bool HasChanged()=> Changed;
         public virtual void SetDisplayer(Displayer d) => displayer = d;
-        protected Panel PictureBox => displayer.PictureBox;
+        protected Panel Panel => displayer.Panel;
         protected IScreenToCoordinateMapper Mapper => displayer?.Mapper;
         protected Background Background => displayer.Background;
         public virtual void Dispose() { }

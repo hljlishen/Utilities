@@ -1,6 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using System;
-using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,38 +9,27 @@ namespace Utilities.Display
 {
     public class Displayer : IDisposable
     {
-        public Panel PictureBox;
-        public IScreenToCoordinateMapper Mapper { get; }
-        private System.Windows.Forms.Timer updateTimer;
-        private RenderTarget rt;
-        public D2DFactory Factory { get; private set; }
-        public Background Background { get; protected set; }
-        public LayeredElement Elements { get; private set; }
-        private readonly object Locker = new object();
-        public int UpdateInterval
-        {
-            get => updateTimer.Interval;
-            set
-            {
-                updateTimer.Stop();
-                updateTimer.Interval = value;
-                updateTimer.Start();
-            }
-        }
-
+        public int UpdateInterval { get; set; }
         public bool Redraw { get; set; }
+        public Panel Panel { get; set; }
+        public IScreenToCoordinateMapper Mapper { get; }
+        private RenderTarget rt;
+        public D2DFactory Factory { get; protected set; }
+        public Background Background { get; protected set; }
+        public LayeredElement Elements { get; protected set; }
+        public readonly object Locker = new object();
 
         public Displayer(Panel pb, AbstractDisplayerFactory factory) : this(pb, factory.GetMapper(), factory.GetBackground())
         {
 
         }
 
-        public Displayer(Panel pb, IScreenToCoordinateMapper mapper, Background background)
+        public Displayer(Panel p, IScreenToCoordinateMapper mapper, Background background)
         {
-            PictureBox = pb;
+            Panel = p;
             #region Mapper
             Mapper = mapper;
-            mapper.SetScreenArea(0, pb.Size.Width, 0, pb.Size.Height);
+            mapper.SetScreenArea(0, p.Size.Width, 0, p.Size.Height);
             mapper.SetCoordinateXRange(background.Model.XLeft, background.Model.XRight);
             mapper.SetCoordinateYRange(background.Model.YTop, background.Model.YBottom);
             mapper.MapperStateChanged += Mapper_MapperStateChanged;
@@ -52,72 +40,60 @@ namespace Utilities.Display
             Elements.SetDisplayer(this);
             background.SetDisplayer(this);
             Background = background;
-            Elements.AddElement(0, background);
+            Elements.Add(0, background);
             #endregion
 
-            pb.SizeChanged += Pb_SizeChanged;
+            Panel.SizeChanged += Pb_SizeChanged;
             Factory = D2DFactory.CreateFactory(D2DFactoryType.Multithreaded);   //创建工厂
-            var rtps = new RenderTargetProperties();
-            var hrtp = new HwndRenderTargetProperties(pb.Handle, new SizeU((uint)pb.Width, (uint)pb.Height), PresentOptions.None);
-            rt = Factory.CreateHwndRenderTarget(rtps, hrtp);
+            StartDrawing();
+        }
 
-            updateTimer = new System.Windows.Forms.Timer
-            {
-                Interval = 30
-            };
-            updateTimer.Tick += UpdateTimer_Tick;
-            //updateTimer.Start();
-
+        private void StartDrawing()
+        {
+            InitD2d();
             Task.Run(Draw);
         }
 
+        private void InitD2d()
+        {
+            rt?.Dispose();
+            var rtps = new RenderTargetProperties();
+            var hrtp = new HwndRenderTargetProperties(Panel.Handle, new SizeU((uint)Panel.Width, (uint)Panel.Height), PresentOptions.None);
+            rt = Factory.CreateHwndRenderTarget(rtps, hrtp);
+            rt.AntiAliasMode = AntiAliasMode.Aliased;
+            rt.TextAntiAliasMode = TextAntiAliasMode.Aliased;
+        }
         private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => Redraw = true;
 
         private void Pb_SizeChanged(object sender, EventArgs e)
         {
-            //Mapper.SetScreenArea(0, PictureBox.Width, 0, PictureBox.Height);
-            //lock(Locker)
-            //{
-            //    rt?.Dispose();
-            //    var rtps = new RenderTargetProperties();
-            //    var hrtp = new HwndRenderTargetProperties(PictureBox.Handle, new SizeU((uint)PictureBox.Width, (uint)PictureBox.Height), PresentOptions.None);
-            //    rt = Factory.CreateHwndRenderTarget(rtps, hrtp);
-            //}
+            //Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
+            rt.Transform = Matrix3x2F.Scale(rt.Size.Width/ Panel.Width, rt.Size.Height / Panel.Height);
+            Redraw = true;
         }
 
         private void Draw()
         {
             while (true)
             {
-                UpdateTimer_Tick(null, null);
-                Thread.Sleep(30);
-            }
-        }
-
-        private void UpdateTimer_Tick(object sender, System.EventArgs e)
-        {
-            lock (Locker)
-            {
-                rt.BeginDraw();
-                rt.Clear();
-                if (Redraw)
+                lock (Locker)
                 {
-                    Elements?.Draw(rt);
-                    Redraw = false;
-                }
-                else
-                {
-                    Elements.DrawChangedLayers(rt);
-                }
+                    rt.BeginDraw();
+                    rt.Clear();
+                    if (Redraw)
+                    {
+                        Elements?.Draw(rt);
+                        Redraw = false;
+                    }
+                    else
+                    {
+                        Elements.DrawChangedLayers(rt);
+                    }
 
-                rt.EndDraw();
+                    rt.EndDraw();
+                }
+                Thread.Sleep(UpdateInterval);
             }
-        }
-        public static void InitializeGraphics(Graphics graphics)
-        {
-            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
         }
 
         public void Dispose()

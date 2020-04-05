@@ -38,7 +38,7 @@ namespace Utilities.Display
             }
         }
 
-        public void AddElement(int layerId, GraphicElement e)
+        public void Add(int layerId, GraphicElement e)
         {
             lock(Locker)
             {

@@ -34,7 +34,6 @@ namespace Utilities.Display
         public uint MarkerCount { get; set; } = 5;
         public TextFormat distanceMarkTextFormat { get; private set; }
         public SolidColorBrush textBrush { get; private set; } = null;
-
         public SolidColorBrush antennaBrush { get; private set; } = null;
 
         public override void Dispose()
@@ -71,6 +70,7 @@ namespace Utilities.Display
             DWriteFactory dw = DWriteFactory.CreateFactory();
             distanceMarkTextFormat = dw.CreateTextFormat("Berlin Sans FB Demi", 15);
             antennaBrush = rt.CreateSolidColorBrush(Functions.GetColorFFromRgb(255, 255, 255));
+            dw.Dispose();
         }
     }
 

@@ -19,7 +19,9 @@ namespace Utilities.Display
         public override void Draw(RenderTarget rt)
         {
             if (bitmapRt == null)
-                bitmapRt = rt.CreateCompatibleRenderTarget(new CompatibleRenderTargetOptions(), new Microsoft.WindowsAPICodePack.DirectX.Direct2D1.SizeF(PictureBox.Width, PictureBox.Height));
+                //bitmapRt = rt.CreateCompatibleRenderTarget(new CompatibleRenderTargetOptions(), new Microsoft.WindowsAPICodePack.DirectX.Direct2D1.SizeF(Panel.Width, Panel.Height));
+                bitmapRt = rt.CreateCompatibleRenderTarget(new CompatibleRenderTargetOptions(), rt.Size);
+            bitmapRt.Transform = rt.Transform;
             DrawElements(rt, Mapper);
             DrawBitmap(rt);
             base.Draw(rt);
@@ -28,7 +30,10 @@ namespace Utilities.Display
 
         private void DrawBitmap(RenderTarget rt)
         {
-            rt.DrawBitmap(bitmapRt.Bitmap);
+            //var m = rt.Transform;
+            //rt.Transform = Matrix3x2F.Scale(1, 1);
+            rt.DrawBitmap(bitmapRt.Bitmap, 1, BitmapInterpolationMode.Linear, new RectF(0, 0, Panel.Width, Panel.Height));
+            //rt.Transform = m;
         }
 
         private void DrawElements(RenderTarget rt, IScreenToCoordinateMapper mapper)
