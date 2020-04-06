@@ -72,7 +72,7 @@ namespace Utilities.Display
             {
                 case CoordinateType.Polar:
                     var p = new RectangularCoordinate(currentCoordinateLocation.X, currentCoordinateLocation.Y, 0).Polar;
-                    return $"Az:{p.Az} ,Dis:{p.Dis}";
+                    return $"Az:{p.Az:0.0} ,Dis:{p.Dis:0.0}";
                 case CoordinateType.Rectangular:
                     return $"X:{currentCoordinateLocation.X} ,Y:{currentCoordinateLocation.Y}";
                 case CoordinateType.Screen:
@@ -90,7 +90,7 @@ namespace Utilities.Display
             }
             else
             {
-                return new RectF(0, 0, 1000, 1000);
+                return new RectangleF(DisplayModel.FixLocation.X, DisplayModel.FixLocation.Y, 1000, 1000).ToRectF();
             }
         }
 

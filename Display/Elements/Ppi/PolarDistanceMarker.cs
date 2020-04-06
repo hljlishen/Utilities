@@ -11,6 +11,8 @@ namespace Utilities.Display
         {
         }
 
+        public PolarDistanceMarker() : this(new MarkerModel() { LineColor = Color.Green, LineWidth = 2, ObjectNumber = 5, SelectedLineColor = Color.Orange, SelectedLineWidth = 4, FontName = "Berlin Sans FB Demi", FontColor = Color.Gray, FontSize = 15, SelectedFontColor = Color.Orange, SelectedFontName = "Berlin Sans FB Demi", SelectedFontSize = 15 }) { }
+
         protected override void DrawDynamicElement(RenderTarget rt)
         {
             foreach (var o in objects)
