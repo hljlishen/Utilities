@@ -19,7 +19,7 @@ namespace Utilities.Display
             DisplayModel = displayModel;
         }
 
-        public LocationDisplay() : this(new LocationDisplayModel() { coordinateType = CoordinateType.Rectangular, FixLocation = new PointF(), FontColor = Color.White, FontName = "Berlin Sans FB Demi", FontSize = 25, LocationType = CoordinateLocation.FollowMouse})
+        public LocationDisplay() : this(new LocationDisplayModel() { coordinateType = CoordinateType.Rectangular, FixLocation = new PointF(), FontColor = Color.White, FontName = "Berlin Sans FB Demi", FontSize = 25, LocationType = CoordinateLocation.FixedPosition})
         {
         }
 
@@ -34,7 +34,7 @@ namespace Utilities.Display
         protected override void InitializeComponents(RenderTarget rt)
         {
             base.InitializeComponents(rt);
-            textBrush = rt.CreateSolidColorBrush(DisplayModel.FontColor.ToColorF());
+            textBrush = DisplayModel.FontColor.SolidBrush(rt);
             DWriteFactory dw = DWriteFactory.CreateFactory();
             textFormat = dw.CreateTextFormat(DisplayModel.FontName, DisplayModel.FontSize);
             dw.Dispose();

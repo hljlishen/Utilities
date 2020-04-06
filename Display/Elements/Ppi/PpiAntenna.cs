@@ -1,7 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using System.Drawing;
 using Utilities.Coordinates;
-using Utilities.Tools;
 
 namespace Utilities.Display
 {
@@ -11,7 +10,8 @@ namespace Utilities.Display
         private double degree = 0;
         private int shadeLen = 200;
         private double shadeStep = 0.1f;
-        public Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush AntennaPen = null;
+        private Color antennaColor = Color.White;
+        public Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush antennaBrush = null;
         protected override void DrawDynamicElement(RenderTarget g)
         {
             var opStep = 1.0f / shadeLen;
@@ -26,23 +26,15 @@ namespace Utilities.Display
                 shadeLen = 200;
             }
             else
-                shadeStep = 1;
+                shadeLen = 1;
             for (int i = 0; i < shadeLen; i++)
             {
-                RectangularCoordinate p = new PolarCoordinate(degree + shadeStep * i, 0, (Background as PpiBackground).Range).Rectangular;
+                RectangularCoordinate p = new PolarCoordinate(degree + shadeStep * i, 0, ReferenceSystem.Right).Rectangular;
                 PointF endPoint = Mapper.GetScreenLocation(p.X, p.Y);
                 PointF beginPoint = Mapper.GetScreenLocation(0, 0);
 
-                AntennaPen.Opacity = 1 - i * opStep;
-                g.DrawLine(new Point2F(beginPoint.X, beginPoint.Y), new Point2F(endPoint.X, endPoint.Y), AntennaPen, 2);
-            }
-        }
-
-        private void DrawShade(RenderTarget g, double angle, double step, int length)
-        {
-            for (int i = 0; i < length; i++)
-            {
-                RectangularCoordinate p = new PolarCoordinate(degree, 0, (Background as PpiBackground).Range).Rectangular;
+                antennaBrush.Opacity = 1 - i * opStep;
+                g.DrawLine(new Point2F(beginPoint.X, beginPoint.Y), new Point2F(endPoint.X, endPoint.Y), antennaBrush, 2);
             }
         }
 
@@ -55,12 +47,12 @@ namespace Utilities.Display
         public override void Dispose()
         {
             base.Dispose();
-            AntennaPen?.Dispose();
+            antennaBrush?.Dispose();
         }
 
         protected override void InitializeComponents(RenderTarget rt)
         {
-            AntennaPen = rt.CreateSolidColorBrush(Functions.GetColorFFromRgb(255, 255, 255));
+            antennaBrush = antennaColor.SolidBrush(rt);
         }
     }
 }

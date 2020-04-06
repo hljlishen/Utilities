@@ -1,16 +1,9 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
-using System;
 using System.Drawing;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
-using Utilities.Mapper;
 
 namespace Utilities.Display
 {
-    public enum RectSelectType
-    {
-        Rectangle,
-        Square
-    }
     public class ZoomController : GraphicElement
     {
         private bool mouseDown = false;
@@ -19,7 +12,7 @@ namespace Utilities.Display
         private Brush fillBrush;
         private Brush frameBrush;
         private Rectangle coverRect;
-        private SelectStrategy selectStrategy;
+        public SelectStrategy SelectStrategy { get; set; }
 
         public override void Dispose()
         {
@@ -31,12 +24,18 @@ namespace Utilities.Display
         protected override void InitializeComponents(RenderTarget rt)
         {
             base.InitializeComponents(rt);
-            fillBrush = rt.CreateSolidColorBrush(Color.Blue.ToColorF());
+            fillBrush = Color.Blue.SolidBrush(rt);
             fillBrush.Opacity = 0.5f;
-            frameBrush = rt.CreateSolidColorBrush(Color.White.ToColorF());
+            frameBrush = Color.White.SolidBrush(rt);
         }
 
-        public ZoomController(RectSelectType selectType = RectSelectType.Rectangle) => selectStrategy = SelectStrategy.Instance(selectType);
+        public ZoomController() : this(new RectangleSelection()) { }
+        public ZoomController(SelectStrategy selectStrategy)
+        {
+            SelectStrategy = selectStrategy;
+            SelectStrategy.SetZoomController(this);
+        }
+
         public override void SetDisplayer(Displayer d)
         {
             base.SetDisplayer(d);
@@ -48,7 +47,7 @@ namespace Utilities.Display
         private void PictureBox_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             mouseDown = false;
-            if (!selectStrategy.IsRectBigEnough(coverRect, Mapper))
+            if (!SelectStrategy.IsRectBigEnough(coverRect, Mapper))
             {
                 Changed = true;
                 return;
@@ -69,7 +68,7 @@ namespace Utilities.Display
                 return;
             var p = Panel;
             mouseCurrentPos = e.Location;
-            coverRect = selectStrategy.CalRect(mouseDownPos, mouseCurrentPos);
+            coverRect = SelectStrategy.CalRect(mouseDownPos, mouseCurrentPos);
             Changed = true;
         }
 
@@ -79,80 +78,22 @@ namespace Utilities.Display
             mouseDownPos = e.Location;
         }
 
-        public void Reset() => SetMapperRange(displayer.Background.XLeft, displayer.Background.XRight, displayer.Background.YTop, displayer.Background.YBottom);
+        public void Reset() => SetMapperRange(ReferenceSystem.Left, ReferenceSystem.Right, ReferenceSystem.Top, ReferenceSystem.Bottom);
 
         protected override void DrawElement(RenderTarget rt)
         {
             if (!mouseDown)
                 return;
-            selectStrategy.DrawZoomView(coverRect.ToRectF(), rt, fillBrush, frameBrush, 2);
+            SelectStrategy.DrawZoomView(coverRect.ToRectF(), rt, fillBrush, frameBrush, 2);
         }
-    }
 
-    public abstract class SelectStrategy
-    {
-        public abstract Rectangle CalRect(Point centerPoint, Point CornerPoint);
-        public abstract void DrawZoomView(RectF coverRect, RenderTarget rt, Brush fillBrush, Brush frameBrush, float strokeWidth);
-
-        public virtual bool IsRectBigEnough(Rectangle r, IScreenToCoordinateMapper mapper)
+        public void SetStrategy(SelectStrategy s)
         {
-            if (r.Right - r.Left < 5 || r.Bottom - r.Top < 5)
-                return false;
-            var xLeft = mapper.GetCoordinateX(r.Left);
-            var xRight = mapper.GetCoordinateX(r.Right);
-            var yTop = mapper.GetCoordinateY(r.Top);
-            var yBottom = mapper.GetCoordinateY(r.Bottom);
-            if(ValueMapper.IsIntervalTooSmall(xLeft, xRight) || ValueMapper.IsIntervalTooSmall(yTop, yBottom))
-                return false;
-            return true;
-        }
-        public static SelectStrategy Instance(RectSelectType type)
-        {
-            switch (type)
+            lock(Locker)
             {
-                case RectSelectType.Rectangle:
-                    return new RectangleStrategy();
-                case RectSelectType.Square:
-                    return new SquareStrategy();
-                default:
-                    throw new Exception("错误的RectSelectType类型");
+                SelectStrategy = s;
+                s.SetZoomController(this);
             }
         }
-    }
-
-    internal class RectangleStrategy : SelectStrategy
-    {
-        public override Rectangle CalRect(Point corner1, Point corner2)
-        {
-            int xDis = Math.Abs(corner1.X - corner2.X);
-            int yDis = Math.Abs(corner1.Y - corner2.Y);
-            Rectangle rect = new Rectangle(Math.Min(corner1.X, corner2.X), Math.Min(corner1.Y, corner2.Y), xDis, yDis);
-            return rect;
-        }
-
-        public override void DrawZoomView(RectF coverRect, RenderTarget rt, Brush fillBrush, Brush frameBrush, float strokeWidth)
-        {
-            rt.FillRectangle(coverRect, fillBrush);
-            rt.DrawRectangle(coverRect, frameBrush, strokeWidth);
-        }
-    }
-
-    internal class SquareStrategy : SelectStrategy
-    {
-        public override Rectangle CalRect(Point centerPoint, Point cornerPoint)
-        {
-            var raduas = DistanceBetween(centerPoint, cornerPoint);
-            Rectangle rect = new Rectangle(centerPoint.X - (int)raduas, centerPoint.Y - (int)raduas, (int)raduas * 2, (int)raduas * 2);
-            return rect;
-        }
-
-        public override void DrawZoomView(RectF coverRect, RenderTarget rt, Brush fillBrush, Brush frameBrush, float strokeWidth)
-        {
-            Ellipse e = new Ellipse(coverRect.Center(), coverRect.Width / 2, coverRect.Width / 2);
-            rt.FillEllipse(e, fillBrush);
-            rt.DrawEllipse(e, frameBrush, strokeWidth);
-        }
-
-        private double DistanceBetween(Point p1, Point p2) => Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
     }
 }

@@ -66,18 +66,37 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
+    <Compile Include="Display\Elements\Signal\AnalogSignalPlotter.cs" />
+    <Compile Include="Display\Elements\AxisX.cs" />
+    <Compile Include="Display\Elements\AxisY.cs" />
+    <Compile Include="Display\Elements\Circle.cs" />
+    <Compile Include="Display\Elements\Ppi\PolarDistanceMarker.cs" />
+    <Compile Include="Display\Elements\Line.cs" />
+    <Compile Include="Display\Elements\MouseSensitiveElement.cs" />
+    <Compile Include="Display\Elements\Ppi\MarkerModel.cs" />
+    <Compile Include="Display\Elements\MouseSensitiveObject.cs" />
+    <Compile Include="Display\Elements\Rect.cs" />
+    <Compile Include="Display\Elements\Signal\DiscreteSignalPlotter.cs" />
+    <Compile Include="Display\Elements\XAxisMarker.cs" />
+    <Compile Include="Display\ReferenceSystem\ReferenceSystem.cs" />
     <Compile Include="Display\Elements\LocationDisplayer\CoordinateLocation.cs" />
     <Compile Include="Display\Elements\LocationDisplayer\CoordinateType.cs" />
     <Compile Include="Display\Elements\LocationDisplayer\LocationDisplay.cs" />
     <Compile Include="Display\Elements\LocationDisplayer\LocationDisplayModel.cs" />
+    <Compile Include="Display\Elements\Ppi\PolarAngleMarker.cs" />
+    <Compile Include="Display\Elements\ZoomController\RectangleSelection.cs" />
+    <Compile Include="Display\Elements\ZoomController\SelectStrategy.cs" />
+    <Compile Include="Display\Elements\ZoomController\SquareSelection.cs" />
+    <Compile Include="Display\Elements\ZoomController\XAxisSelection.cs" />
+    <Compile Include="Display\Elements\ZoomController\YAxisSelection.cs" />
     <Compile Include="Display\TernaryRasterOperations.cs" />
     <Compile Include="Display\DynamicElement.cs" />
     <Compile Include="Display\GDI.cs" />
     <Compile Include="Display\GraphicElement.cs" />
     <Compile Include="Display\Layer.cs" />
     <Compile Include="Display\Elements\Ppi\PpiAntenna.cs" />
-    <Compile Include="Display\Elements\Ppi\PpiFactory.cs" />
     <Compile Include="Display\Elements\ZoomController\ZoomController.cs" />
+    <Compile Include="Display\YAxisMarker.cs" />
     <Compile Include="Extentions\DrawingExtionFuncs.cs" />
     <Compile Include="Guard\Guard.cs" />
     <Compile Include="IniBind\AttributeInterception\AttributeStrategy.cs" />
@@ -91,11 +110,8 @@
     <Compile Include="IniBind\InterfaceInterception\InterfaceStrategy.cs" />
     <Compile Include="IniBind\InterfaceInterception\NotIIniBindInterfaceInstanceException.cs" />
     <Compile Include="InputValidation\TextBoxValueDoesntMatchRuleException.cs" />
-    <Compile Include="Display\Background.cs" />
     <Compile Include="Display\Displayer.cs" />
     <Compile Include="Display\LayeredElement.cs" />
-    <Compile Include="Display\Elements\Ppi\PpiBackground.cs" />
-    <Compile Include="Display\AbstractDisplayerFactory.cs" />
     <Compile Include="Rule\AndRule.cs" />
     <Compile Include="Rule\CompositeRule.cs" />
     <Compile Include="Rule\DoubleStrInRange.cs" />
@@ -128,5 +144,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

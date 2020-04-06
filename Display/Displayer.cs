@@ -15,32 +15,25 @@ namespace Utilities.Display
         public IScreenToCoordinateMapper Mapper { get; }
         private RenderTarget rt;
         public D2DFactory Factory { get; protected set; }
-        public Background Background { get; protected set; }
+
+        public ReferenceSystem ReferenceSystem;
         public LayeredElement Elements { get; protected set; }
         public readonly object Locker = new object();
 
-        public Displayer(Panel pb, AbstractDisplayerFactory factory) : this(pb, factory.GetMapper(), factory.GetBackground())
-        {
-
-        }
-
-        public Displayer(Panel p, IScreenToCoordinateMapper mapper, Background background)
+        public Displayer(Panel p, IScreenToCoordinateMapper mapper, ReferenceSystem referenceSystem)
         {
             Panel = p;
             #region Mapper
             Mapper = mapper;
+            referenceSystem.SetMapper(mapper);
+            ReferenceSystem = referenceSystem;
             mapper.SetScreenArea(0, p.Size.Width, 0, p.Size.Height);
-            mapper.SetCoordinateXRange(background.Model.XLeft, background.Model.XRight);
-            mapper.SetCoordinateYRange(background.Model.YTop, background.Model.YBottom);
             mapper.MapperStateChanged += Mapper_MapperStateChanged;
             #endregion
 
             #region Background
             Elements = new LayeredElement();
             Elements.SetDisplayer(this);
-            background.SetDisplayer(this);
-            Background = background;
-            Elements.Add(0, background);
             #endregion
 
             Panel.SizeChanged += Pb_SizeChanged;
@@ -67,7 +60,7 @@ namespace Utilities.Display
 
         private void Pb_SizeChanged(object sender, EventArgs e)
         {
-            //Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
+            Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
             rt.Transform = Matrix3x2F.Scale(rt.Size.Width/ Panel.Width, rt.Size.Height / Panel.Height);
             Redraw = true;
         }

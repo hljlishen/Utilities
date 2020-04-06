@@ -25,6 +25,7 @@ namespace Utilities.Mapper
         double GetScreenY(double coordinateY);
         void SetCoordinateXRange(double xLeft, double xRight);
         void SetCoordinateYRange(double yTop, double yBottom);
+        void SetCoordinateArea(double left, double right, double top, double bottom);
         void SetScreenArea(double left, double right, double top, double bottom);
     }
 }

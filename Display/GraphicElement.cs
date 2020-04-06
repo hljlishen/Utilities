@@ -11,6 +11,7 @@ namespace Utilities.Display
         protected Displayer displayer;
         protected readonly object Locker = new object();
         protected bool firstTimeDraw = true;
+        public ReferenceSystem ReferenceSystem => displayer.ReferenceSystem;
         public void Draw(RenderTarget rt)
         {
             if(firstTimeDraw)
@@ -25,9 +26,9 @@ namespace Utilities.Display
         protected virtual void InitializeComponents(RenderTarget rt) { }
         public virtual bool HasChanged()=> Changed;
         public virtual void SetDisplayer(Displayer d) => displayer = d;
-        protected Panel Panel => displayer.Panel;
-        protected IScreenToCoordinateMapper Mapper => displayer?.Mapper;
-        protected Background Background => displayer.Background;
+        public Panel Panel => displayer.Panel;
+        public IScreenToCoordinateMapper Mapper => displayer?.Mapper;
+        //public Background Background => displayer.Background;
         public virtual void Dispose() { }
     }
 }

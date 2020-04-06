@@ -266,8 +266,8 @@ namespace Utilities.Tools
 
         public static int RandomInt(int minimum, int maximum)
         {
-            Random random = new Random(DateTime.Now.Millisecond);
-            return random.Next(minimum, maximum);
+            var r = new Random(DateTime.Now.Millisecond);
+            return r.Next(minimum, maximum);
         }
 
         public static byte[] IntToByteLsb(int number, int reqiredMinimumLength)   //整型转化为byte数组，小端模式

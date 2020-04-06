@@ -71,5 +71,13 @@ namespace Utilities.Mapper
             if (!isInitializing)
                 MapperStateChanged?.Invoke(this);
         }
+
+        public void SetCoordinateArea(double left, double right, double top, double bottom)
+        {
+            XAxisMapper.SetRange2(left, right);
+            YAxisMapper.SetRange2(top, bottom);
+            if (!isInitializing)
+                MapperStateChanged?.Invoke(this);
+        }
     }
 }
