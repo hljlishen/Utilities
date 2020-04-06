@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class YAxisMarker : MouseSensitiveElement<Line>
+    public class YAxisMarker : MouseMoveElement<Line>
     {
         private StrokeStyle stroke;
 

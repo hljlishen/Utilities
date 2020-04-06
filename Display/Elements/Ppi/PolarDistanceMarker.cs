@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class PolarDistanceMarker : MouseSensitiveElement<Circle>
+    public class PolarDistanceMarker : MouseMoveElement<Circle>
     {
         public PolarDistanceMarker(MarkerModel model) : base(model)
         {

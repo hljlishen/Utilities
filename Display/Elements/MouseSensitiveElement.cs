@@ -58,7 +58,6 @@ namespace Utilities.Display
         public override void SetDisplayer(Displayer d)
         {
             base.SetDisplayer(d);
-            Panel.MouseMove += Panel_MouseMove;
             Mapper.MapperStateChanged += Mapper_MapperStateChanged;
             objects.Clear();
             objects = GetObjects().ToList();
@@ -74,7 +73,7 @@ namespace Utilities.Display
         }
         protected abstract IEnumerable<T> GetObjects();
 
-        protected virtual void Panel_MouseMove(object sender, MouseEventArgs e)
+        protected void ProcessMouseEvent(MouseEventArgs e)
         {
             lock (Locker)
             {

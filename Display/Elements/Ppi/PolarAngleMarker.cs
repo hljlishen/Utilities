@@ -6,7 +6,7 @@ using Utilities.Tools;
 
 namespace Utilities.Display
 {
-    public class PolarAngleMarker : MouseSensitiveElement<Line>
+    public class PolarAngleMarker : MouseMoveElement<Line>
     {
         private StrokeStyle strokeStyle;
 

@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
+    <Compile Include="Display\Elements\MouseClickElement.cs" />
+    <Compile Include="Display\Elements\MouseMoveElement.cs" />
     <Compile Include="Display\Elements\Signal\AnalogSignalPlotter.cs" />
     <Compile Include="Display\Elements\AxisX.cs" />
     <Compile Include="Display\Elements\AxisY.cs" />
@@ -96,7 +98,7 @@
     <Compile Include="Display\Layer.cs" />
     <Compile Include="Display\Elements\Ppi\PpiAntenna.cs" />
     <Compile Include="Display\Elements\ZoomController\ZoomController.cs" />
-    <Compile Include="Display\YAxisMarker.cs" />
+    <Compile Include="Display\Elements\YAxisMarker.cs" />
     <Compile Include="Extentions\DrawingExtionFuncs.cs" />
     <Compile Include="Guard\Guard.cs" />
     <Compile Include="IniBind\AttributeInterception\AttributeStrategy.cs" />
