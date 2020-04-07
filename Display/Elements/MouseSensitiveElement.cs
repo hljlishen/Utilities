@@ -12,7 +12,7 @@ namespace Utilities.Display
     public abstract class MouseSensitiveElement<T> : DynamicElement<MarkerModel> where T : MouseSensitiveObject
     {
         protected List<T> objects = new List<T>();
-        public MarkerModel Model { get; protected set; }
+        public MarkerModel Model { get; set; }
         protected Brush normalLineBrush;
         protected Brush selectedLineBrush;
         protected TextFormat normalTextFormat;

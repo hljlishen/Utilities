@@ -17,6 +17,8 @@ namespace Utilities.Display
         public D2DFactory Factory { get; protected set; }
 
         public ReferenceSystem ReferenceSystem;
+        private bool Disposed;
+
         public LayeredElement Elements { get; protected set; }
         public readonly object Locker = new object();
 
@@ -38,7 +40,11 @@ namespace Utilities.Display
 
             Panel.SizeChanged += Pb_SizeChanged;
             Factory = D2DFactory.CreateFactory(D2DFactoryType.Multithreaded);   //创建工厂
+
             StartDrawing();
+            Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
+            rt.Transform = Matrix3x2F.Scale(rt.Size.Width / Panel.Width, rt.Size.Height / Panel.Height);
+            Redraw = true;
         }
 
         private void StartDrawing()
@@ -71,6 +77,8 @@ namespace Utilities.Display
             {
                 lock (Locker)
                 {
+                    if (Disposed)
+                        return;
                     rt.BeginDraw();
                     rt.Clear();
                     if (Redraw)
@@ -92,6 +100,7 @@ namespace Utilities.Display
         public void Dispose()
         {
             rt.Dispose();
+            Disposed = true;
         }
     }
 }
