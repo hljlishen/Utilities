@@ -39,7 +39,7 @@ namespace Utilities.Mapper
             isInitializing = false;
         }
 
-        public ScreenToCoordinateMapper() : this(screenLeft: 0, screenRight: 1, coordinateXLeft: 0, coordinateXRight: 1, screenTop: 0, screenBottom: 1, coordinateYTop: 1, coordinateYBottom: 0)
+        public ScreenToCoordinateMapper() : this(screenLeft: 0, screenRight: 1, coordinateXLeft: 0, coordinateXRight: 1, screenTop: 1, screenBottom: 0, coordinateYTop: 1, coordinateYBottom: 0)
         { }
 
         public event Action<IScreenToCoordinateMapper> MapperStateChanged;

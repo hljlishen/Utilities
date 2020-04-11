@@ -66,7 +66,6 @@ namespace Utilities.Display
         {
             if (!mouseDown)
                 return;
-            var p = Panel;
             mouseCurrentPos = e.Location;
             coverRect = SelectStrategy.CalRect(mouseDownPos, mouseCurrentPos);
             Changed = true;

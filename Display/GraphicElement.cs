@@ -10,7 +10,7 @@ namespace Utilities.Display
         protected bool Changed = true;
         protected Displayer displayer;
         protected readonly object Locker = new object();
-        protected bool firstTimeDraw = true;
+        private bool firstTimeDraw = true;
         public ReferenceSystem ReferenceSystem => displayer.ReferenceSystem;
         public void Draw(RenderTarget rt)
         {
@@ -25,10 +25,14 @@ namespace Utilities.Display
         protected abstract void DrawElement(RenderTarget rt);
         protected virtual void InitializeComponents(RenderTarget rt) { }
         public virtual bool HasChanged()=> Changed;
+
+        /// <summary>
+        /// 框架负责调用次函数，用户不要主动调用
+        /// </summary>
+        /// <param name="d">显示器</param>
         public virtual void SetDisplayer(Displayer d) => displayer = d;
         public Panel Panel => displayer.Panel;
-        public IScreenToCoordinateMapper Mapper => displayer?.Mapper;
-        //public Background Background => displayer.Background;
+        public IScreenToCoordinateMapper Mapper => displayer.Mapper;
         public virtual void Dispose() { }
     }
 }

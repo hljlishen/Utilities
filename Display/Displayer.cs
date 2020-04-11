@@ -42,7 +42,7 @@ namespace Utilities.Display
             Factory = D2DFactory.CreateFactory(D2DFactoryType.Multithreaded);   //创建工厂
 
             StartDrawing();
-            Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
+
             rt.Transform = Matrix3x2F.Scale(rt.Size.Width / Panel.Width, rt.Size.Height / Panel.Height);
             Redraw = true;
         }
@@ -66,9 +66,13 @@ namespace Utilities.Display
 
         private void Pb_SizeChanged(object sender, EventArgs e)
         {
-            Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
-            rt.Transform = Matrix3x2F.Scale(rt.Size.Width/ Panel.Width, rt.Size.Height / Panel.Height);
-            Redraw = true;
+            lock(Locker)
+            {
+                Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
+                (rt as HwndRenderTarget).Resize(new SizeU((uint)Panel.Width, (uint)Panel.Height));
+                rt.Transform = Matrix3x2F.Scale(rt.Size.Width / Panel.Width, rt.Size.Height / Panel.Height);
+                Redraw = true;
+            }
         }
 
         private void Draw()

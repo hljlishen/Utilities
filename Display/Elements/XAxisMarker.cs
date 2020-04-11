@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class XAxisMarker : MouseMoveElement<Line>
+    public class XAxisMarker : MarkerElement<Line>
     {
         private StrokeStyle stroke;
 

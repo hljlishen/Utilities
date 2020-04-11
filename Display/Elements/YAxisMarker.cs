@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class YAxisMarker : MouseMoveElement<Line>
+    public class YAxisMarker : MarkerElement<Line>
     {
         private StrokeStyle stroke;
 
@@ -50,6 +50,11 @@ namespace Utilities.Display
                     rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, stroke);
                 }
             }
+        }
+
+        protected override void DoUpdate(MarkerModel t)
+        {
+            throw new System.NotImplementedException();
         }
 
         public YAxisMarker(MarkerModel model) : base(model)

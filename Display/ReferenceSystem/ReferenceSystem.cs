@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Utilities.Mapper;
 
 namespace Utilities.Display
@@ -18,6 +19,9 @@ namespace Utilities.Display
         public double Right { get; private set; }
         public double Top { get; private set; }
         public double Bottom { get; private set; }
+
+        public double XDistance => Math.Abs(Right - Left);
+        public double YDistance => Math.Abs(Top - Bottom);
         public IScreenToCoordinateMapper Mapper { get; private set; }
         public void SetMapper(IScreenToCoordinateMapper mapper)
         {

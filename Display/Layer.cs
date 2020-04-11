@@ -1,14 +1,11 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using System.Collections.Generic;
-using System.Drawing;
-using Utilities.Mapper;
 
 namespace Utilities.Display
 {
     public class Layer : GraphicElement
     {
         public List<GraphicElement> elements = new List<GraphicElement>();
-        protected Bitmap bmp;
         protected BitmapRenderTarget bitmapRt;
         public int Id { get; protected set; }
         public Layer(int id)
@@ -16,15 +13,12 @@ namespace Utilities.Display
             Id = id;
         }
 
-        private void DrawBitmap(RenderTarget rt)
+        private void DrawLayerToTarget(RenderTarget rt)
         {
-            //var m = rt.Transform;
-            //rt.Transform = Matrix3x2F.Scale(1, 1);
             rt.DrawBitmap(bitmapRt.Bitmap, 1, BitmapInterpolationMode.Linear, new RectF(0, 0, Panel.Width, Panel.Height));
-            //rt.Transform = m;
         }
 
-        private void DrawElements(RenderTarget rt, IScreenToCoordinateMapper mapper)
+        private void DrawLayerOnBitmap()
         {
             bitmapRt.BeginDraw();
             bitmapRt.Clear();
@@ -44,7 +38,7 @@ namespace Utilities.Display
             if (HasChanged())
                 Draw(rt);
             else
-                DrawBitmap(rt);
+                DrawLayerToTarget(rt);
         }
 
         public override bool HasChanged() => base.HasChanged() ? true : ElementsChanged();
@@ -105,11 +99,14 @@ namespace Utilities.Display
 
         protected override void DrawElement(RenderTarget rt)
         {
-            if (bitmapRt == null)
+            if (bitmapRt == null || bitmapRt.Size != rt.Size)
+            {
+                bitmapRt?.Dispose();
                 bitmapRt = rt.CreateCompatibleRenderTarget(new CompatibleRenderTargetOptions(), rt.Size);
+            }                
             bitmapRt.Transform = rt.Transform;
-            DrawElements(rt, Mapper);
-            DrawBitmap(rt);
+            DrawLayerOnBitmap();
+            DrawLayerToTarget(rt);
             return;
         }
     }

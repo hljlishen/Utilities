@@ -10,7 +10,7 @@ namespace System.Drawing
 
         public static RectF ToRectF(this RectangleF r) => new RectF(r.Left, r.Top, r.Right, r.Bottom);
 
-        public static ColorF ToColorF(this Color c) => new ColorF(c.R, c.G, c.B);
+        public static ColorF ToColorF(this Color c) => new ColorF(c.R / 255.0f, c.G / 255.0f, c.B / 255.0f);
 
         public static Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush SolidBrush(this Color c, RenderTarget rt) => rt.CreateSolidColorBrush(c.ToColorF());
         public static Point2F Center(this RectF r) => new Point2F((r.Left + r.Right) / 2, (r.Top + r.Bottom) / 2);

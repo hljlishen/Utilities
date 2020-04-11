@@ -26,7 +26,7 @@ namespace Utilities.Mapper
         public ValueInterval Range1 { get; private set; }
         public void SetRange1(double left, double right)
         {
-            //AssertValidRange(left, right);
+            AssertValidRange(left, right);
             Value1Left = left;
             Value1Right = right;
             v1Direction = right > left;

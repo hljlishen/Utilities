@@ -6,7 +6,7 @@ using Utilities.Tools;
 
 namespace Utilities.Display
 {
-    public class PolarAngleMarker : MouseMoveElement<Line>
+    public class PolarAngleMarker : MarkerElement<Line>
     {
         private StrokeStyle strokeStyle;
 
@@ -45,7 +45,7 @@ namespace Utilities.Display
                 if (l.Selected)
                 {
                     rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), selectedLineBrush, Model.SelectedLineWidth, strokeStyle);
-                    rt.DrawText(l.Value.ToString("0") + "°", selectedTextFormat, new RectangleF(l.MouseLocation.X, l.MouseLocation.Y - 30, 100, 100).ToRectF(), selectedTextBrush);
+                    rt.DrawText(l.Value.ToString() + "°", selectedTextFormat, new RectangleF(l.MouseLocation.X, l.MouseLocation.Y - 30, 100, 100).ToRectF(), selectedTextBrush); ;
                 }
                 else
                     rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, strokeStyle);

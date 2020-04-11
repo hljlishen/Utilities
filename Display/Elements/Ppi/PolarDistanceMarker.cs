@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class PolarDistanceMarker : MouseMoveElement<Circle>
+    public class PolarDistanceMarker : MarkerElement<Circle>
     {
         public PolarDistanceMarker(MarkerModel model) : base(model)
         {
@@ -21,11 +21,11 @@ namespace Utilities.Display
                 if (c.Selected)
                 {
                     rt.DrawEllipse(c.Ellipse, selectedLineBrush, Model.SelectedLineWidth);
-                    rt.DrawText(c.Value.ToString("0.0"), selectedTextFormat, new RectF(c.MouseLocation.X + 10, c.MouseLocation.Y, 1000, 1000), selectedTextBrush);
+                    rt.DrawText(((double)c.Value).ToString("0.0"), selectedTextFormat, new RectF(c.MouseLocation.X + 10, c.MouseLocation.Y, 1000, 1000), selectedTextBrush);
                 }
                 else
                     rt.DrawEllipse(c.Ellipse, normalLineBrush, Model.LineWidth);
-                rt.DrawText(c.Value.ToString("0"), normalTextFormat, new RectF(c.TextLeftTop.X + 3, c.TextLeftTop.Y, c.TextLeftTop.X + 100, c.TextLeftTop.Y + 100), normalTextBrush);
+                rt.DrawText(((double)c.Value).ToString("0"), normalTextFormat, new RectF(c.TextLeftTop.X + 3, c.TextLeftTop.Y, c.TextLeftTop.X + 100, c.TextLeftTop.Y + 100), normalTextBrush);
             }
         }
 

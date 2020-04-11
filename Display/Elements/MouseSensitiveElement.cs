@@ -1,60 +1,18 @@
-﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
-using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Utilities.Mapper;
-using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
 namespace Utilities.Display
 {
-    public abstract class MouseSensitiveElement<T> : DynamicElement<MarkerModel> where T : MouseSensitiveObject
+    public abstract class MouseSensitiveElement<ObjectType, UpdateType> : DynamicElement<UpdateType> where ObjectType : MouseSensitiveObject
     {
-        protected List<T> objects = new List<T>();
-        public MarkerModel Model { get; set; }
-        protected Brush normalLineBrush;
-        protected Brush selectedLineBrush;
-        protected TextFormat normalTextFormat;
-        protected TextFormat selectedTextFormat;
-        protected Brush normalTextBrush;
-        protected Brush selectedTextBrush;
+        protected List<ObjectType> objects = new List<ObjectType>();
 
-        protected MouseSensitiveElement(MarkerModel model)
+        protected MouseSensitiveElement()
         {
-            Model = model;
         }
 
-        protected override void InitializeComponents(RenderTarget rt)
-        {
-            base.InitializeComponents(rt);
-            normalLineBrush?.Dispose();
-            selectedLineBrush?.Dispose();
-            normalTextFormat?.Dispose();
-            selectedTextFormat?.Dispose();
-            normalTextBrush?.Dispose();
-            selectedTextBrush?.Dispose();
-
-            normalLineBrush = Model.LineColor.SolidBrush(rt);
-            selectedLineBrush = Model.SelectedLineColor.SolidBrush(rt);
-            normalTextBrush = Model.FontColor.SolidBrush(rt);
-            selectedTextBrush = Model.SelectedFontColor.SolidBrush(rt);
-            DWriteFactory dw = DWriteFactory.CreateFactory();
-            normalTextFormat = dw.CreateTextFormat(Model.FontName, Model.FontSize);
-            selectedTextFormat = dw.CreateTextFormat(Model.SelectedFontName, Model.SelectedFontSize);
-            dw.Dispose();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            normalLineBrush?.Dispose();
-            selectedLineBrush?.Dispose();
-            normalTextFormat?.Dispose();
-            selectedTextFormat?.Dispose();
-            normalTextBrush?.Dispose();
-            selectedTextBrush?.Dispose();
-        }
         public override void SetDisplayer(Displayer d)
         {
             base.SetDisplayer(d);
@@ -71,7 +29,7 @@ namespace Utilities.Display
                 objects = GetObjects().ToList();
             }
         }
-        protected abstract IEnumerable<T> GetObjects();
+        protected abstract IEnumerable<ObjectType> GetObjects();
 
         protected void ProcessMouseEvent(MouseEventArgs e)
         {
@@ -96,6 +54,10 @@ namespace Utilities.Display
             }
         }
 
-        protected override void DoUpdate(MarkerModel t) => Model = t;
+        protected override void DoUpdate(UpdateType t)
+        {
+            objects.Clear();
+            objects = GetObjects().ToList();
+        }
     }
 }

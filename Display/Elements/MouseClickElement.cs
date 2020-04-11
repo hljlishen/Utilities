@@ -1,11 +1,7 @@
 ﻿namespace Utilities.Display
 {
-    public abstract class MouseClickElement<T> : MouseSensitiveElement<T> where T : MouseSensitiveObject
+    public abstract class MouseClickElement<ObjectType, UpdateType> : MouseSensitiveElement<ObjectType, UpdateType> where ObjectType : MouseSensitiveObject
     {
-        protected MouseClickElement(MarkerModel model) : base(model)
-        {
-        }
-
         public override void SetDisplayer(Displayer d)
         {
             base.SetDisplayer(d);

@@ -5,8 +5,6 @@ namespace Utilities.Mapper
 {
     public class SquaredScreenRectDecorator : MapperDecorator
     {
-        //public override double ScreenWidth => Mapper.ScreenRight - Mapper.ScreenLeft;
-        //public override double ScreenHeight => Mapper.ScreenBottom - Mapper.ScreenTop;
         public SquaredScreenRectDecorator(IScreenToCoordinateMapper mapper) : base(mapper)
         {
         }
@@ -15,13 +13,6 @@ namespace Utilities.Mapper
             var area = FindSquareInArea(left, right, top, bottom);
             base.SetScreenArea(area.Left, area.Right, area.Top, area.Bottom);
         }
-        //public static RectangleF FindBiggestSquareIn(RectangleF rect)
-        //{
-        //    PointF center = CenterPointOf(rect);
-        //    var squareWidth = Math.Min(rect.Width, rect.Height);
-        //    var leftTopPoint = new PointF(center.X - squareWidth / 2, center.Y - squareWidth / 2);
-        //    return new RectangleF(leftTopPoint, new SizeF(squareWidth, squareWidth));
-        //}
 
         public static PointF CenterPointOf(RectangleF rect) => new PointF(rect.Width / 2 + rect.Left, rect.Height / 2 + rect.Top);
 

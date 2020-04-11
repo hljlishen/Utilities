@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
+    <Compile Include="Display\Elements\Chart_Bar.cs" />
+    <Compile Include="Display\Elements\MarkerElement.cs" />
     <Compile Include="Display\Elements\MouseClickElement.cs" />
     <Compile Include="Display\Elements\MouseMoveElement.cs" />
     <Compile Include="Display\Elements\Signal\AnalogSignalPlotter.cs" />
