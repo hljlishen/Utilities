@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class YAxisMarker : MarkerElement<Line>
+    public class YAxisMarker : MarkerElement<LiveLine>
     {
         private StrokeStyle stroke;
 
@@ -21,7 +21,7 @@ namespace Utilities.Display
             stroke = rt.Factory.CreateStrokeStyle(new StrokeStyleProperties { DashStyle = DashStyle.Dash });
         }
 
-        protected override IEnumerable<Line> GetObjects()
+        protected override IEnumerable<LiveLine> GetObjects()
         {
             var step = (ReferenceSystem.Top - ReferenceSystem.Bottom) / Model.ObjectNumber;
             var xLeft = Mapper.GetScreenX(ReferenceSystem.Left);
@@ -31,30 +31,19 @@ namespace Utilities.Display
             {
                 double value = ReferenceSystem.Bottom + step * i;
                 var y = Mapper.GetScreenY(value);
-                yield return new Line(new PointF((float)xLeft, (float)y), new PointF((float)xRight, (float)y)) { Value = value };
+                yield return new LiveLine(new PointF((float)xLeft, (float)y), new PointF((float)xRight, (float)y)) { Value = value };
             }
         }
 
-        protected override void DrawDynamicElement(RenderTarget rt)
+        protected override void DrawObjectUnselected(RenderTarget rt, LiveLine l)
         {
-            foreach (var o in objects)
-            {
-                var l = o as Line;
-                if (l.Selected)
-                {
-                    rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), selectedLineBrush, Model.SelectedLineWidth, stroke);
-                    rt.DrawText(l.Value.ToString(), selectedTextFormat, new RectangleF(l.MouseLocation.X, l.MouseLocation.Y - 30, 100, 100).ToRectF(), selectedTextBrush);
-                }
-                else
-                {
-                    rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, stroke);
-                }
-            }
+            rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, stroke);
         }
 
-        protected override void DoUpdate(MarkerModel t)
+        protected override void DrawObjectSelected(RenderTarget rt, LiveLine l)
         {
-            throw new System.NotImplementedException();
+            rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), selectedLineBrush, Model.SelectedLineWidth, stroke);
+            rt.DrawText(l.Value.ToString(), selectedTextFormat, new RectangleF(l.MouseLocation.X, l.MouseLocation.Y - 30, 100, 100).ToRectF(), selectedTextBrush);
         }
 
         public YAxisMarker(MarkerModel model) : base(model)

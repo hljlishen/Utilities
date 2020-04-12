@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Utilities.Mapper;
 
 namespace Utilities.Display
 {
-    public abstract class MouseSensitiveElement<ObjectType, UpdateType> : DynamicElement<UpdateType> where ObjectType : MouseSensitiveObject
+    public abstract class MouseSensitiveElement<ObjectType, UpdateType> : DynamicElement<UpdateType> where ObjectType : LiveObject
     {
         protected List<ObjectType> objects = new List<ObjectType>();
 
@@ -59,5 +60,19 @@ namespace Utilities.Display
             objects.Clear();
             objects = GetObjects().ToList();
         }
+
+        protected override void DrawDynamicElement(RenderTarget rt)
+        {
+            foreach (var o in objects)
+            {
+                if (o.Selected)
+                    DrawObjectSelected(rt, o);
+                else
+                    DrawObjectUnselected(rt, o);
+            }
+        }
+
+        protected abstract void DrawObjectUnselected(RenderTarget rt, ObjectType o);
+        protected abstract void DrawObjectSelected(RenderTarget rt, ObjectType o);
     }
 }

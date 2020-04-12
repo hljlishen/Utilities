@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class XAxisMarker : MarkerElement<Line>
+    public class XAxisMarker : MarkerElement<LiveLine>
     {
         private StrokeStyle stroke;
 
@@ -25,24 +25,7 @@ namespace Utilities.Display
 
         public XAxisMarker() : this(new MarkerModel(Color.Green, 1, 10, Color.Orange, 3, "宋体", 15, Color.Gray, "宋体", 15, Color.Orange)) { }
 
-        protected override void DrawDynamicElement(RenderTarget rt)
-        {
-            foreach (var o in objects)
-            {
-                var l = o as Line;
-                if(l.Selected)
-                {
-                    rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), selectedLineBrush, Model.SelectedLineWidth, stroke);
-                    rt.DrawText(l.Value.ToString(), selectedTextFormat, new RectangleF(l.MouseLocation.X + 20, l.MouseLocation.Y, 100, 100).ToRectF(), selectedTextBrush);
-                }
-                else
-                {
-                    rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, stroke);
-                }
-            }
-        }
-
-        protected override IEnumerable<Line> GetObjects()
+        protected override IEnumerable<LiveLine> GetObjects()
         {
             var step = (ReferenceSystem.Right - ReferenceSystem.Left) / Model.ObjectNumber;
             var yBottom = Mapper.GetScreenY(ReferenceSystem.Bottom);
@@ -52,8 +35,19 @@ namespace Utilities.Display
             {
                 double value = ReferenceSystem.Left + step * i;
                 var x = Mapper.GetScreenX(value);
-                yield return new Line(new PointF((float)x, (float)yBottom), new PointF((float)x, (float)yTop)) { Value = value };
+                yield return new LiveLine(new PointF((float)x, (float)yBottom), new PointF((float)x, (float)yTop)) { Value = value };
             }
+        }
+
+        protected override void DrawObjectUnselected(RenderTarget rt, LiveLine l)
+        {
+            rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, stroke);
+        }
+
+        protected override void DrawObjectSelected(RenderTarget rt, LiveLine l)
+        {
+            rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), selectedLineBrush, Model.SelectedLineWidth, stroke);
+            rt.DrawText(l.Value.ToString(), selectedTextFormat, new RectangleF(l.MouseLocation.X + 20, l.MouseLocation.Y, 100, 100).ToRectF(), selectedTextBrush);
         }
     }
 }

@@ -5,9 +5,9 @@ using Utilities.Tools;
 
 namespace Utilities.Display
 {
-    public class Circle : MouseSensitiveObject
+    public class LiveCircle : LiveObject
     {
-        public Circle(Ellipse ellipse)
+        public LiveCircle(Ellipse ellipse)
         {
             Ellipse = ellipse;
         }

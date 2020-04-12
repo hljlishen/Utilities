@@ -2,7 +2,7 @@
 
 namespace Utilities.Display
 {
-    public abstract class MouseSensitiveObject
+    public abstract class LiveObject
     {
         public PointF MouseLocation { get; set; }
         public object Value { get; set; }

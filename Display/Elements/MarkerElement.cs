@@ -5,7 +5,7 @@ using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
 namespace Utilities.Display
 {
-    public abstract class MarkerElement<ObjectType> : MouseMoveElement<ObjectType, MarkerModel> where ObjectType : MouseSensitiveObject
+    public abstract class MarkerElement<ObjectType> : MouseMoveElement<ObjectType, MarkerModel> where ObjectType : LiveObject
     {
         protected MarkerModel Model;
         protected Brush normalLineBrush;

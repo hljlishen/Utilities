@@ -6,7 +6,7 @@ using Utilities.Tools;
 
 namespace Utilities.Display
 {
-    public class PolarAngleMarker : MarkerElement<Line>
+    public class PolarAngleMarker : MarkerElement<LiveLine>
     {
         private StrokeStyle strokeStyle;
 
@@ -37,22 +37,7 @@ namespace Utilities.Display
             }
         }
 
-        protected override void DrawDynamicElement(RenderTarget rt)
-        {
-            foreach (var o in objects)
-            {
-                var l = o as Line;
-                if (l.Selected)
-                {
-                    rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), selectedLineBrush, Model.SelectedLineWidth, strokeStyle);
-                    rt.DrawText(l.Value.ToString() + "°", selectedTextFormat, new RectangleF(l.MouseLocation.X, l.MouseLocation.Y - 30, 100, 100).ToRectF(), selectedTextBrush); ;
-                }
-                else
-                    rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, strokeStyle);
-            }
-        }
-
-        protected override IEnumerable<Line> GetObjects()
+        protected override IEnumerable<LiveLine> GetObjects()
         {
             var center = ReferenceSystem.ScreenOriginalPoint;
             var angles = CalAngles(Model.ObjectNumber);
@@ -61,8 +46,19 @@ namespace Utilities.Display
             {
                 var x = center.X + radius * (float)Math.Sin(Functions.DegreeToRadian(angle));
                 var y = center.Y - radius * (float)Math.Cos(Functions.DegreeToRadian(angle));
-                yield return new Line(center, new PointF((float)x, (float)y)) { Value = angle };
+                yield return new LiveLine(center, new PointF((float)x, (float)y)) { Value = angle };
             }
+        }
+
+        protected override void DrawObjectUnselected(RenderTarget rt, LiveLine l)
+        {
+            rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, strokeStyle);
+        }
+
+        protected override void DrawObjectSelected(RenderTarget rt, LiveLine l)
+        {
+            rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), selectedLineBrush, Model.SelectedLineWidth, strokeStyle);
+            rt.DrawText(l.Value.ToString() + "°", selectedTextFormat, new RectangleF(l.MouseLocation.X, l.MouseLocation.Y - 30, 100, 100).ToRectF(), selectedTextBrush);
         }
     }
 }

@@ -73,13 +73,13 @@
     <Compile Include="Display\Elements\Signal\AnalogSignalPlotter.cs" />
     <Compile Include="Display\Elements\AxisX.cs" />
     <Compile Include="Display\Elements\AxisY.cs" />
-    <Compile Include="Display\Elements\Circle.cs" />
+    <Compile Include="Display\Elements\LiveCircle.cs" />
     <Compile Include="Display\Elements\Ppi\PolarDistanceMarker.cs" />
-    <Compile Include="Display\Elements\Line.cs" />
+    <Compile Include="Display\Elements\LiveLine.cs" />
     <Compile Include="Display\Elements\MouseSensitiveElement.cs" />
     <Compile Include="Display\Elements\Ppi\MarkerModel.cs" />
-    <Compile Include="Display\Elements\MouseSensitiveObject.cs" />
-    <Compile Include="Display\Elements\Rect.cs" />
+    <Compile Include="Display\Elements\LiveObject.cs" />
+    <Compile Include="Display\Elements\LiveRect.cs" />
     <Compile Include="Display\Elements\Signal\DiscreteSignalPlotter.cs" />
     <Compile Include="Display\Elements\XAxisMarker.cs" />
     <Compile Include="Display\ReferenceSystem\ReferenceSystem.cs" />

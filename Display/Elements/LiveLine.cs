@@ -3,11 +3,11 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class Line : MouseSensitiveObject
+    public class LiveLine : LiveObject
     {
         public PointF P1, P2;
 
-        public Line(PointF p1, PointF p2)
+        public LiveLine(PointF p1, PointF p2)
         {
             P1 = p1;
             P2 = p2;

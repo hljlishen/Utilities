@@ -2,9 +2,9 @@
 
 namespace Utilities.Display
 {
-    public class Rect : MouseSensitiveObject
+    public class LiveRect : LiveObject
     {
-        public Rect(RectangleF rectangle)
+        public LiveRect(RectangleF rectangle)
         {
             Rectangle = rectangle;
         }

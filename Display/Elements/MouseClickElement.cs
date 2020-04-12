@@ -1,6 +1,6 @@
 ﻿namespace Utilities.Display
 {
-    public abstract class MouseClickElement<ObjectType, UpdateType> : MouseSensitiveElement<ObjectType, UpdateType> where ObjectType : MouseSensitiveObject
+    public abstract class MouseClickElement<ObjectType, UpdateType> : MouseSensitiveElement<ObjectType, UpdateType> where ObjectType : LiveObject
     {
         public override void SetDisplayer(Displayer d)
         {
