@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Utilities.Display
 {
-    public class LayeredElement : GraphicElement
+    public class LayerManager : GraphicElement
     {
         protected Dictionary<int, Layer> layers = new Dictionary<int, Layer>();
         public void DrawChangedLayers(RenderTarget rt)

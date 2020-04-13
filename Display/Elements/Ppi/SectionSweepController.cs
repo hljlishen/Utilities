@@ -39,7 +39,7 @@ namespace Utilities.Display
 
         public bool IsOn => isOn;
 
-        public string Name => "扇扫选择";
+        public string Name { get; set; } = "扇扫选择";
 
         public void Stop()
         {
@@ -78,9 +78,9 @@ namespace Utilities.Display
 
         private void Panel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if(isActive)
+            MouseDown = false;  //置false放在判断之外，否则如果判断不通过，MouseDown一直未true
+            if (isActive && Math.Abs(Model.Begin - Model.End) > 15 && isOn)
             {
-                MouseDown = false;
                 SectionSelected?.Invoke(this, Model);
             }
         }
@@ -88,9 +88,9 @@ namespace Utilities.Display
         {
             lock(Locker)
             {
-                if (MouseDown && isActive)
+                MouseCurrentPos = e.Location;
+                if (MouseDown && isActive && IsOn &&  Functions.DistanceBetween(MouseDownPos.ToPoint2F(), MouseCurrentPos.ToPoint2F()) > 20)
                 {
-                    MouseCurrentPos = e.Location;
                     Model = GetSection(MouseDownPos, MouseCurrentPos);
                     UpdateGraphic();
                 }
@@ -102,13 +102,14 @@ namespace Utilities.Display
             {
                 MouseDown = true;
                 MouseDownPos = e.Location;
+                MouseCurrentPos = e.Location;
             }
         }
         protected abstract PathGeometry GetPathGeometry(SweepSection s, RenderTarget t);
         protected abstract SweepSection GetSection(PointF downPos, PointF currentPos);
         protected override void DrawDynamicElement(RenderTarget rt)
         {
-            if (isActive && !isStopped)
+            if (isActive && !isStopped /*&& Math.Abs(Model.Begin - Model.End) > 5*/)
             {
                 var geo = GetPathGeometry(Model, rt);
                 rt.DrawGeometry(geo, frameBrush, 3);
@@ -116,15 +117,9 @@ namespace Utilities.Display
             }
         }
 
-        public void On()
-        {
-            isOn = true;
-        }
+        public void On() => isOn = true;
 
-        public void Off()
-        {
-            isOn = false;
-        }
+        public void Off() => isOn = false;
     }
 
     public class PolarSectionSweepController : SectionSweepController

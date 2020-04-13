@@ -16,7 +16,7 @@ namespace Utilities.Display
 
         public bool IsOn => isOn;
 
-        public string Name => "波门选择";
+        public string Name { get; set; } = "波门选择";
 
         public event Action<PointF, PointF> SelectionFinish;
 

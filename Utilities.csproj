@@ -66,7 +66,8 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
-    <Compile Include="Display\Elements\ButtonElement.cs" />
+    <Compile Include="Display\Elements\Button\ButtenProperties.cs" />
+    <Compile Include="Display\Elements\Button\ButtonElement.cs" />
     <Compile Include="Display\Elements\Chart_Bar.cs" />
     <Compile Include="Display\Elements\ExclusiveSwitchableManager.cs" />
     <Compile Include="Display\Elements\MarkerElement.cs" />
@@ -74,8 +75,8 @@
     <Compile Include="Display\Elements\MouseClickToCancelSelectionElement.cs" />
     <Compile Include="Display\Elements\MouseMoveElement.cs" />
     <Compile Include="Display\Elements\Ppi\SectionSweepController.cs" />
-    <Compile Include="Display\Elements\Ppi\WaveGateController.cs" />
-    <Compile Include="Display\Elements\Ppi\WaveGateSelector.cs" />
+    <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateController.cs" />
+    <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateSelector.cs" />
     <Compile Include="Display\Elements\Signal\AnalogSignalPlotter.cs" />
     <Compile Include="Display\Elements\AxisX.cs" />
     <Compile Include="Display\Elements\AxisY.cs" />
@@ -123,7 +124,9 @@
     <Compile Include="IniBind\InterfaceInterception\NotIIniBindInterfaceInstanceException.cs" />
     <Compile Include="InputValidation\TextBoxValueDoesntMatchRuleException.cs" />
     <Compile Include="Display\Displayer.cs" />
-    <Compile Include="Display\LayeredElement.cs" />
+    <Compile Include="Display\LayerManager.cs" />
+    <Compile Include="Mapper\Area.cs" />
+    <Compile Include="Mapper\ZoomRectDecorator.cs" />
     <Compile Include="Rule\AndRule.cs" />
     <Compile Include="Rule\CompositeRule.cs" />
     <Compile Include="Rule\DoubleStrInRange.cs" />

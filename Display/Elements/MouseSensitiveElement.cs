@@ -57,6 +57,7 @@ namespace Utilities.Display
 
         protected override void DoUpdate(UpdateType t)
         {
+            base.DoUpdate(t);
             objects.Clear();
             objects = GetObjects().ToList();
         }

@@ -11,6 +11,6 @@ namespace Utilities.Display
         void On();
         void Off();
         bool IsOn { get; }
-        string Name { get; }
+        string Name { get; set; }
     }
 }

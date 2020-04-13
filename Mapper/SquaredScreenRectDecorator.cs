@@ -14,10 +14,10 @@ namespace Utilities.Mapper
             base.SetScreenArea(area.Left, area.Right, area.Top, area.Bottom);
         }
 
-        public static PointF CenterPointOf(RectangleF rect) => new PointF(rect.Width / 2 + rect.Left, rect.Height / 2 + rect.Top);
+        public static PointF CenterPointOf(RectangleF rect) => new PointF((rect.Right + rect.Left) / 2, (rect.Bottom + rect.Top) / 2);
 
-        public static PointF CenterPoint(double left, double right, double top, double bottom) => new PointF(Math.Abs((float)left - (float)right) / 2, Math.Abs((float)top - (float)bottom) / 2);
-        public static double MaximumSquareWidth(double left, double right, double top, double bottom) => Math.Min(Math.Abs(left - right), Math.Abs(top - bottom))/2;
+        public static PointF CenterPoint(double left, double right, double top, double bottom) => new PointF(Math.Abs((float)left + (float)right) / 2, Math.Abs((float)top + (float)bottom) / 2);
+        public static double MaximumSquareWidth(double left, double right, double top, double bottom) => Math.Min(Math.Abs(left - right), Math.Abs(top - bottom)) / 2;
 
         private Area FindSquareInArea(double left, double right, double top, double bottom)
         {
@@ -28,7 +28,7 @@ namespace Utilities.Mapper
 
             Area ret;
 
-            if(isXIncreasing)
+            if (isXIncreasing)
             {
                 ret.Left = center.X - width;
                 ret.Right = center.X + width;
@@ -39,7 +39,7 @@ namespace Utilities.Mapper
                 ret.Right = center.X - width;
             }
 
-            if(isYIncreaseing)
+            if (isYIncreaseing)
             {
                 ret.Top = center.Y + width;
                 ret.Bottom = center.Y - width;
@@ -49,16 +49,8 @@ namespace Utilities.Mapper
                 ret.Top = center.Y - width;
                 ret.Bottom = center.Y + width;
             }
-            
-            return ret;
-        }
 
-        private struct Area
-        {
-            public double Left;
-            public double Right;
-            public double Top;
-            public double Bottom;
+            return ret;
         }
     }
 }

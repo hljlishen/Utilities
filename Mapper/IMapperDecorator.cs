@@ -37,5 +37,6 @@ namespace Utilities.Mapper
         public virtual void SetScreenArea(double left, double right, double top, double bottom) => Mapper.SetScreenArea(left, right, top, bottom);
 
         public void SetCoordinateArea(double left, double right, double top, double bottom) => Mapper.SetCoordinateArea(left, right, top, bottom);
+        internal void SetScreenArea(Area a) => Mapper.SetScreenArea(a.Left, a.Right, a.Top, a.Bottom);
     }
 }

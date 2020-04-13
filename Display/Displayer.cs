@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Utilities.Mapper;
+using Utilities.Tools;
 
 namespace Utilities.Display
 {
@@ -19,7 +20,7 @@ namespace Utilities.Display
         public ReferenceSystem ReferenceSystem;
         private bool Disposed;
 
-        public LayeredElement Elements { get; protected set; }
+        public LayerManager Elements { get; protected set; }
         public readonly object Locker = new object();
 
         public Displayer(Panel p, IScreenToCoordinateMapper mapper, ReferenceSystem referenceSystem)
@@ -34,7 +35,7 @@ namespace Utilities.Display
             #endregion
 
             #region Background
-            Elements = new LayeredElement();
+            Elements = new LayerManager();
             Elements.SetDisplayer(this);
             #endregion
 
@@ -71,7 +72,8 @@ namespace Utilities.Display
                 Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
                 (rt as HwndRenderTarget).Resize(new SizeU((uint)Panel.Width, (uint)Panel.Height));
                 rt.Transform = Matrix3x2F.Scale(rt.Size.Width / Panel.Width, rt.Size.Height / Panel.Height);
-                Redraw = true;
+                //rt.Transform = Matrix3x2F.Rotation((float)Functions.DegreeToRadian(90), new Point2F(438, 412.5f));
+                //Redraw = true;
             }
         }
 

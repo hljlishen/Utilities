@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Utilities.Coordinates;
 using Utilities.Tools;
+using System.Linq;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
 namespace Utilities.Display
@@ -17,8 +18,9 @@ namespace Utilities.Display
         public double EndDistance;
     }
 
-    struct WaveGatePoints
+    struct WaveGateCoordinates
     {
+        public uint Id;
         public RectangularCoordinate P1;
         public RectangularCoordinate P2;
     }
@@ -26,14 +28,13 @@ namespace Utilities.Display
     public class WaveGateController : MouseClickElement<LiveSectorRing, int>, ISwtichable
     {
         private uint currentWaveGateId = 0;
-        private readonly Dictionary<LiveSectorRing, uint> waveGateIdMap = new Dictionary<LiveSectorRing, uint>();
-        private readonly List<WaveGatePoints> waveGates = new List<WaveGatePoints>();
+        private readonly Dictionary<LiveSectorRing, WaveGateCoordinates> waveGateMap = new Dictionary<LiveSectorRing, WaveGateCoordinates>();
         private WaveGateSelector selector;
         private Brush frameBrush, normalFillBrush, selectedFillBrush;
 
         public bool IsOn => selector.IsOn;
 
-        public string Name => "波门选择";
+        public string Name { get; set; } = "波门选择";
 
         public event Action<WaveGateController, WaveGate> WaveGateSelected;
         public event Action<uint> WaveGateDeleted;
@@ -69,12 +70,10 @@ namespace Utilities.Display
                     var sr = objects[i];
                     if(sr.Selected)
                     {
-                        uint id = waveGateIdMap[sr];
-                        waveGateIdMap.Remove(sr);
+                        uint id = waveGateMap[sr].Id;
+                        waveGateMap.Remove(sr);
                         WaveGateDeleted?.Invoke(id);
                         objects.Remove(sr);
-
-                        //需要删除WaveGates中的元素，否则重绘画面时，wavegates中的数据会再次被绘制出来
                     }
                 }
                 UpdateGraphic();
@@ -85,7 +84,7 @@ namespace Utilities.Display
         {
             base.SetDisplayer(d);
             selector = new WaveGateSelector();
-            d.Elements.Add(10, selector);
+            d.Elements.Add(LayerId, selector);
             selector.SelectionFinish += Selector_SelectionFinish;
         }
 
@@ -95,7 +94,7 @@ namespace Utilities.Display
             {
                 var r1 = Mapper.GetCoordinateLocation(arg1.X, arg1.Y).ToRectangularCoordinate();
                 var r2 = Mapper.GetCoordinateLocation(arg2.X, arg2.Y).ToRectangularCoordinate();
-                waveGates.Add(new WaveGatePoints() { P1 = r1, P2 = r2 });
+                WaveGateCoordinates wgc = new WaveGateCoordinates() { Id = currentWaveGateId++, P1 = r1, P2 = r2 };
 
                 PolarCoordinate p1 = new PolarCoordinate(r1);
                 PolarCoordinate p2 = new PolarCoordinate(r2);
@@ -106,7 +105,8 @@ namespace Utilities.Display
                 WaveGateSelected?.Invoke(this, w);
                 LiveSectorRing ring = new LiveSectorRing() { Center = ReferenceSystem.ScreenOriginalPoint, ScrP1 = arg1, ScrP2 = arg2 };
                 objects.Add(ring);
-                waveGateIdMap.Add(ring, currentWaveGateId++);
+
+                waveGateMap.Add(ring, wgc);
 
                 UpdateGraphic();
             }
@@ -129,22 +129,23 @@ namespace Utilities.Display
         protected override IEnumerable<LiveSectorRing> GetObjects()
         {
             var oPoint = ReferenceSystem.ScreenOriginalPoint;
-            foreach (var w in waveGates)
+
+            //此处需要将waveGateMap清空重新添加映射，因为GetObject之后的LiveSectorRing对象是重新计算的，需要用新的LiveSectorRing对象重新建立 LiveSectorRing<-->WaveGateCoordinate映射。
+            //此处如果不更新映射，displayer放缩之后再删除波门，会用新的LiveSectorRing对象在旧的LiveSectorRing<-->WaveGateCoordinate映射中查找WaveGateCoordinate，从而抛出异常
+            var values = waveGateMap.Values.ToList();
+            waveGateMap.Clear();
+            foreach (var w in values)
             {
                 var scrP1 = Mapper.GetScreenLocation(w.P1.X, w.P1.Y);
                 var scrP2 = Mapper.GetScreenLocation(w.P2.X, w.P2.Y);
-                yield return new LiveSectorRing() { ScrP1 = scrP1, Center = oPoint, ScrP2 = scrP2 };
+                LiveSectorRing liveSectorRing = new LiveSectorRing() { ScrP1 = scrP1, Center = oPoint, ScrP2 = scrP2 };
+                waveGateMap.Add(liveSectorRing, w);
+                yield return liveSectorRing;
             }
         }
 
-        public void On()
-        {
-            selector.On();
-        }
+        public void On() => selector.On();
 
-        public void Off()
-        {
-            selector.Off();
-        }
+        public void Off() => selector.Off();
     }
 }

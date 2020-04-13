@@ -7,7 +7,6 @@ namespace Utilities.Display
 {
     public abstract class MarkerElement<ObjectType> : MouseMoveElement<ObjectType, MarkerModel> where ObjectType : LiveObject
     {
-        protected MarkerModel Model;
         protected Brush normalLineBrush;
         protected Brush selectedLineBrush;
         protected TextFormat normalTextFormat;
@@ -29,10 +28,11 @@ namespace Utilities.Display
             selectedLineBrush = Model.SelectedLineColor.SolidBrush(rt);
             normalTextBrush = Model.FontColor.SolidBrush(rt);
             selectedTextBrush = Model.SelectedFontColor.SolidBrush(rt);
-            DWriteFactory dw = DWriteFactory.CreateFactory();
-            normalTextFormat = dw.CreateTextFormat(Model.FontName, Model.FontSize);
-            selectedTextFormat = dw.CreateTextFormat(Model.SelectedFontName, Model.SelectedFontSize);
-            dw.Dispose();
+            using (var dw = DWriteFactory.CreateFactory())
+            {
+                normalTextFormat = dw.CreateTextFormat(Model.FontName, Model.FontSize);
+                selectedTextFormat = dw.CreateTextFormat(Model.SelectedFontName, Model.SelectedFontSize);
+            }
         }
 
         public override void Dispose()
@@ -49,12 +49,6 @@ namespace Utilities.Display
         public MarkerElement(MarkerModel model)
         {
             Model = model;
-        }
-
-        protected override void DoUpdate(MarkerModel t)
-        {
-            Model = t;
-            base.DoUpdate(t);
         }
     }
 }

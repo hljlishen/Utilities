@@ -53,8 +53,9 @@ namespace Utilities.Display
             {
                 if (buttonMap.Values.Contains(s))
                     return;
-                var btn = new ButtonElement(new ButtenProperties(currentPos, Model.ButtonSize, s.Name));
-                btn.Update(new ButtenProperties(currentPos, Model.ButtonSize, s.Name));
+                var properties = new ButtenProperties(currentPos, Model.ButtonSize, s.Name);
+                var btn = new ButtonElement(properties);
+                btn.Update(properties);
                 btn.Clicked += Btn_Clicked;
                 buttonMap.Add(btn, s);
                 UpdateGraphic();
@@ -95,9 +96,9 @@ namespace Utilities.Display
                 }
             }
         }
-
         protected override void DrawDynamicElement(RenderTarget rt)
         {
+            //此控件不绘制任何图像，由它保存的button和ISwitchable自己绘制
         }
     }
 }

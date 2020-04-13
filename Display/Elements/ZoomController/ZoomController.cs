@@ -18,7 +18,7 @@ namespace Utilities.Display
 
         public bool IsOn => isOn;
 
-        public string Name => "放缩控制";
+        public string Name { get; set; } = "放缩控制";
 
         public override void Dispose()
         {

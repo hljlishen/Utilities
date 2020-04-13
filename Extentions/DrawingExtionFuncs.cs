@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
 using Utilities.Coordinates;
 
 namespace System.Drawing
@@ -23,3 +24,18 @@ namespace System.Drawing
         public static PointF ToPointF(this RectangularCoordinate r) => new PointF((float)r.X, (float)r.Y);
     }
 }
+
+namespace System
+{
+    public static class StringExt
+    { 
+        public static TextFormat MakeFormat(this string fontName, float size)
+        {
+            using(var dw = DWriteFactory.CreateFactory())
+            {
+                return dw.CreateTextFormat(fontName, size);
+            }
+        }
+    }
+}
+
