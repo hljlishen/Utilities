@@ -20,6 +20,14 @@ namespace Utilities.Display
         public double Top { get; private set; }
         public double Bottom { get; private set; }
 
+        public double ScreenLeft => Mapper.GetScreenX(Left);
+        public double ScreenRight => Mapper.GetScreenX(Right);
+        public double ScreenTop => Mapper.GetScreenY(Top);
+        public double ScreenBottom => Mapper.GetScreenY(Bottom);
+
+        public double ScreenWidth => ScreenRight - ScreenLeft;
+        public double ScreenHeight => ScreenBottom - ScreenTop;
+
         public double XDistance => Math.Abs(Right - Left);
         public double YDistance => Math.Abs(Top - Bottom);
         public IScreenToCoordinateMapper Mapper { get; private set; }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using Utilities.Coordinates;
 
 namespace System.Drawing
 {
@@ -16,5 +17,9 @@ namespace System.Drawing
         public static Point2F Center(this RectF r) => new Point2F((r.Left + r.Right) / 2, (r.Top + r.Bottom) / 2);
 
         public static bool IsPointInRect(this RectangleF r, PointF p) => p.X >= r.Left && p.X <= r.Right && p.Y >= r.Top && p.Y <= r.Bottom;
+
+        public static RectangularCoordinate ToRectangularCoordinate(this PointF p) => new RectangularCoordinate(p.X, p.Y, 0);
+
+        public static PointF ToPointF(this RectangularCoordinate r) => new PointF((float)r.X, (float)r.Y);
     }
 }

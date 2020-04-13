@@ -63,8 +63,9 @@ namespace Utilities.Display
         {
             lock (Locker)
                 elements.Add(e);
+            e.LayerId = LayerId;
             e.SetDisplayer(displayer);
-            Changed = true;
+            UpdateGraphic();
         }
 
         public void RemoveElement(GraphicElement e)
@@ -74,7 +75,7 @@ namespace Utilities.Display
                 if (elements.Contains(e))
                 {
                     elements.Remove(e);
-                    Changed = true;
+                    UpdateGraphic();
                 }
             }
         }

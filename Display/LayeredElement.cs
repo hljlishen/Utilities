@@ -32,7 +32,7 @@ namespace Utilities.Display
                     layers[layerId] = layer;
                 }
                 layers[layerId].AddElement(e);
-                Changed = true;
+                UpdateGraphic();
             }
         }
 

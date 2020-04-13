@@ -1,10 +1,11 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using System;
 using System.Drawing;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
 namespace Utilities.Display
 {
-    public class ZoomController : GraphicElement
+    public class ZoomController : GraphicElement, ISwtichable
     {
         private bool mouseDown = false;
         private Point mouseDownPos;
@@ -12,7 +13,12 @@ namespace Utilities.Display
         private Brush fillBrush;
         private Brush frameBrush;
         private Rectangle coverRect;
+        private bool isOn = false;
         public SelectStrategy SelectStrategy { get; set; }
+
+        public bool IsOn => isOn;
+
+        public string Name => "放缩控制";
 
         public override void Dispose()
         {
@@ -46,20 +52,29 @@ namespace Utilities.Display
 
         private void PictureBox_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            if (!mouseDown)
+                return;
             mouseDown = false;
+
             if (!SelectStrategy.IsRectBigEnough(coverRect, Mapper))
             {
-                Changed = true;
-                return;
+                UpdateGraphic();
             }
-            SetMapperRange(Mapper.GetCoordinateX(coverRect.Left), Mapper.GetCoordinateX(coverRect.Right), Mapper.GetCoordinateY(coverRect.Top), Mapper.GetCoordinateY(coverRect.Bottom));
+            else
+            {
+                SetMapperRange(Mapper.GetCoordinateX(coverRect.Left), Mapper.GetCoordinateX(coverRect.Right), Mapper.GetCoordinateY(coverRect.Top), Mapper.GetCoordinateY(coverRect.Bottom));
+            }
+
+            //此处必须清零coverRect，原因是：当鼠标只做点击不拖动时，coverRect会保留上次放缩时计算的CoverRect值，因此会通过IsRectBigEnough的校验
+            coverRect = new Rectangle(0, 0, 0, 0);
+            return;
         }
 
         private void SetMapperRange(double xLeft, double xRight, double yTop, double yBottom)
         {
             Mapper.SetCoordinateXRange(xLeft, xRight);
             Mapper.SetCoordinateYRange(yTop, yBottom);
-            Changed = true;
+            //UpdateGraphic();
         }
 
         private void PictureBox_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -68,13 +83,16 @@ namespace Utilities.Display
                 return;
             mouseCurrentPos = e.Location;
             coverRect = SelectStrategy.CalRect(mouseDownPos, mouseCurrentPos);
-            Changed = true;
+            UpdateGraphic();
         }
 
         private void PictureBox_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            if (!IsOn)
+                return;
             mouseDown = true;
             mouseDownPos = e.Location;
+            mouseCurrentPos = e.Location;
         }
 
         public void Reset() => SetMapperRange(ReferenceSystem.Left, ReferenceSystem.Right, ReferenceSystem.Top, ReferenceSystem.Bottom);
@@ -93,6 +111,16 @@ namespace Utilities.Display
                 SelectStrategy = s;
                 s.SetZoomController(this);
             }
+        }
+
+        public void On()
+        {
+            isOn = true;
+        }
+
+        public void Off()
+        {
+            isOn = false;
         }
     }
 }

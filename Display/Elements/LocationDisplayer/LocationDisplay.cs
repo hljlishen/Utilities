@@ -50,12 +50,13 @@ namespace Utilities.Display
         {
             currentScreenLcation = e.Location;
             currentCoordinateLocation = Mapper.GetCoordinateLocation(e.X, e.Y);
-            Changed = true;
+            //Changed = true;
+            UpdateGraphic();
         }
 
         protected override void DrawDynamicElement(RenderTarget rt)
         {
-            if (Changed)
+            if (HasChanged())
             {
                 textBrush?.Dispose();
                 textFormat?.Dispose();

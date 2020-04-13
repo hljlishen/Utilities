@@ -44,6 +44,27 @@ namespace Utilities.Tools
             return r;
         }
 
+        public static double AngleToNorth(PointF center, PointF p)
+        {
+            var angle = 90 - RadianToDegree(Math.Atan2(center.Y - p.Y, p.X - center.X));
+            return StandardAngle(angle);
+        }
+        public static double FindSmallArcBeginAngle(double a, double b)
+        {
+            var max = Math.Max(a, b);
+            var min = Math.Min(a, b);
+
+            return max - min <= 180 ? min : max;
+        }
+
+        public static double FindSmallArcEndAngle(double a, double b)
+        {
+            var max = Math.Max(a, b);
+            var min = Math.Min(a, b);
+
+            return max - min <= 180 ? max : min;
+        }
+
         public static Point2F FindCenterPosition(Rect rect)
         {
             if (rect == null)

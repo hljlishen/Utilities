@@ -7,7 +7,8 @@ namespace Utilities.Display
 {
     public abstract class GraphicElement : IDisposable
     {
-        protected bool Changed = true;
+        public int LayerId { get; set; }
+        private bool Changed = true;
         protected Displayer displayer;
         protected readonly object Locker = new object();
         private bool firstTimeDraw = true;
@@ -25,6 +26,7 @@ namespace Utilities.Display
         protected abstract void DrawElement(RenderTarget rt);
         protected virtual void InitializeComponents(RenderTarget rt) { }
         public virtual bool HasChanged()=> Changed;
+        public virtual void UpdateGraphic() => Changed = true;
 
         /// <summary>
         /// 框架负责调用次函数，用户不要主动调用

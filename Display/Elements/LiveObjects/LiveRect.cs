@@ -10,6 +10,6 @@ namespace Utilities.Display
         }
 
         public RectangleF Rectangle { get; set; }
-        public override bool IsMouseNear(PointF mouseLocation) => Rectangle.IsPointInRect(mouseLocation);
+        public override bool IsPointNear(PointF mouseLocation) => Rectangle.IsPointInRect(mouseLocation);
     }
 }

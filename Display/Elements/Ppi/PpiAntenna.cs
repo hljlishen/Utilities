@@ -8,7 +8,7 @@ namespace Utilities.Display
     {
         private double preDegree = 0;
         private double degree = 0;
-        private int shadeLen = 200;
+        private int shadeLen = 1;
         private double shadeStep = 0.1f;
         private Color antennaColor = Color.White;
         public Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush antennaBrush = null;
@@ -17,13 +17,13 @@ namespace Utilities.Display
             var opStep = 1.0f / shadeLen;
             if (preDegree > degree)
             {
-                shadeLen = 200;
+                //shadeLen = 200;
                 shadeStep = 0.1f;
             }
             else if (preDegree < degree)
             {
                 shadeStep = -0.1f;
-                shadeLen = 200;
+                //shadeLen = 200;
             }
             else
                 shadeLen = 1;

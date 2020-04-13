@@ -4,6 +4,7 @@ namespace Utilities.Display
 {
     public abstract class DynamicElement<T> : GraphicElement
     {
+        protected T Model;
         protected override void DrawElement(RenderTarget rt)
         {
             lock (Locker)
@@ -19,10 +20,13 @@ namespace Utilities.Display
             lock(Locker)
             {
                 DoUpdate(t);
-                Changed = true;
+                UpdateGraphic();
             }
         }
 
-        protected abstract void DoUpdate(T t);
+        protected virtual void DoUpdate(T t)
+        {
+            Model = t;
+        }
     }
 }

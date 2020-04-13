@@ -7,6 +7,6 @@ namespace Utilities.Display
         public PointF MouseLocation { get; set; }
         public object Value { get; set; }
         public bool Selected { get; set; } = false;
-        public abstract bool IsMouseNear(PointF mouseLocation);
+        public abstract bool IsPointNear(PointF mouseLocation);
     }
 }

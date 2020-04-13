@@ -25,7 +25,7 @@ namespace Utilities.Display
             return Math.Abs(lineK * p.X - p.Y + lineC) / (Math.Sqrt(lineK * lineK + 1));
         }
 
-        public override bool IsMouseNear(PointF p)
+        public override bool IsPointNear(PointF p)
         {
             if (VerticalDistancToPointF(p) <= 8)
             {

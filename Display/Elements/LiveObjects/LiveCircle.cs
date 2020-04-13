@@ -20,6 +20,6 @@ namespace Utilities.Display
             return Math.Abs(Ellipse.RadiusX - disToCenter);
         }
 
-        public override bool IsMouseNear(PointF mouseLocation) => DistanceToCirleEdge(mouseLocation) < 6;
+        public override bool IsPointNear(PointF mouseLocation) => DistanceToCirleEdge(mouseLocation) < 6;
     }
 }

@@ -26,7 +26,7 @@ namespace Utilities.Display
         {
         }
 
-        public PolarAngleMarker() : this(new MarkerModel() { LineColor = Color.White, LineWidth = 1, ObjectNumber = 12, SelectedLineColor = Color.Red, SelectedLineWidth = 3, FontName = "Berlin Sans FB Demi", FontColor = Color.Gray, FontSize = 15, SelectedFontColor = Color.Red, SelectedFontName = "Berlin Sans FB Demi", SelectedFontSize = 15 }) { }
+        public PolarAngleMarker() : this(new MarkerModel() { LineColor = Color.White, LineWidth = 1, ObjectNumber = 12, SelectedLineColor = Color.Orange, SelectedLineWidth = 3, FontName = "Berlin Sans FB Demi", FontColor = Color.Gray, FontSize = 15, SelectedFontColor = Color.Yellow, SelectedFontName = "Berlin Sans FB Demi", SelectedFontSize = 15 }) { }
 
         private IEnumerable<double> CalAngles(uint angleMarkerNumber)
         {

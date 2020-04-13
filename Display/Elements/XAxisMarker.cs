@@ -31,7 +31,7 @@ namespace Utilities.Display
             var yBottom = Mapper.GetScreenY(ReferenceSystem.Bottom);
             var yTop = Mapper.GetScreenY(ReferenceSystem.Top);
 
-            for (int i = 0; i < Model.ObjectNumber; i++)
+            for (int i = 0; i < Model.ObjectNumber + 1; i++)
             {
                 double value = ReferenceSystem.Left + step * i;
                 var x = Mapper.GetScreenX(value);

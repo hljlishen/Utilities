@@ -27,7 +27,7 @@ namespace Utilities.Display
             var xLeft = Mapper.GetScreenX(ReferenceSystem.Left);
             var xRight = Mapper.GetScreenX(ReferenceSystem.Right);
 
-            for (int i = 0; i < Model.ObjectNumber; i++)
+            for (int i = 0; i < Model.ObjectNumber + 1; i++)
             {
                 double value = ReferenceSystem.Bottom + step * i;
                 var y = Mapper.GetScreenY(value);

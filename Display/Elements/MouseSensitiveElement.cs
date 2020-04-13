@@ -32,23 +32,23 @@ namespace Utilities.Display
         }
         protected abstract IEnumerable<ObjectType> GetObjects();
 
-        protected void ProcessMouseEvent(MouseEventArgs e)
+        protected virtual void ProcessMouseEvent(MouseEventArgs e)
         {
             lock (Locker)
             {
                 foreach (var o in objects)
                 {
-                    if (o.IsMouseNear(e.Location))
+                    if (o.IsPointNear(e.Location))
                     {
                         o.MouseLocation = e.Location;
                         if (!o.Selected)
-                            Changed = true;
+                            UpdateGraphic();
                         o.Selected = true;
                     }
                     else
                     {
                         if (o.Selected)
-                            Changed = true;
+                            UpdateGraphic();
                         o.Selected = false;
                     }
                 }
