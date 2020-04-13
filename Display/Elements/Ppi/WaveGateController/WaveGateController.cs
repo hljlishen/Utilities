@@ -6,6 +6,7 @@ using Utilities.Coordinates;
 using Utilities.Tools;
 using System.Linq;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
+using System.Windows.Forms;
 
 namespace Utilities.Display
 {
@@ -25,7 +26,7 @@ namespace Utilities.Display
         public RectangularCoordinate P2;
     }
 
-    public class WaveGateController : MouseClickElement<LiveSectorRing, int>, ISwtichable
+    public class WaveGateController : MouseClickToCancelSelectionElement<LiveSectorRing, int>, ISwtichable
     {
         private uint currentWaveGateId = 0;
         private readonly Dictionary<LiveSectorRing, WaveGateCoordinates> waveGateMap = new Dictionary<LiveSectorRing, WaveGateCoordinates>();
@@ -147,5 +148,10 @@ namespace Utilities.Display
         public void On() => selector.On();
 
         public void Off() => selector.Off();
+
+        protected override void MouseClickLiveObjectHandler(MouseEventArgs e, LiveSectorRing t)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

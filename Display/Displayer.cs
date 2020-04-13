@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using System;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -72,8 +73,7 @@ namespace Utilities.Display
                 Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
                 (rt as HwndRenderTarget).Resize(new SizeU((uint)Panel.Width, (uint)Panel.Height));
                 rt.Transform = Matrix3x2F.Scale(rt.Size.Width / Panel.Width, rt.Size.Height / Panel.Height);
-                //rt.Transform = Matrix3x2F.Rotation((float)Functions.DegreeToRadian(90), new Point2F(438, 412.5f));
-                //Redraw = true;
+                Redraw = true;
             }
         }
 
