@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using System;
 using System.Drawing;
+using Utilities.Mapper;
 using Utilities.Tools;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 using SizeF = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.SizeF;
@@ -25,7 +26,7 @@ namespace Utilities.Display
             End = end;
         }
     }
-    public abstract class SectionSweepController : DynamicElement<SweepSection>, ISwtichable
+    public abstract class SectionSweepController : RotatableElement<SweepSection>, ISwtichable
     {
         private bool MouseDown = false;
         private PointF MouseDownPos;
@@ -126,8 +127,8 @@ namespace Utilities.Display
     {
         protected override PathGeometry GetPathGeometry(SweepSection s, RenderTarget t)
         {
-            var pbegin = CalIntersectionPoint(s.Begin);
-            var pend = CalIntersectionPoint(s.End);
+            var pbegin = CalIntersectionPoint(s.Begin + (Mapper as PolarRotateDecorator).RotateAngle);
+            var pend = CalIntersectionPoint(s.End + (Mapper as PolarRotateDecorator).RotateAngle);
 
             PathGeometry sweepSectionGraphic = t.Factory.CreatePathGeometry();
             GeometrySink gs = sweepSectionGraphic.Open();

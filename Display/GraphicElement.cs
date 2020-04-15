@@ -34,7 +34,7 @@ namespace Utilities.Display
         /// <param name="d">显示器</param>
         public virtual void SetDisplayer(Displayer d) => displayer = d;
         public Panel Panel => displayer.Panel;
-        public IScreenToCoordinateMapper Mapper => displayer.Mapper;
+        public virtual IScreenToCoordinateMapper Mapper => displayer.Mapper;
         public virtual void Dispose() { }
     }
 }

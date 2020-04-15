@@ -30,7 +30,6 @@ namespace Utilities.Display
             var step = (ReferenceSystem.Right - ReferenceSystem.Left) / Model.ObjectNumber;
             var yBottom = Mapper.GetScreenY(ReferenceSystem.Bottom);
             var yTop = Mapper.GetScreenY(ReferenceSystem.Top);
-
             for (int i = 0; i < Model.ObjectNumber + 1; i++)
             {
                 double value = ReferenceSystem.Left + step * i;
@@ -41,6 +40,7 @@ namespace Utilities.Display
 
         protected override void DrawObjectUnselected(RenderTarget rt, LiveLine l)
         {
+            normalLineBrush.Opacity = 0.5f;
             rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, stroke);
         }
 

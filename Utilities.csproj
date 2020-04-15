@@ -74,9 +74,12 @@
     <Compile Include="Display\Elements\MouseClickElement.cs" />
     <Compile Include="Display\Elements\MouseClickToCancelSelectionElement.cs" />
     <Compile Include="Display\Elements\MouseMoveElement.cs" />
+    <Compile Include="Display\Elements\NorthLine.cs" />
     <Compile Include="Display\Elements\Ppi\SectionSweepController.cs" />
     <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateController.cs" />
     <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateSelector.cs" />
+    <Compile Include="Display\Elements\RotatableElement.cs" />
+    <Compile Include="Display\Elements\RotationController.cs" />
     <Compile Include="Display\Elements\Signal\AnalogSignalPlotter.cs" />
     <Compile Include="Display\Elements\AxisX.cs" />
     <Compile Include="Display\Elements\AxisY.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="Display\Elements\LiveObjects\LiveRect.cs" />
     <Compile Include="Display\Elements\Signal\DiscreteSignalPlotter.cs" />
     <Compile Include="Display\Elements\Swtichable.cs" />
+    <Compile Include="Display\Elements\Target.cs" />
     <Compile Include="Display\Elements\XAxisMarker.cs" />
     <Compile Include="Display\Elements\LiveObjects\LiveSectorRing.cs" />
     <Compile Include="Display\ReferenceSystem\ReferenceSystem.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="Display\Displayer.cs" />
     <Compile Include="Display\LayerManager.cs" />
     <Compile Include="Mapper\Area.cs" />
+    <Compile Include="Mapper\PolarRotateDecorator.cs" />
     <Compile Include="Mapper\ZoomRectDecorator.cs" />
     <Compile Include="Rule\AndRule.cs" />
     <Compile Include="Rule\CompositeRule.cs" />

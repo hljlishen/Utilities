@@ -7,7 +7,7 @@ using Utilities.Tools;
 using System.Linq;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 using System.Windows.Forms;
-
+using Utilities.Mapper;
 namespace Utilities.Display
 {
     public struct WaveGate
@@ -26,6 +26,7 @@ namespace Utilities.Display
         public RectangularCoordinate P2;
     }
 
+    //public class WaveGateController : MouseClickToCancelSelectionElement<LiveSectorRing, int>, ISwtichable
     public class WaveGateController : MouseClickToCancelSelectionElement<LiveSectorRing, int>, ISwtichable
     {
         private uint currentWaveGateId = 0;
@@ -87,7 +88,16 @@ namespace Utilities.Display
             selector = new WaveGateSelector();
             d.Elements.Add(LayerId, selector);
             selector.SelectionFinish += Selector_SelectionFinish;
+
+            //PolarRotateDecorator.GetInstance(null).MapperStateChanged += WaveGateController_MapperStateChanged;
         }
+
+        //private void WaveGateController_MapperStateChanged(IScreenToCoordinateMapper obj)
+        //{
+        //    objects.Clear();
+        //    objects = GetObjects();
+        //    UpdateGraphic();
+        //}
 
         private void Selector_SelectionFinish(PointF arg1, PointF arg2)
         {
@@ -139,6 +149,8 @@ namespace Utilities.Display
             {
                 var scrP1 = Mapper.GetScreenLocation(w.P1.X, w.P1.Y);
                 var scrP2 = Mapper.GetScreenLocation(w.P2.X, w.P2.Y);
+                //var scrP1 = PolarRotateDecorator.GetInstance(null).GetScreenLocation(w.P1.X, w.P1.Y);
+                //var scrP2 = PolarRotateDecorator.GetInstance(null).GetScreenLocation(w.P2.X, w.P2.Y);
                 LiveSectorRing liveSectorRing = new LiveSectorRing() { ScrP1 = scrP1, Center = oPoint, ScrP2 = scrP2 };
                 waveGateMap.Add(liveSectorRing, w);
                 yield return liveSectorRing;

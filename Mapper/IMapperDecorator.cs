@@ -11,6 +11,7 @@ namespace Utilities.Mapper
             Mapper.MapperStateChanged += Mapper_MapperStateChanged;
         }
         private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => MapperStateChanged?.Invoke(obj);
+        protected void InvokeStateChanged() => MapperStateChanged?.Invoke(this);
         protected IScreenToCoordinateMapper Mapper { get; private set; }
         public double ScreenLeft => Mapper.ScreenLeft;
         public double ScreenRight => Mapper.ScreenRight;
