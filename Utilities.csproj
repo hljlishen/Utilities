@@ -95,6 +95,8 @@
     <Compile Include="Display\Elements\Target.cs" />
     <Compile Include="Display\Elements\XAxisMarker.cs" />
     <Compile Include="Display\Elements\LiveObjects\LiveSectorRing.cs" />
+    <Compile Include="Display\Sensors\MouseClickSensor.cs" />
+    <Compile Include="Display\Sensors\MouseMoveSensor.cs" />
     <Compile Include="Display\ReferenceSystem\ReferenceSystem.cs" />
     <Compile Include="Display\Elements\LocationDisplayer\CoordinateLocation.cs" />
     <Compile Include="Display\Elements\LocationDisplayer\CoordinateType.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Display\Elements\ZoomController\SquareSelection.cs" />
     <Compile Include="Display\Elements\ZoomController\XAxisSelection.cs" />
     <Compile Include="Display\Elements\ZoomController\YAxisSelection.cs" />
+    <Compile Include="Display\Sensors\Sensor.cs" />
     <Compile Include="Display\TernaryRasterOperations.cs" />
     <Compile Include="Display\DynamicElement.cs" />
     <Compile Include="Display\GDI.cs" />
