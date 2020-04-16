@@ -14,6 +14,9 @@ namespace Utilities.Display
         {
             lock(locker)
             {
+                if (objects == null || objects.Count == 0)
+                    return;
+
                 foreach (var o in objects)
                 {
                     if (o.IsPointNear(e.Location))

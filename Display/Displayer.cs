@@ -70,6 +70,8 @@ namespace Utilities.Display
         {
             lock(Locker)
             {
+                if (Panel.Width < 10 && Panel.Height < 10)  //卫语句，窗口最小化时会触发sizechanged事件，此时width和height都是0，会触发ValueInterval的范围过小异常
+                    return;
                 Mapper.SetScreenArea(0, Panel.Width, 0, Panel.Height);
                 (rt as HwndRenderTarget).Resize(new SizeU((uint)Panel.Width, (uint)Panel.Height));
                 rt.Transform = Matrix3x2F.Scale(rt.Size.Width / Panel.Width, rt.Size.Height / Panel.Height);

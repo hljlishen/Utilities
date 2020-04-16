@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class YAxisMarker : MarkerElement<LiveLine>
+    public class YAxisMarker : MarkerElement
     {
         private StrokeStyle stroke;
 
@@ -21,7 +21,7 @@ namespace Utilities.Display
             stroke = rt.Factory.CreateStrokeStyle(new StrokeStyleProperties { DashStyle = DashStyle.Dash });
         }
 
-        protected override IEnumerable<LiveLine> GetObjects()
+        protected override IEnumerable<LiveObject> GetObjects()
         {
             var step = (ReferenceSystem.Top - ReferenceSystem.Bottom) / Model.ObjectNumber;
             var xLeft = Mapper.GetScreenX(ReferenceSystem.Left);
@@ -35,16 +35,28 @@ namespace Utilities.Display
             }
         }
 
-        protected override void DrawObjectUnselected(RenderTarget rt, LiveLine l)
+        protected void DrawObjectUnselected(RenderTarget rt, LiveLine l)
         {
             normalLineBrush.Opacity = 0.5f;
             rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, stroke);
         }
 
-        protected override void DrawObjectSelected(RenderTarget rt, LiveLine l)
+        protected void DrawObjectSelected(RenderTarget rt, LiveLine l)
         {
             rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), selectedLineBrush, Model.SelectedLineWidth, stroke);
             rt.DrawText(l.Value.ToString(), selectedTextFormat, new RectangleF(l.MouseLocation.X, l.MouseLocation.Y - 30, 100, 100).ToRectF(), selectedTextBrush);
+        }
+
+        protected override void DrawDynamicElement(RenderTarget rt)
+        {
+            foreach (var o in Objects)
+            {
+                var l = o as LiveLine;
+                if (l.Selected)
+                    DrawObjectSelected(rt, l);
+                else
+                    DrawObjectUnselected(rt, l);
+            }
         }
 
         public YAxisMarker(MarkerModel model) : base(model)

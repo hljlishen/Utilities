@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Utilities.Coordinates;
-using Utilities.Tools;
 using System.Linq;
-using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
-using System.Windows.Forms;
+using Utilities.Coordinates;
 using Utilities.Mapper;
+using Utilities.Tools;
+using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 namespace Utilities.Display
 {
     public struct WaveGate
@@ -27,12 +26,16 @@ namespace Utilities.Display
     }
 
     //public class WaveGateController : MouseClickToCancelSelectionElement<LiveSectorRing, int>, ISwtichable
-    public class WaveGateController : MouseClickToCancelSelectionElement<LiveSectorRing, int>, ISwtichable
+    public class WaveGateController : RotatableElement<int>, ISwtichable
     {
         private uint currentWaveGateId = 0;
-        private readonly Dictionary<LiveSectorRing, WaveGateCoordinates> waveGateMap = new Dictionary<LiveSectorRing, WaveGateCoordinates>();
+        private readonly Dictionary<LiveObject, WaveGateCoordinates> waveGateMap = new Dictionary<LiveObject, WaveGateCoordinates>();
         private WaveGateSelector selector;
         private Brush frameBrush, normalFillBrush, selectedFillBrush;
+
+        public WaveGateController(string rotateDecoratotInstanceName = "default") : base(rotateDecoratotInstanceName)
+        {
+        }
 
         public bool IsOn => selector.IsOn;
 
@@ -65,17 +68,17 @@ namespace Utilities.Display
         {
             lock (Locker)
             {
-                if (objects.Count == 0)
+                if (Objects.Count == 0)
                     return;
-                for(int i = objects.Count - 1; i >= 0; i--)
+                for (int i = Objects.Count - 1; i >= 0; i--)
                 {
-                    var sr = objects[i];
-                    if(sr.Selected)
+                    var sr = Objects[i];
+                    if (sr.Selected)
                     {
                         uint id = waveGateMap[sr].Id;
                         waveGateMap.Remove(sr);
                         WaveGateDeleted?.Invoke(id);
-                        objects.Remove(sr);
+                        Objects.Remove(sr);
                     }
                 }
                 UpdateGraphic();
@@ -88,34 +91,28 @@ namespace Utilities.Display
             selector = new WaveGateSelector();
             d.Elements.Add(LayerId, selector);
             selector.SelectionFinish += Selector_SelectionFinish;
-
-            //PolarRotateDecorator.GetInstance(null).MapperStateChanged += WaveGateController_MapperStateChanged;
         }
 
-        //private void WaveGateController_MapperStateChanged(IScreenToCoordinateMapper obj)
-        //{
-        //    objects.Clear();
-        //    objects = GetObjects();
-        //    UpdateGraphic();
-        //}
 
         private void Selector_SelectionFinish(PointF arg1, PointF arg2)
         {
-            lock(Locker)
+            lock (Locker)
             {
+                var pp1 = Mapper.GetCoordinateLocation(arg1.X, arg1.Y).ToRectangularCoordinate().Polar;
+                var pp2 = Mapper.GetCoordinateLocation(arg2.X, arg2.Y).ToRectangularCoordinate().Polar;
                 var r1 = Mapper.GetCoordinateLocation(arg1.X, arg1.Y).ToRectangularCoordinate();
                 var r2 = Mapper.GetCoordinateLocation(arg2.X, arg2.Y).ToRectangularCoordinate();
                 WaveGateCoordinates wgc = new WaveGateCoordinates() { Id = currentWaveGateId++, P1 = r1, P2 = r2 };
 
                 PolarCoordinate p1 = new PolarCoordinate(r1);
                 PolarCoordinate p2 = new PolarCoordinate(r2);
-                var begin = Functions.FindSmallArcBeginAngle(p1.Az, p2.Az);
-                var end = Functions.FindSmallArcEndAngle(p1.Az, p2.Az);
+                var begin = Functions.FindSmallArcBeginAngle(p1.Az, p2.Az) - (Mapper as PolarRotateDecorator).RotateAngle;
+                var end = Functions.FindSmallArcEndAngle(p1.Az, p2.Az) - (Mapper as PolarRotateDecorator).RotateAngle;
                 WaveGate w = new WaveGate() { BeginAngle = begin, EndAngle = end, BeginDistance = Math.Min(p1.Dis, p2.Dis), EndDistance = Math.Max(p1.Dis, p2.Dis), Id = currentWaveGateId };
 
                 WaveGateSelected?.Invoke(this, w);
                 LiveSectorRing ring = new LiveSectorRing() { Center = ReferenceSystem.ScreenOriginalPoint, ScrP1 = arg1, ScrP2 = arg2 };
-                objects.Add(ring);
+                Objects.Add(ring);
 
                 waveGateMap.Add(ring, wgc);
 
@@ -123,21 +120,21 @@ namespace Utilities.Display
             }
         }
 
-        protected override void DrawObjectSelected(RenderTarget rt, LiveSectorRing o)
+        protected void DrawObjectSelected(RenderTarget rt, LiveSectorRing o)
         {
             var geo = WaveGateSelector.GetPathGeometry(rt, o.Center, o.ScrP1, o.ScrP2);
             rt.DrawGeometry(geo, frameBrush, 3);
             rt.FillGeometry(geo, selectedFillBrush);
         }
 
-        protected override void DrawObjectUnselected(RenderTarget rt, LiveSectorRing o)
+        protected void DrawObjectUnselected(RenderTarget rt, LiveSectorRing o)
         {
             var geo = WaveGateSelector.GetPathGeometry(rt, o.Center, o.ScrP1, o.ScrP2);
             rt.DrawGeometry(geo, frameBrush, 3);
             rt.FillGeometry(geo, normalFillBrush);
         }
 
-        protected override IEnumerable<LiveSectorRing> GetObjects()
+        protected override IEnumerable<LiveObject> GetObjects()
         {
             var oPoint = ReferenceSystem.ScreenOriginalPoint;
 
@@ -161,9 +158,16 @@ namespace Utilities.Display
 
         public void Off() => selector.Off();
 
-        protected override void MouseClickLiveObjectHandler(MouseEventArgs e, LiveSectorRing t)
+        protected override void DrawDynamicElement(RenderTarget rt)
         {
-            //throw new NotImplementedException();
+            foreach (var o in Objects)
+            {
+                var l = o as LiveSectorRing;
+                if (l.Selected)
+                    DrawObjectSelected(rt, l);
+                else
+                    DrawObjectUnselected(rt, l);
+            }
         }
     }
 }

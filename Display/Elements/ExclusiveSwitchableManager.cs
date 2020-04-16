@@ -11,7 +11,7 @@ namespace Utilities.Display
         public uint MaxiumButtonInRow;
         public Size ButtonSize;
 
-        public ExclusiveSwitchableManagerProperties(Point location) : this(location, 3, new Size(80, 40)) 
+        public ExclusiveSwitchableManagerProperties(Point location) : this(location, 3, new Size(80, 40))
         { 
         }
 
@@ -99,6 +99,11 @@ namespace Utilities.Display
         protected override void DrawDynamicElement(RenderTarget rt)
         {
             //此控件不绘制任何图像，由它保存的button和ISwitchable自己绘制
+        }
+
+        protected override IEnumerable<LiveObject> GetObjects()
+        {
+            return null;
         }
     }
 }

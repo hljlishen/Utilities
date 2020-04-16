@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace Utilities.Display
 {
-    public class PolarDistanceMarker : MarkerElement<LiveCircle>
+    public class PolarDistanceMarker : MarkerElement
     {
         public PolarDistanceMarker(MarkerModel model) : base(model)
         {
@@ -13,7 +13,7 @@ namespace Utilities.Display
 
         public PolarDistanceMarker() : this(new MarkerModel() { LineColor = Color.Green, LineWidth = 2, ObjectNumber = 5, SelectedLineColor = Color.Orange, SelectedLineWidth = 4, FontName = "Berlin Sans FB Demi", FontColor = Color.Gray, FontSize = 15, SelectedFontColor = Color.Orange, SelectedFontName = "Berlin Sans FB Demi", SelectedFontSize = 15 }) { }
 
-        protected override IEnumerable<LiveCircle> GetObjects()
+        protected override IEnumerable<LiveObject> GetObjects()
         {
             var step = Math.Abs(ReferenceSystem.Top) / Model.ObjectNumber;
             var center = ReferenceSystem.ScreenOriginalPoint;
@@ -24,18 +24,30 @@ namespace Utilities.Display
             }
         }
 
-        protected override void DrawObjectUnselected(RenderTarget rt, LiveCircle c)
+        protected void DrawObjectUnselected(RenderTarget rt, LiveCircle c)
         {
             rt.DrawEllipse(c.Ellipse, normalLineBrush, Model.LineWidth);
             rt.DrawText(((double)c.Value).ToString("0"), normalTextFormat, new RectF(c.TextLeftTop.X + 3, c.TextLeftTop.Y, c.TextLeftTop.X + 100, c.TextLeftTop.Y + 100), normalTextBrush);
         }
 
-        protected override void DrawObjectSelected(RenderTarget rt, LiveCircle c)
+        protected void DrawObjectSelected(RenderTarget rt, LiveCircle c)
         {
             rt.DrawEllipse(c.Ellipse, selectedLineBrush, Model.SelectedLineWidth);
-            rt.DrawText(((double)c.Value).ToString("0.0"), selectedTextFormat, new RectF(c.MouseLocation.X + 10, c.MouseLocation.Y, 1000, 1000), selectedTextBrush);
+            rt.DrawText(((double)c.Value).ToString("0.0"), selectedTextFormat, new RectF(c.MouseLocation.X + 10, c.MouseLocation.Y, c.MouseLocation.X + 1000, c.MouseLocation.Y + 1000), selectedTextBrush);
 
             rt.DrawText(((double)c.Value).ToString("0"), normalTextFormat, new RectF(c.TextLeftTop.X + 3, c.TextLeftTop.Y, c.TextLeftTop.X + 100, c.TextLeftTop.Y + 100), normalTextBrush);
+        }
+
+        protected override void DrawDynamicElement(RenderTarget rt)
+        {
+            foreach (var o in Objects)
+            {
+                var l = o as LiveCircle;
+                if (l.Selected)
+                    DrawObjectSelected(rt, l);
+                else
+                    DrawObjectUnselected(rt, l);
+            }
         }
     }
 }

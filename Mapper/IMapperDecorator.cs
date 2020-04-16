@@ -12,7 +12,7 @@ namespace Utilities.Mapper
         }
         private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => MapperStateChanged?.Invoke(obj);
         protected void InvokeStateChanged() => MapperStateChanged?.Invoke(this);
-        protected IScreenToCoordinateMapper Mapper { get; private set; }
+        public IScreenToCoordinateMapper Mapper { get; private set; }
         public double ScreenLeft => Mapper.ScreenLeft;
         public double ScreenRight => Mapper.ScreenRight;
         public double ScreenTop => Mapper.ScreenTop;

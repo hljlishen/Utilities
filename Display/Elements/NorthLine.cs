@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utilities.Coordinates;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
@@ -13,6 +10,10 @@ namespace Utilities.Display
     public class NorthLine : RotatableElement<double>
     {
         private Brush LineBrush;
+
+        public NorthLine(string rotateDecoratotInstanceName="default") :base(rotateDecoratotInstanceName)
+        {
+        }
 
         public override void Dispose()
         {

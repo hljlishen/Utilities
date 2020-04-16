@@ -7,6 +7,7 @@ namespace Utilities.Display
     public class AxisY : GraphicElement
     {
         private Brush axisBrush;
+
         protected override void InitializeComponents(RenderTarget rt)
         {
             base.InitializeComponents(rt);

@@ -2,7 +2,7 @@
 
 namespace Utilities.Display
 {
-    public abstract class MouseClickToCancelSelectionElement<T, UpdateType> : MouseSensitiveElement<T, UpdateType> where T : LiveObject
+    public class MouseClickSensor1 : Sensor
     {
         public override void SetDisplayer(Displayer d)
         {
@@ -12,26 +12,30 @@ namespace Utilities.Display
 
         private void Panel_MouseClick(object sender, MouseEventArgs e)
         {
-            ProcessMouseEvent(e);
-        }
-
-        protected override void ProcessMouseEvent(MouseEventArgs e)
-        {
-            lock (Locker)
+            bool stateChanged = false;
+            lock (locker)
             {
+                if (objects == null || objects.Count == 0)
+                    return;
+
                 foreach (var o in objects)
                 {
                     if (o.IsPointNear(e.Location))
                     {
                         o.MouseLocation = e.Location;
                         o.Selected = !o.Selected;
-                        MouseClickLiveObjectHandler(e, o);
-                        UpdateGraphic();
+                        stateChanged = true;
                     }
                 }
             }
+            if (stateChanged)
+                InvokeObjectStateChanged();
         }
 
-        protected abstract void MouseClickLiveObjectHandler(MouseEventArgs e, T t);
+        public override void Dispose()
+        {
+            base.Dispose();
+            Panel.MouseClick -= Panel_MouseClick;
+        }
     }
 }

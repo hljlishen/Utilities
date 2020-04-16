@@ -7,10 +7,9 @@ namespace Utilities.Display
     {
         public List<GraphicElement> elements = new List<GraphicElement>();
         protected BitmapRenderTarget bitmapRt;
-        public int Id { get; protected set; }
         public Layer(int id)
         {
-            Id = id;
+            LayerId = id;
         }
 
         private void DrawLayerToTarget(RenderTarget rt)
@@ -59,13 +58,53 @@ namespace Utilities.Display
             return false;
         }
 
-        public void AddElement(GraphicElement e)
+        public void Add(GraphicElement e)
         {
             lock (Locker)
                 elements.Add(e);
             e.LayerId = LayerId;
             e.SetDisplayer(displayer);
             UpdateGraphic();
+        }
+
+        public void AddRange(IEnumerable<GraphicElement> es)
+        {
+            lock(Locker)
+            {
+                foreach(var e in es)
+                {
+                    elements.Add(e);
+                    e.LayerId = LayerId;
+                    e.SetDisplayer(displayer);
+                }
+                UpdateGraphic();
+            }
+        }
+
+        /// <summary>
+        /// 将图层中的所有元素替换为参数中的新元素
+        /// </summary>
+        /// <param name="es">要显示在图层中的元素</param>
+        public void RefreshLayerElements(IEnumerable<GraphicElement> es)
+        {
+            lock (Locker)
+            {
+                //清空当前图层的所有元素
+                foreach(var e in elements)
+                {
+                    e.Dispose();
+                }
+                elements?.Clear();
+
+                //给图层添加新元素
+                foreach (var e in es)
+                {
+                    elements.Add(e);
+                    e.LayerId = LayerId;
+                    e.SetDisplayer(displayer);
+                }
+                UpdateGraphic();
+            }
         }
 
         public void RemoveElement(GraphicElement e)
@@ -110,5 +149,6 @@ namespace Utilities.Display
             DrawLayerToTarget(rt);
             return;
         }
+        protected override IEnumerable<LiveObject> GetObjects() => null;
     }
 }

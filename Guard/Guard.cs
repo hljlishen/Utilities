@@ -17,5 +17,7 @@ namespace Utilities.Guards
                 throw new Exception($"参数类型错误，需要{typeof(T)}类型的参数");
             return ret;
         }
+
+        public static T NullCheckAssignment<T>(T t) where T : class => t ?? throw new NullReferenceException();
     }
 }

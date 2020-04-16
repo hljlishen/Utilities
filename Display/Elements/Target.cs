@@ -17,6 +17,11 @@ namespace Utilities.Display
         private Brush TagBrush;
         private Brush TextBrush;
         private TextFormat TextFormat;
+
+        public Target(string rotateDecoratotInstanceName = "default") : base(rotateDecoratotInstanceName)
+        {
+        }
+
         public double Az { get; set; } = 90;
         public double Dis { get; set; } = 500;
 
@@ -48,6 +53,11 @@ namespace Utilities.Display
             RectangleF rect = new RectangleF(scrP.X - 20, scrP.Y - 20, 40, 15);
             rt.FillRectangle(rect.ToRectF(), TagBrush);
             rt.DrawText("1", TextFormat, rect.ToRectF(), TextBrush);
+        }
+
+        protected override IEnumerable<LiveObject> GetObjects()
+        {
+            return null;
         }
     }
 }

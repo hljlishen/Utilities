@@ -20,6 +20,7 @@ namespace Utilities.Display
             lock(Locker)
             {
                 DoUpdate(t);
+                RefreshObjects();
                 UpdateGraphic();
             }
         }

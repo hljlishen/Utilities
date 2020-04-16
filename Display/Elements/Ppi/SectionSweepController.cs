@@ -1,7 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using System;
 using System.Drawing;
-using Utilities.Mapper;
 using Utilities.Tools;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 using SizeF = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.SizeF;
@@ -37,6 +36,10 @@ namespace Utilities.Display
         private bool isActive = true;
         private bool isStopped = false;
         private bool isOn = false;
+
+        protected SectionSweepController(string rotateDecoratotInstanceName = "default") : base(rotateDecoratotInstanceName)
+        {
+        }
 
         public bool IsOn => isOn;
 
@@ -79,6 +82,8 @@ namespace Utilities.Display
 
         private void Panel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            if (!MouseDown)
+                return;
             MouseDown = false;  //置false放在判断之外，否则如果判断不通过，MouseDown一直未true
             if (isActive && Math.Abs(Model.Begin - Model.End) > 15 && isOn)
             {
@@ -112,6 +117,8 @@ namespace Utilities.Display
         {
             if (isActive && !isStopped /*&& Math.Abs(Model.Begin - Model.End) > 5*/)
             {
+                if (Model.Begin == 0 && Model.End == 0)
+                    return;
                 var geo = GetPathGeometry(Model, rt);
                 rt.DrawGeometry(geo, frameBrush, 3);
                 rt.FillGeometry(geo, fillBrush);
@@ -127,8 +134,8 @@ namespace Utilities.Display
     {
         protected override PathGeometry GetPathGeometry(SweepSection s, RenderTarget t)
         {
-            var pbegin = CalIntersectionPoint(s.Begin + (Mapper as PolarRotateDecorator).RotateAngle);
-            var pend = CalIntersectionPoint(s.End + (Mapper as PolarRotateDecorator).RotateAngle);
+            var pbegin = CalIntersectionPoint(s.Begin + RotateAngle);
+            var pend = CalIntersectionPoint(s.End + RotateAngle);
 
             PathGeometry sweepSectionGraphic = t.Factory.CreatePathGeometry();
             GeometrySink gs = sweepSectionGraphic.Open();
@@ -162,9 +169,9 @@ namespace Utilities.Display
             double cover2 = (360 - maxA) + minA;
 
             if (cover1 < cover2)
-                return new SweepSection(minA, maxA);
+                return new SweepSection(minA - RotateAngle, maxA - RotateAngle);
             else
-                return new SweepSection(maxA, minA);
+                return new SweepSection(maxA - RotateAngle, minA - RotateAngle);
         }
         private PointF CalIntersectionPoint(double angle)
         {

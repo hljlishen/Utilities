@@ -71,10 +71,9 @@
     <Compile Include="Display\Elements\Chart_Bar.cs" />
     <Compile Include="Display\Elements\ExclusiveSwitchableManager.cs" />
     <Compile Include="Display\Elements\MarkerElement.cs" />
-    <Compile Include="Display\Elements\MouseClickElement.cs" />
-    <Compile Include="Display\Elements\MouseClickToCancelSelectionElement.cs" />
-    <Compile Include="Display\Elements\MouseMoveElement.cs" />
     <Compile Include="Display\Elements\NorthLine.cs" />
+    <Compile Include="Display\Elements\OriginalVideoDot.cs" />
+    <Compile Include="Display\Elements\OriginalVideoManager.cs" />
     <Compile Include="Display\Elements\Ppi\SectionSweepController.cs" />
     <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateController.cs" />
     <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateSelector.cs" />
@@ -86,7 +85,6 @@
     <Compile Include="Display\Elements\LiveObjects\LiveCircle.cs" />
     <Compile Include="Display\Elements\Ppi\PolarDistanceMarker.cs" />
     <Compile Include="Display\Elements\LiveObjects\LiveLine.cs" />
-    <Compile Include="Display\Elements\MouseSensitiveElement.cs" />
     <Compile Include="Display\Elements\Ppi\MarkerModel.cs" />
     <Compile Include="Display\Elements\LiveObjects\LiveObject.cs" />
     <Compile Include="Display\Elements\LiveObjects\LiveRect.cs" />
@@ -95,7 +93,8 @@
     <Compile Include="Display\Elements\Target.cs" />
     <Compile Include="Display\Elements\XAxisMarker.cs" />
     <Compile Include="Display\Elements\LiveObjects\LiveSectorRing.cs" />
-    <Compile Include="Display\Sensors\MouseClickSensor.cs" />
+    <Compile Include="Display\Sensors\MouseClickSensor1.cs" />
+    <Compile Include="Display\Sensors\MouseClickSensor2.cs" />
     <Compile Include="Display\Sensors\MouseMoveSensor.cs" />
     <Compile Include="Display\ReferenceSystem\ReferenceSystem.cs" />
     <Compile Include="Display\Elements\LocationDisplayer\CoordinateLocation.cs" />

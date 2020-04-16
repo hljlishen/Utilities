@@ -3,13 +3,12 @@ using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 //using Font = System.Drawing.Font;
 
 namespace Utilities.Display
 {
-    public class ButtonElement : MouseClickToCancelSelectionElement<LiveRect, ButtenProperties>
+    public class ButtonElement : DynamicElement<ButtenProperties>
     {
         protected Brush ForeFillBrush;
         protected Brush SelectedFillBrush;
@@ -25,8 +24,8 @@ namespace Utilities.Display
 
         public bool Selected
         {
-            get => objects[0].Selected;
-            set => objects[0].Selected = value;
+            get => Objects[0].Selected;
+            set => Objects[0].Selected = value;
         }
 
 
@@ -35,6 +34,7 @@ namespace Utilities.Display
             Model = buttenProperties;
             center.X = Model.Location.X + Model.ForeSize.Width / 2;
             center.Y = Model.Location.Y + Model.ForeSize.Height / 2;
+            Sensor = new MouseClickSensor1();
         }
 
         public event Action<ButtonElement> Clicked;
@@ -71,7 +71,7 @@ namespace Utilities.Display
             dw.Dispose();
         }
 
-        protected override void DrawObjectSelected(RenderTarget rt, LiveRect o)
+        protected void DrawObjectSelected(RenderTarget rt, LiveRect o)
         {
             rt.DrawRectangle(o.Rectangle.ToRectF(), FrameBrush, 4f);
             rt.FillRectangle(o.Rectangle.ToRectF(), SelectedFillBrush);
@@ -79,7 +79,7 @@ namespace Utilities.Display
             IsSelected = true;
         }
 
-        protected override void DrawObjectUnselected(RenderTarget rt, LiveRect o)
+        protected void DrawObjectUnselected(RenderTarget rt, LiveRect o)
         {
             rt.DrawRectangle(o.Rectangle.ToRectF(), FrameBrush, 2.5f);
             rt.FillRectangle(o.Rectangle.ToRectF(), ForeFillBrush);
@@ -87,14 +87,29 @@ namespace Utilities.Display
             IsSelected = false;
         }
 
-        protected override IEnumerable<LiveRect> GetObjects()
+        protected override IEnumerable<LiveObject> GetObjects()
         {
             LiveRect r = new LiveRect(new Rectangle(Model.Location, Model.ForeSize));
 
             r.Selected = IsSelected;
             yield return r;
         }
+        protected override void Sensor_ObjectStateChanged(Sensor obj)
+        {
+            Clicked?.Invoke(this);
+            base.Sensor_ObjectStateChanged(obj);
+        }
 
-        protected override void MouseClickLiveObjectHandler(MouseEventArgs e, LiveRect t) => Clicked?.Invoke(this);
+        protected override void DrawDynamicElement(RenderTarget rt)
+        {
+            foreach (var o in Objects)
+            {
+                var l = o as LiveRect;
+                if (l.Selected)
+                    DrawObjectSelected(rt, l);
+                else
+                    DrawObjectUnselected(rt, l);
+            }
+        }
     }
 }

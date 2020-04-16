@@ -2,7 +2,7 @@
 
 namespace Utilities.Display
 {
-    public class MouseClickSensor : Sensor
+    public class MouseClickSensor2 : Sensor
     {
         public override void SetDisplayer(Displayer d)
         {
@@ -12,21 +12,32 @@ namespace Utilities.Display
 
         private void Panel_MouseClick(object sender, MouseEventArgs e)
         {
-            bool stateChanged = false;
             lock (locker)
             {
+                if (objects == null || objects.Count == 0)
+                    return;
+
                 foreach (var o in objects)
                 {
                     if (o.IsPointNear(e.Location))
                     {
                         o.MouseLocation = e.Location;
-                        o.Selected = !o.Selected;
-                        stateChanged = true;
+                        if (!o.Selected)
+                        {
+                            o.Selected = true;
+                            InvokeObjectStateChanged();
+                        }
+                    }
+                    else
+                    {
+                        if (o.Selected)
+                        {
+                            o.Selected = false;
+                            InvokeObjectStateChanged();
+                        }
                     }
                 }
             }
-            if (stateChanged)
-                InvokeObjectStateChanged();
         }
 
         public override void Dispose()

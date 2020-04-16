@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Utilities.Coordinates;
 using Utilities.Mapper;
@@ -20,6 +21,10 @@ namespace Utilities.Display
         private Brush textBrush;
         private double lastAngle;
         private bool isOn = false;
+
+        public RotationController(string rotateDecoratotInstanceName = "default") : base(rotateDecoratotInstanceName)
+        {
+        }
 
         public bool IsOn => isOn;
 

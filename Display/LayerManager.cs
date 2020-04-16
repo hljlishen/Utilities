@@ -31,8 +31,20 @@ namespace Utilities.Display
                     layer.SetDisplayer(displayer);
                     layers[layerId] = layer;
                 }
-                layers[layerId].AddElement(e);
+                layers[layerId].Add(e);
                 UpdateGraphic();
+            }
+        }
+        internal Layer GetLayer(int layerId) => layers[layerId];
+        internal void AddLayer(int layerId)
+        {
+            lock(Locker)
+            {
+                if (layers.ContainsKey(layerId))
+                    return;
+                Layer layer = new Layer(layerId);
+                layer.SetDisplayer(displayer);
+                layers.Add(layerId, layer);
             }
         }
 
@@ -60,5 +72,7 @@ namespace Utilities.Display
                 }
             }
         }
+
+        protected override IEnumerable<LiveObject> GetObjects() => null;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using System.Collections.Generic;
 using System.Drawing;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
