@@ -40,7 +40,7 @@ namespace Utilities.Display
 
         protected void DrawObjectUnselected(RenderTarget rt, LiveLine l)
         {
-            normalLineBrush.Opacity = 0.5f;
+            normalLineBrush.Opacity = 0.8f;
             rt.DrawLine(l.P1.ToPoint2F(), l.P2.ToPoint2F(), normalLineBrush, Model.LineWidth, stroke);
         }
 

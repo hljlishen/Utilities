@@ -28,7 +28,6 @@ namespace Utilities.Display
             set => Objects[0].Selected = value;
         }
 
-
         public ButtonElement(ButtenProperties buttenProperties)
         {
             Model = buttenProperties;

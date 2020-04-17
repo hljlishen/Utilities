@@ -7,6 +7,7 @@ namespace Utilities.Display
     {
         public List<GraphicElement> elements = new List<GraphicElement>();
         protected BitmapRenderTarget bitmapRt;
+
         public Layer(int id)
         {
             LayerId = id;

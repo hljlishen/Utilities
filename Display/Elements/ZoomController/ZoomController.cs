@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
-using System;
 using System.Drawing;
+using System.Windows.Forms;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
 namespace Utilities.Display
@@ -14,7 +14,7 @@ namespace Utilities.Display
         private Brush frameBrush;
         private Rectangle coverRect;
         private bool isOn = false;
-        public SelectStrategy SelectStrategy { get; set; }
+        public SelectStrategy SelectStrategy { get; protected set; }
 
         public bool IsOn => isOn;
 
@@ -25,6 +25,13 @@ namespace Utilities.Display
             base.Dispose();
             fillBrush?.Dispose();
             frameBrush?.Dispose();
+        }
+
+        protected override void UnbindEvents(Panel p)
+        {
+            p.MouseDown -= PictureBox_MouseDown;
+            p.MouseMove -= PictureBox_MouseMove;
+            p.MouseUp -= PictureBox_MouseUp;
         }
 
         protected override void InitializeComponents(RenderTarget rt)
@@ -42,12 +49,11 @@ namespace Utilities.Display
             SelectStrategy.SetZoomController(this);
         }
 
-        public override void SetDisplayer(Displayer d)
+        protected override void BindEvents(Panel p)
         {
-            base.SetDisplayer(d);
-            Panel.MouseDown += PictureBox_MouseDown;
-            Panel.MouseMove += PictureBox_MouseMove;
-            Panel.MouseUp += PictureBox_MouseUp;
+            p.MouseDown += PictureBox_MouseDown;
+            p.MouseMove += PictureBox_MouseMove;
+            p.MouseUp += PictureBox_MouseUp;
         }
 
         private void PictureBox_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -74,10 +80,9 @@ namespace Utilities.Display
         {
             Mapper.SetCoordinateXRange(xLeft, xRight);
             Mapper.SetCoordinateYRange(yTop, yBottom);
-            //UpdateGraphic();
         }
 
-        private void PictureBox_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void PictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (!mouseDown)
                 return;
@@ -86,7 +91,7 @@ namespace Utilities.Display
             UpdateGraphic();
         }
 
-        private void PictureBox_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void PictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (!IsOn)
                 return;
@@ -113,14 +118,8 @@ namespace Utilities.Display
             }
         }
 
-        public void On()
-        {
-            isOn = true;
-        }
+        public void On() => isOn = true;
 
-        public void Off()
-        {
-            isOn = false;
-        }
+        public void Off() => isOn = false;
     }
 }

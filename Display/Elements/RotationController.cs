@@ -3,6 +3,7 @@ using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using Utilities.Coordinates;
 using Utilities.Mapper;
 using Utilities.Tools;
@@ -18,6 +19,7 @@ namespace Utilities.Display
         private Brush markerBrush;
         private Brush selectedMarkerBrush;
         private TextFormat textFormat;
+        private TextLayout TextLayout;
         private Brush textBrush;
         private double lastAngle;
         private bool isOn = false;
@@ -74,16 +76,24 @@ namespace Utilities.Display
                 }
 
                 if(i % 5 == 0)
-                    rt.DrawText(i.ToString(), textFormat, new RectangleF(scrP3, new Size(100, 100)).ToRectF(), textBrush);
+                    rt.DrawText(i.ToString(), textFormat, new RectangleF(scrP3.X - 5, scrP3.Y - 5, 100, 100).ToRectF(), textBrush);
             }
         }
 
-        public override void SetDisplayer(Displayer d)
+        protected override void BindEvents(Panel p)
         {
-            base.SetDisplayer(d);
+            base.BindEvents(p);
             Panel.MouseDown += Panel_MouseDown;
             Panel.MouseMove += Panel_MouseMove;
             Panel.MouseUp += Panel_MouseUp;
+        }
+
+        protected override void UnbindEvents(Panel p)
+        {
+            base.UnbindEvents(p);
+            Panel.MouseDown -= Panel_MouseDown;
+            Panel.MouseMove -= Panel_MouseMove;
+            Panel.MouseUp -= Panel_MouseUp;
         }
 
         private void Panel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)

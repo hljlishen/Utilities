@@ -22,7 +22,7 @@ namespace Utilities.Display
 
         public virtual bool IsRectBigEnough(Rectangle r, IScreenToCoordinateMapper mapper)
         {
-            if (Math.Abs(r.Right - r.Left) < 8 || Math.Abs(r.Bottom - r.Top) < 8)
+            if (Math.Abs(r.Right - r.Left) < 20 || Math.Abs(r.Bottom - r.Top) < 20)
                 return false;
             var xLeft = mapper.GetCoordinateX(r.Left);
             var xRight = mapper.GetCoordinateX(r.Right);

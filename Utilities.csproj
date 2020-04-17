@@ -71,6 +71,7 @@
     <Compile Include="Display\Elements\Chart_Bar.cs" />
     <Compile Include="Display\Elements\ExclusiveSwitchableManager.cs" />
     <Compile Include="Display\Elements\MarkerElement.cs" />
+    <Compile Include="Display\Elements\MouseDragger.cs" />
     <Compile Include="Display\Elements\NorthLine.cs" />
     <Compile Include="Display\Elements\OriginalVideoDot.cs" />
     <Compile Include="Display\Elements\OriginalVideoManager.cs" />

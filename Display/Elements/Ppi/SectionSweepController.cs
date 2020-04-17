@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 using Utilities.Tools;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 using SizeF = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.SizeF;
@@ -72,14 +73,20 @@ namespace Utilities.Display
             fillBrush = Color.Red.SolidBrush(rt);
             fillBrush.Opacity = 0.3f;
         }
-        public override void SetDisplayer(Displayer d)
+
+        protected override void BindEvents(Panel p)
         {
-            base.SetDisplayer(d);
             Panel.MouseDown += Panel_MouseDown;
             Panel.MouseMove += Panel_MouseMove;
             Panel.MouseUp += Panel_MouseUp;
         }
 
+        protected override void UnbindEvents(Panel p)
+        {
+            Panel.MouseDown -= Panel_MouseDown;
+            Panel.MouseMove -= Panel_MouseMove;
+            Panel.MouseUp -= Panel_MouseUp;
+        }
         private void Panel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (!MouseDown)

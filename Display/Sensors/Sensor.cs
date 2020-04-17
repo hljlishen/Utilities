@@ -17,15 +17,23 @@ namespace Utilities.Display
 
         public void SetLocker(object locker) => this.locker = locker ?? throw new NullReferenceException("locker为空");
 
-        public virtual void SetDisplayer(Displayer d) => Displayer = d;
-
-        public void SetObjects(List<LiveObject> objects)
+        public virtual void SetDisplayer(Displayer d)
         {
-            this.objects = objects;
+            Displayer = d;
+            Displayer.BeforeRebindTarget += Displayer_BeforeRebindTarget;
+            Displayer.AfterRebindTarget += Displayer_AfterRebindTarget;
+            BindEvents(Panel);
         }
 
-        public virtual void Dispose()
-        {
-        }
+        private void Displayer_AfterRebindTarget() => BindEvents(Panel);
+
+        protected abstract void BindEvents(Panel panel);
+
+        private void Displayer_BeforeRebindTarget() => UnbindEvents(Panel);
+
+        protected abstract void UnbindEvents(Panel panel);
+        public void SetObjects(List<LiveObject> objects) => this.objects = objects;
+
+        public virtual void Dispose() => UnbindEvents(Panel);
     }
 }

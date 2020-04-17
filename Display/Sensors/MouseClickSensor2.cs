@@ -4,12 +4,6 @@ namespace Utilities.Display
 {
     public class MouseClickSensor2 : Sensor
     {
-        public override void SetDisplayer(Displayer d)
-        {
-            base.SetDisplayer(d);
-            Panel.MouseClick += Panel_MouseClick;
-        }
-
         private void Panel_MouseClick(object sender, MouseEventArgs e)
         {
             lock (locker)
@@ -40,10 +34,8 @@ namespace Utilities.Display
             }
         }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            Panel.MouseClick -= Panel_MouseClick;
-        }
+        protected override void BindEvents(Panel panel) => panel.MouseClick += Panel_MouseClick;
+
+        protected override void UnbindEvents(Panel panel) => panel.MouseClick -= Panel_MouseClick;
     }
 }

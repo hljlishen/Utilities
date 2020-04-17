@@ -4,12 +4,6 @@ namespace Utilities.Display
 {
     public class MouseMoveSensor : Sensor
     {
-        public override void SetDisplayer(Displayer d)
-        {
-            base.SetDisplayer(d);
-            Panel.MouseMove += Panel_MouseMove;
-        }
-
         private void Panel_MouseMove(object sender, MouseEventArgs e)
         {
             lock(locker)
@@ -40,10 +34,8 @@ namespace Utilities.Display
             }
         }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            Panel.MouseMove -= Panel_MouseMove;
-        }
+        protected override void BindEvents(Panel panel) => panel.MouseMove += Panel_MouseMove;
+
+        protected override void UnbindEvents(Panel panel) => panel.MouseMove -= Panel_MouseMove;
     }
 }

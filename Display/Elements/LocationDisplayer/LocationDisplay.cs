@@ -2,6 +2,7 @@
 using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 using Utilities.Coordinates;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
@@ -40,17 +41,22 @@ namespace Utilities.Display
             dw.Dispose();
         }
 
-        public override void SetDisplayer(Displayer d)
+        protected override void BindEvents(Panel p)
         {
-            base.SetDisplayer(d);
+            base.BindEvents(p);
             Panel.MouseMove += Panel_MouseMove;
+        }
+
+        protected override void UnbindEvents(Panel p)
+        {
+            base.UnbindEvents(p);
+            Panel.MouseMove -= Panel_MouseMove;
         }
 
         private void Panel_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             currentScreenLcation = e.Location;
             currentCoordinateLocation = Mapper.GetCoordinateLocation(e.X, e.Y);
-            //Changed = true;
             UpdateGraphic();
         }
 
