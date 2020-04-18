@@ -135,7 +135,7 @@ namespace Utilities.Display
 
                     if (Redraw)
                     {
-                        Elements?.Draw(rt);
+                        Elements.Draw(rt);
                         Redraw = false;
                     }
                     else
@@ -152,7 +152,7 @@ namespace Utilities.Display
         public void Dispose()
         {
             rt.Dispose();
-            Disposed = true;
+            //Disposed = true;
         }
     }
 }

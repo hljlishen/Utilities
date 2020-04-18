@@ -21,7 +21,7 @@ namespace Utilities.Display
             {
                 DoUpdate(t);
                 RefreshObjects();
-                UpdateGraphic();
+                UpdateView();
             }
         }
 

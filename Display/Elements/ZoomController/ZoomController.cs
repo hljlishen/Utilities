@@ -32,6 +32,7 @@ namespace Utilities.Display
             p.MouseDown -= PictureBox_MouseDown;
             p.MouseMove -= PictureBox_MouseMove;
             p.MouseUp -= PictureBox_MouseUp;
+            p.MouseDoubleClick -= P_MouseDoubleClick;
         }
 
         protected override void InitializeComponents(RenderTarget rt)
@@ -54,6 +55,12 @@ namespace Utilities.Display
             p.MouseDown += PictureBox_MouseDown;
             p.MouseMove += PictureBox_MouseMove;
             p.MouseUp += PictureBox_MouseUp;
+            p.MouseDoubleClick += P_MouseDoubleClick;
+        }
+
+        private void P_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            mouseDown = false;
         }
 
         private void PictureBox_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -64,7 +71,7 @@ namespace Utilities.Display
 
             if (!SelectStrategy.IsRectBigEnough(coverRect, Mapper))
             {
-                UpdateGraphic();
+                UpdateView();
             }
             else
             {
@@ -88,7 +95,7 @@ namespace Utilities.Display
                 return;
             mouseCurrentPos = e.Location;
             coverRect = SelectStrategy.CalRect(mouseDownPos, mouseCurrentPos);
-            UpdateGraphic();
+            UpdateView();
         }
 
         private void PictureBox_MouseDown(object sender, MouseEventArgs e)

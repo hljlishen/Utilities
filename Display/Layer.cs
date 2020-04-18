@@ -65,7 +65,7 @@ namespace Utilities.Display
                 elements.Add(e);
             e.LayerId = LayerId;
             e.SetDisplayer(displayer);
-            UpdateGraphic();
+            UpdateView();
         }
 
         public void AddRange(IEnumerable<GraphicElement> es)
@@ -78,7 +78,7 @@ namespace Utilities.Display
                     e.LayerId = LayerId;
                     e.SetDisplayer(displayer);
                 }
-                UpdateGraphic();
+                UpdateView();
             }
         }
 
@@ -104,7 +104,7 @@ namespace Utilities.Display
                     e.LayerId = LayerId;
                     e.SetDisplayer(displayer);
                 }
-                UpdateGraphic();
+                UpdateView();
             }
         }
 
@@ -115,7 +115,7 @@ namespace Utilities.Display
                 if (elements.Contains(e))
                 {
                     elements.Remove(e);
-                    UpdateGraphic();
+                    UpdateView();
                 }
             }
         }

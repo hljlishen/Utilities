@@ -57,7 +57,7 @@ namespace Utilities.Display
             if (dis < 10)
                 return;
             SelectionFinish?.Invoke(MouseDownPos, MouseCurrentPos);
-            UpdateGraphic();
+            UpdateView();
         }
 
         private void Panel_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -67,7 +67,7 @@ namespace Utilities.Display
                 if (!MouseDown)
                     return;
                 MouseCurrentPos = e.Location;
-                UpdateGraphic();
+                UpdateView();
             }
         }
 
@@ -159,6 +159,7 @@ namespace Utilities.Display
             gs.AddArc(arc);
             gs.EndFigure(FigureEnd.Closed);
             gs.Close();
+            gs.Dispose();
 
             return waveGate;
         }
@@ -177,14 +178,8 @@ namespace Utilities.Display
             return ret;
         }   //极坐标
 
-        public void On()
-        {
-            isOn = true;
-        }
+        public void On() => isOn = true;
 
-        public void Off()
-        {
-            isOn = false;
-        }
+        public void Off() => isOn = false;
     }
 }

@@ -1,12 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Utilities.Coordinates;
 using System.Drawing;
-using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using Utilities.Coordinates;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
 namespace Utilities.Display
@@ -16,13 +10,12 @@ namespace Utilities.Display
         public PolarCoordinate Location;
         public int Am;
     }
-    public class OriginalVideoDot : RotatableElement<OriginVideoDotProperty>
+    public class OriginalVideoDot : DynamicElement<OriginVideoDotProperty>
     {
         private Brush fillBrush;
 
         public override void Dispose()
         {
-            base.Dispose();
             fillBrush?.Dispose();
         }
 
@@ -31,16 +24,21 @@ namespace Utilities.Display
             base.InitializeComponents(rt);
             fillBrush = Color.Red.SolidBrush(rt);   //需要动态计算画刷的颜色
         }
-        public OriginalVideoDot(PolarCoordinate location, double am = 0, string rotateDecoratotInstanceName = "default") : base(rotateDecoratotInstanceName)
+        public OriginalVideoDot(PolarCoordinate location, double am = 0)
         {
             Model.Location = location;
+        }
+
+        public override void SetDisplayer(Displayer d)
+        {
+            displayer = d;
         }
 
         public OriginalVideoDot(OriginVideoDotProperty p) : this(p.Location, p.Am) { }
         protected override void DrawDynamicElement(RenderTarget rt)
         {
-            var rotatedPoint = new PolarCoordinate(Model.Location.Az + RotateAngle, Model.Location.El, Model.Location.Dis).Rectangular;
-            var scrPoint = InnerMapper.GetScreenLocation(rotatedPoint.X, rotatedPoint.Y);
+            var rotatedPoint = new PolarCoordinate(Model.Location.Az , Model.Location.El, Model.Location.Dis).Rectangular;
+            var scrPoint = Mapper.GetScreenLocation(rotatedPoint.X, rotatedPoint.Y);
             Ellipse e = new Ellipse(scrPoint.ToPoint2F(), 3, 3);
             rt.FillEllipse(e, fillBrush);
         }

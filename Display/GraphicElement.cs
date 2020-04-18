@@ -20,7 +20,7 @@ namespace Utilities.Display
         protected abstract void DrawElement(RenderTarget rt);
         protected virtual void InitializeComponents(RenderTarget rt) { }
         public virtual bool HasChanged() => Changed;
-        public virtual void UpdateGraphic() => Changed = true;
+        public virtual void UpdateView() => Changed = true;
         public List<LiveObject> Objects { get; protected set; }
         protected bool Initialized { get; set; } = true;
 
@@ -41,7 +41,7 @@ namespace Utilities.Display
             }
         }
 
-        protected virtual void Sensor_ObjectStateChanged(Sensor obj) => UpdateGraphic();
+        protected virtual void Sensor_ObjectStateChanged(Sensor obj) => UpdateView();
 
         protected void RefreshObjects()
         {
@@ -72,7 +72,7 @@ namespace Utilities.Display
         {
             BindEvents(Panel);
             Initialized = true;
-            Changed = true;
+            UpdateView();
         }
 
         private void Displayer_BeforeRebindTarget() => UnbindEvents(Panel);
@@ -90,10 +90,18 @@ namespace Utilities.Display
             Changed = false;
         }
 
-        private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => RefreshObjects();
+        private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj)
+        {
+            RefreshObjects();
+            UpdateView();       //mapper状态改变后需重绘视图
+        }
+
         public virtual void Dispose()
         {
             Sensor?.Dispose();
+            Mapper.MapperStateChanged -= Mapper_MapperStateChanged;
+            displayer.BeforeRebindTarget -= Displayer_BeforeRebindTarget;
+            displayer.AfterRebindTarget -= Displayer_AfterRebindTarget;
             UnbindEvents(Panel);
         }
     }

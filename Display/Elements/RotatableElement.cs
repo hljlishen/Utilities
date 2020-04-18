@@ -4,7 +4,7 @@ namespace Utilities.Display
 {
     public abstract class RotatableElement<T> : DynamicElement<T>
     {
-        protected static PolarRotateDecorator rotateDecorator = null;
+        protected PolarRotateDecorator rotateDecorator = null;
         protected string RotateDecoratorName;
 
         protected RotatableElement(string rotateDecoratorName = "default")
@@ -25,7 +25,7 @@ namespace Utilities.Display
             base.SetDisplayer(d);
         }
 
-        private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => UpdateGraphic();
+        private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => UpdateView();
 
         public override IScreenToCoordinateMapper Mapper => rotateDecorator;
 

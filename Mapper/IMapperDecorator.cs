@@ -11,21 +11,20 @@ namespace Utilities.Mapper
             Mapper.MapperStateChanged += Mapper_MapperStateChanged;
         }
         private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj) => MapperStateChanged?.Invoke(obj);
+        public event Action<IScreenToCoordinateMapper> MapperStateChanged;
         protected void InvokeStateChanged() => MapperStateChanged?.Invoke(this);
         public IScreenToCoordinateMapper Mapper { get; private set; }
-        public double ScreenLeft => Mapper.ScreenLeft;
-        public double ScreenRight => Mapper.ScreenRight;
-        public double ScreenTop => Mapper.ScreenTop;
-        public double ScreenBottom => Mapper.ScreenBottom;
-        public double CoordinateLeft => Mapper.CoordinateLeft;
-        public double CoordinateRight => Mapper.CoordinateRight;
-        public double CoordinateTop => Mapper.CoordinateTop;
-        public double CoordinateBottom => Mapper.CoordinateBottom;
-        public PointF ScreenCenter => Mapper.ScreenCenter;
+        public virtual double ScreenLeft => Mapper.ScreenLeft;
+        public virtual double ScreenRight => Mapper.ScreenRight;
+        public virtual double ScreenTop => Mapper.ScreenTop;
+        public virtual double ScreenBottom => Mapper.ScreenBottom;
+        public virtual double CoordinateLeft => Mapper.CoordinateLeft;
+        public virtual double CoordinateRight => Mapper.CoordinateRight;
+        public virtual double CoordinateTop => Mapper.CoordinateTop;
+        public virtual double CoordinateBottom => Mapper.CoordinateBottom;
+        public virtual PointF ScreenCenter => Mapper.ScreenCenter;
         public virtual double ScreenWidth => Mapper.ScreenWidth;
         public virtual double ScreenHeight => Mapper.ScreenHeight;
-
-        public event Action<IScreenToCoordinateMapper> MapperStateChanged;
 
         public virtual PointF GetCoordinateLocation(double screenX, double screenY) => Mapper.GetCoordinateLocation(screenX, screenY);
         public virtual double GetCoordinateX(double screenX) => Mapper.GetCoordinateX(screenX);
@@ -36,8 +35,7 @@ namespace Utilities.Mapper
         public virtual void SetCoordinateXRange(double xLeft, double xRight) => Mapper.SetCoordinateXRange(xLeft, xRight);
         public virtual void SetCoordinateYRange(double yTop, double yBottom) => Mapper.SetCoordinateYRange(yTop, yBottom);
         public virtual void SetScreenArea(double left, double right, double top, double bottom) => Mapper.SetScreenArea(left, right, top, bottom);
-
-        public void SetCoordinateArea(double left, double right, double top, double bottom) => Mapper.SetCoordinateArea(left, right, top, bottom);
+        public virtual void SetCoordinateArea(double left, double right, double top, double bottom) => Mapper.SetCoordinateArea(left, right, top, bottom);
         internal void SetScreenArea(Area a) => Mapper.SetScreenArea(a.Left, a.Right, a.Top, a.Bottom);
     }
 }

@@ -100,7 +100,7 @@ namespace Utilities.Display
         {
             MouseDown = false;
             lastAngle = (Mapper as PolarRotateDecorator).RotateAngle;
-            UpdateGraphic();
+            UpdateView();
         }
 
         private void Panel_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -112,7 +112,7 @@ namespace Utilities.Display
             var angle2 = Functions.AngleToNorth(ReferenceSystem.ScreenOriginalPoint, MouseCurrentPos);
             var diff = (angle2 - angle1);
             (Mapper as PolarRotateDecorator).RotateAngle = lastAngle + diff;
-            UpdateGraphic();
+            UpdateView();
         }
 
         private void Panel_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)

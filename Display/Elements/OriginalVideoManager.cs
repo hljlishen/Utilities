@@ -11,16 +11,16 @@ namespace Utilities.Display
         public double Angle;
         public List<OriginVideoDotProperty> Dots;
     }
-    public class OriginalVideoManager : DynamicElement<OriginalVideoData>
+    public class OriginalVideoManager : RotatableElement<OriginalVideoData>
     {
-        private Dictionary<int, List<OriginalVideoDot>> layerMap = new Dictionary<int, List<OriginalVideoDot>>();
+        private Dictionary<int, List<OriginalVideoData>> layerMap = new Dictionary<int, List<OriginalVideoData>>();
         private Dictionary<ValueIntervals.ValueInterval, int> intervalMap = new Dictionary<ValueIntervals.ValueInterval, int>();
 
         /// <summary>
-        /// 
+        /// 此控件要占用多个图层，此参数表示要占用图层的个数。占用的图层是此控件所在图层后面consumedLayerCount个。使用Diplayer时不要向这些图层手动添加元素，否则元素会被删除无法显示
         /// </summary>
-        /// <param name="consumedLayerCount">此控件要占用多个图层，此参数表示要占用图层的个数。占用的图层是此控件所在图层后面consumedLayerCount个。使用Diplayer时不要向这些图层手动添加元素，否则元素会被删除无法显示</param>
-        public OriginalVideoManager(uint consumedLayerCount)
+        /// <param name="consumedLayerCount">要占用的图层个数</param>
+        public OriginalVideoManager(uint consumedLayerCount, string rotateDecoratorName = "default") : base(rotateDecoratorName)
         {
             ConsumedLayerCount = consumedLayerCount;
         }
@@ -31,13 +31,33 @@ namespace Utilities.Display
 
             //初始化字典
             var intervalCoverage = 360.0f / ConsumedLayerCount;
-            for (int i = LayerId, j = 0; i < ConsumedLayerCount + LayerId; i++, j++)
+            for (int i = LayerId + 1, j = 0; i < ConsumedLayerCount + LayerId + 1; i++, j++)
             {
-                layerMap.Add(i, new List<OriginalVideoDot>());
+                layerMap.Add(i, new List<OriginalVideoData>());
                 var interval = ValueIntervals.ValueInterval.CloseOpen(j * intervalCoverage, (j + 1) * intervalCoverage);
                 intervalMap.Add(interval, i);
                 d.Elements.AddLayer(i);
             }
+
+            Mapper.MapperStateChanged += Mapper_MapperStateChanged;
+        }
+
+        private void Mapper_MapperStateChanged(Mapper.IScreenToCoordinateMapper obj)
+        {
+            //Mapper状态改变时，需要更新所有图层的原始视频点
+            lock (Locker)
+            {
+                foreach (var layerId in layerMap.Keys)
+                {
+                    RefreshLayer(layerId);
+                }
+            }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Mapper.MapperStateChanged -= Mapper_MapperStateChanged;
         }
 
         private int FindLayerId(OriginalVideoData p)
@@ -52,11 +72,16 @@ namespace Utilities.Display
             throw new Exception("找不到OriginVideoDotProperty所在的图层");
         }
 
-        private IEnumerable<OriginalVideoDot> GetDots(OriginalVideoData p)
+        private IEnumerable<OriginalVideoDot> GetLayerDots(int layerId)
         {
-            foreach(var d in p.Dots)
+            var OriginalVideoDataCollection = layerMap[layerId];
+            foreach (var item in OriginalVideoDataCollection)
             {
-                yield return new OriginalVideoDot(d);
+                foreach (var dotData in item.Dots)
+                {
+                    dotData.Location.Az += RotateAngle;
+                    yield return new OriginalVideoDot(dotData);
+                }
             }
         }
 
@@ -65,7 +90,13 @@ namespace Utilities.Display
         private bool firstTime = true;
         protected override void DrawDynamicElement(RenderTarget rt)
         {
-            //do nothing
+            ////do nothing
+            //foreach (var layerId in layerMap.Keys)
+            //{
+            //    RefreshLayer(layerId);
+            //}
+            if(layerMap.ContainsKey(currentLayerId))
+                RefreshLayer(currentLayerId);
         }
 
         protected override void DoUpdate(OriginalVideoData t)
@@ -78,15 +109,20 @@ namespace Utilities.Display
                 firstTime = false;
             }
 
-            layerMap[layerId].AddRange(GetDots(t).ToList()); //将点的视图保存到对应的图层列表中
+            layerMap[layerId].Add(t); //将点的视图保存到对应的图层列表中
 
             if (layerId != currentLayerId) //如果当前的方位超出了当前图层覆盖的角度范围，则更新当前图层
             {
-                var layer = displayer.Elements.GetLayer(currentLayerId);
-                layer.RefreshLayerElements(layerMap[currentLayerId]);
-                layerMap[currentLayerId].Clear();
+                RefreshLayer(currentLayerId);
             }
             currentLayerId = layerId;
+        }
+
+        private void RefreshLayer(int id)
+        {
+            var layer = displayer.Elements.GetLayer(id);
+            layer.RefreshLayerElements(GetLayerDots(id).ToList());
+            layerMap[id].Clear();
         }
     }
 }

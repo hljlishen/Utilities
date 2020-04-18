@@ -81,7 +81,7 @@ namespace Utilities.Display
                         Objects.Remove(sr);
                     }
                 }
-                UpdateGraphic();
+                UpdateView();
             }
         }
 
@@ -116,7 +116,7 @@ namespace Utilities.Display
 
                 waveGateMap.Add(ring, wgc);
 
-                UpdateGraphic();
+                UpdateView();
             }
         }
 

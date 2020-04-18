@@ -58,7 +58,7 @@ namespace Utilities.Display
                 btn.Update(properties);
                 btn.Clicked += Btn_Clicked;
                 buttonMap.Add(btn, s);
-                UpdateGraphic();
+                UpdateView();
 
                 currentRowButtonNumber++;
                 if(currentRowButtonNumber < Model.MaxiumButtonInRow)

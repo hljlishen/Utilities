@@ -32,7 +32,7 @@ namespace Utilities.Display
                     layers[layerId] = layer;
                 }
                 layers[layerId].Add(e);
-                UpdateGraphic();
+                UpdateView();
             }
         }
         internal Layer GetLayer(int layerId) => layers[layerId];

@@ -57,7 +57,7 @@ namespace Utilities.Display
         {
             currentScreenLcation = e.Location;
             currentCoordinateLocation = Mapper.GetCoordinateLocation(e.X, e.Y);
-            UpdateGraphic();
+            UpdateView();
         }
 
         protected override void DrawDynamicElement(RenderTarget rt)

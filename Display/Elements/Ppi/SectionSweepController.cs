@@ -49,13 +49,13 @@ namespace Utilities.Display
         public void Stop()
         {
             isStopped = true;
-            UpdateGraphic();
+            UpdateView();
         }
 
         public void Start()
         {
             isStopped = false;
-            UpdateGraphic();
+            UpdateView();
         }
 
         public override void Dispose()
@@ -97,7 +97,7 @@ namespace Utilities.Display
                 SectionSelected?.Invoke(this, Model);
             }
         }
-        private void Panel_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void Panel_MouseMove(object sender, MouseEventArgs e)
         {
             lock(Locker)
             {
@@ -105,7 +105,7 @@ namespace Utilities.Display
                 if (MouseDown && isActive && IsOn &&  Functions.DistanceBetween(MouseDownPos.ToPoint2F(), MouseCurrentPos.ToPoint2F()) > 20)
                 {
                     Model = GetSection(MouseDownPos, MouseCurrentPos);
-                    UpdateGraphic();
+                    UpdateView();
                 }
             }
         }
@@ -122,13 +122,14 @@ namespace Utilities.Display
         protected abstract SweepSection GetSection(PointF downPos, PointF currentPos);
         protected override void DrawDynamicElement(RenderTarget rt)
         {
-            if (isActive && !isStopped /*&& Math.Abs(Model.Begin - Model.End) > 5*/)
+            if (isActive && !isStopped)
             {
                 if (Model.Begin == 0 && Model.End == 0)
                     return;
                 var geo = GetPathGeometry(Model, rt);
                 rt.DrawGeometry(geo, frameBrush, 3);
                 rt.FillGeometry(geo, fillBrush);
+                geo.Dispose();
             }
         }
 
@@ -160,6 +161,7 @@ namespace Utilities.Display
             gs.AddLine(oPoint);
             gs.EndFigure(FigureEnd.Closed);
             gs.Close();
+            gs.Dispose();
 
             return sweepSectionGraphic;
         }
