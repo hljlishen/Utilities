@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Utilities.Mapper;
 
 namespace Utilities.Display
 {
@@ -31,7 +32,7 @@ namespace Utilities.Display
 
             //初始化字典
             var intervalCoverage = 360.0f / ConsumedLayerCount;
-            for (int i = LayerId + 1, j = 0; i < ConsumedLayerCount + LayerId + 1; i++, j++)
+            for (int i = LayerId + 1, j = 0; i < ConsumedLayerCount + LayerId + 1; i++, j++)    //计算LayerId时要从OriginalVideoManager所属的Layer下一个Id算起，否则RefreshLayer时会把OriginalVideoManager从当前的layer清除掉
             {
                 layerMap.Add(i, new List<OriginalVideoData>());
                 var interval = ValueIntervals.ValueInterval.CloseOpen(j * intervalCoverage, (j + 1) * intervalCoverage);
@@ -39,7 +40,7 @@ namespace Utilities.Display
                 d.Elements.AddLayer(i);
             }
 
-            Mapper.MapperStateChanged += Mapper_MapperStateChanged;
+            (Mapper as PolarRotateDecorator).MapperStateChanged += Mapper_MapperStateChanged;   //必须将Mapper转换为PolarRotateDecorator类型才能接收到改变RotateAngle时触发的MapperStateChanged事件，需要重构Mapper的事件结构以解决该问题
         }
 
         private void Mapper_MapperStateChanged(Mapper.IScreenToCoordinateMapper obj)
@@ -57,7 +58,7 @@ namespace Utilities.Display
         public override void Dispose()
         {
             base.Dispose();
-            Mapper.MapperStateChanged -= Mapper_MapperStateChanged;
+            (Mapper as PolarRotateDecorator).MapperStateChanged -= Mapper_MapperStateChanged;
         }
 
         private int FindLayerId(OriginalVideoData p)
@@ -79,8 +80,8 @@ namespace Utilities.Display
             {
                 foreach (var dotData in item.Dots)
                 {
-                    dotData.Location.Az += RotateAngle;
-                    yield return new OriginalVideoDot(dotData);
+                    var rotatedDotProperty = new OriginVideoDotProperty() { Location = new Coordinates.PolarCoordinate(dotData.Location.Az + RotateAngle, dotData.Location.El, dotData.Location.Dis), Am = dotData.Am };
+                    yield return new OriginalVideoDot(rotatedDotProperty);
                 }
             }
         }
@@ -90,13 +91,7 @@ namespace Utilities.Display
         private bool firstTime = true;
         protected override void DrawDynamicElement(RenderTarget rt)
         {
-            ////do nothing
-            //foreach (var layerId in layerMap.Keys)
-            //{
-            //    RefreshLayer(layerId);
-            //}
-            if(layerMap.ContainsKey(currentLayerId))
-                RefreshLayer(currentLayerId);
+            //do nothing
         }
 
         protected override void DoUpdate(OriginalVideoData t)
@@ -109,12 +104,12 @@ namespace Utilities.Display
                 firstTime = false;
             }
 
-            layerMap[layerId].Add(t); //将点的视图保存到对应的图层列表中
-
             if (layerId != currentLayerId) //如果当前的方位超出了当前图层覆盖的角度范围，则更新当前图层
             {
+                layerMap[layerId].Clear();  //进入新的存储区之前删除该存储区之前的数据，在更新该区域内容的前一刻才删除该区的数据。不能每次更新图层之后就删除，因为图像旋转时候还需要用到之前存储的数据
                 RefreshLayer(currentLayerId);
             }
+            layerMap[layerId].Add(t); //将点的视图保存到对应的图层列表中
             currentLayerId = layerId;
         }
 
@@ -122,7 +117,6 @@ namespace Utilities.Display
         {
             var layer = displayer.Elements.GetLayer(id);
             layer.RefreshLayerElements(GetLayerDots(id).ToList());
-            layerMap[id].Clear();
         }
     }
 }
