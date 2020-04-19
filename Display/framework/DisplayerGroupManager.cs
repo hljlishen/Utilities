@@ -28,6 +28,13 @@ namespace Utilities.Display
             else
             {
                 var dropPanel = sender as Panel;
+                if(dropPanel == draggingPanel)
+                {
+                    dropPanel = null;
+                    draggingPanel = null;
+                    draggingDisplayer = null;
+                    return;
+                }
                 var dropDisplayer = PanelMap[dropPanel];
                 dropDisplayer.Stop();
                 draggingDisplayer.Stop();

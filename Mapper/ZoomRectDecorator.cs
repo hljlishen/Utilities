@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Utilities.Tools;
 
 namespace Utilities.Mapper
 {
@@ -30,6 +25,11 @@ namespace Utilities.Mapper
             r.Bottom = center.Y + zoomedHeight / 2;
 
             return r;
+        }
+        internal void SetScreenArea(Area a)
+        {
+            Mapper.SetScreenArea(a.Left, a.Right, a.Top, a.Bottom);
+            InvokeStateChanged();
         }
     }
 }

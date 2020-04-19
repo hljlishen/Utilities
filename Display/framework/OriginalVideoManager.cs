@@ -40,7 +40,7 @@ namespace Utilities.Display
                 d.Elements.AddLayer(i);
             }
 
-            (Mapper as PolarRotateDecorator).MapperStateChanged += Mapper_MapperStateChanged;   //必须将Mapper转换为PolarRotateDecorator类型才能接收到改变RotateAngle时触发的MapperStateChanged事件，需要重构Mapper的事件结构以解决该问题
+            Mapper.MapperStateChanged += Mapper_MapperStateChanged;   //必须将Mapper转换为PolarRotateDecorator类型才能接收到改变RotateAngle时触发的MapperStateChanged事件，需要重构Mapper的事件结构以解决该问题
         }
 
         private void Mapper_MapperStateChanged(Mapper.IScreenToCoordinateMapper obj)
@@ -58,7 +58,7 @@ namespace Utilities.Display
         public override void Dispose()
         {
             base.Dispose();
-            (Mapper as PolarRotateDecorator).MapperStateChanged -= Mapper_MapperStateChanged;
+            Mapper.MapperStateChanged -= Mapper_MapperStateChanged;
         }
 
         private int FindLayerId(OriginalVideoData p)

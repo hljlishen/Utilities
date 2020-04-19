@@ -21,7 +21,6 @@ namespace Utilities.Display
         public D2DFactory Factory { get; protected set; }
 
         public ReferenceSystem ReferenceSystem;
-        //private bool Disposed;
 
         public LayerManager Elements { get; protected set; }
         public readonly object Locker = new object();

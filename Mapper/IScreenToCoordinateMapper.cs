@@ -23,8 +23,8 @@ namespace Utilities.Mapper
         PointF GetScreenLocation(double coordinateX, double coordinateY);
         double GetScreenX(double coordinateX);
         double GetScreenY(double coordinateY);
-        void SetCoordinateXRange(double xLeft, double xRight);
-        void SetCoordinateYRange(double yTop, double yBottom);
+        //void SetCoordinateXRange(double xLeft, double xRight);
+        //void SetCoordinateYRange(double yTop, double yBottom);
         void SetCoordinateArea(double left, double right, double top, double bottom);
         void SetScreenArea(double left, double right, double top, double bottom);
     }
@@ -56,14 +56,14 @@ namespace Utilities.Mapper
         {
             InvokeStateChange();
         }
-        public virtual void SetCoordinateXRange(double xLeft, double xRight)
-        {
-            InvokeStateChange();
-        }
-        public virtual void SetCoordinateYRange(double yTop, double yBottom)
-        {
-            InvokeStateChange();
-        }
+        //public virtual void SetCoordinateXRange(double xLeft, double xRight)
+        //{
+        //    InvokeStateChange();
+        //}
+        //public virtual void SetCoordinateYRange(double yTop, double yBottom)
+        //{
+        //    InvokeStateChange();
+        //}
         public virtual void SetScreenArea(double left, double right, double top, double bottom)
         {
             InvokeStateChange();

@@ -85,8 +85,9 @@ namespace Utilities.Display
 
         private void SetMapperRange(double xLeft, double xRight, double yTop, double yBottom)
         {
-            Mapper.SetCoordinateXRange(xLeft, xRight);
-            Mapper.SetCoordinateYRange(yTop, yBottom);
+            //Mapper.SetCoordinateXRange(xLeft, xRight);
+            //Mapper.SetCoordinateYRange(yTop, yBottom);
+            Mapper.SetCoordinateArea(xLeft, xRight, yTop, yBottom);
         }
 
         private void PictureBox_MouseMove(object sender, MouseEventArgs e)

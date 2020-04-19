@@ -33,8 +33,9 @@ namespace Utilities.Mapper
 
         public ScreenToCoordinateMapper(double screenLeft, double screenRight, double coordinateXLeft, double coordinateXRight, double screenTop, double screenBottom, double coordinateYTop, double coordinateYBottom)
         {
-            SetCoordinateXRange(coordinateXLeft, coordinateXRight);
-            SetCoordinateYRange(coordinateYTop, coordinateYBottom);
+            //SetCoordinateXRange(coordinateXLeft, coordinateXRight);
+            //SetCoordinateYRange(coordinateYTop, coordinateYBottom);
+            SetCoordinateArea(coordinateXLeft, coordinateXRight, coordinateYTop, coordinateYBottom);
             SetScreenArea(screenLeft, screenRight, screenTop, screenBottom);
             isInitializing = false;
         }
@@ -50,19 +51,19 @@ namespace Utilities.Mapper
         public double GetCoordinateY(double screenY) => YAxisMapper.MapToValue2(screenY);
         public PointF GetScreenLocation(double coordinateX, double coordinateY) => new PointF((int)GetScreenX(coordinateX), (int)GetScreenY(coordinateY));
         public PointF GetCoordinateLocation(double screenX, double screenY) => new PointF((int)GetCoordinateX(screenX), (int)GetCoordinateY(screenY));
-        public void SetCoordinateXRange(double xLeft, double xRight)
-        {
-            XAxisMapper.SetRange2(xLeft, xRight);
-            if(!isInitializing)
-                MapperStateChanged?.Invoke(this);
-        }
+        //public void SetCoordinateXRange(double xLeft, double xRight)
+        //{
+        //    XAxisMapper.SetRange2(xLeft, xRight);
+        //    if(!isInitializing)
+        //        MapperStateChanged?.Invoke(this);
+        //}
 
-        public void SetCoordinateYRange(double yTop, double yBottom)
-        {
-            YAxisMapper.SetRange2(yTop, yBottom);
-            if (!isInitializing)
-                MapperStateChanged?.Invoke(this);
-        }
+        //public void SetCoordinateYRange(double yTop, double yBottom)
+        //{
+        //    YAxisMapper.SetRange2(yTop, yBottom);
+        //    if (!isInitializing)
+        //        MapperStateChanged?.Invoke(this);
+        //}
 
         public void SetScreenArea(double left, double right, double top, double bottom)
         {
