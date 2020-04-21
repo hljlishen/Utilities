@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
+    <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateSelector1.cs" />
     <Compile Include="Display\framework\DisplayerGroupManager.cs" />
     <Compile Include="Display\Elements\Button\ButtenProperties.cs" />
     <Compile Include="Display\Elements\Button\ButtonElement.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Display\Elements\XAxisMarker.cs" />
     <Compile Include="Display\LiveObjects\LiveSectorRing.cs" />
     <Compile Include="Display\MouseDragDetector.cs" />
+    <Compile Include="Display\Sensors\MouseDoubleClickSensor.cs" />
     <Compile Include="Display\Sensors\MouseClickSensor1.cs" />
     <Compile Include="Display\Sensors\MouseClickSensor2.cs" />
     <Compile Include="Display\Sensors\MouseMoveSensor.cs" />

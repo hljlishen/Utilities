@@ -26,8 +26,8 @@ namespace Utilities.Display
         public double ScreenBottom { get; private set; } /*=> Mapper.GetScreenY(Bottom);*/
         public double ScreenWidth { get; private set; } /*=> ScreenRight - ScreenLeft;*/
         public double ScreenHeight { get; private set; } /*=> ScreenBottom - ScreenTop;*/
-        public double XDistance  => Math.Abs(Right - Left);
-        public double YDistance  => Math.Abs(Top - Bottom);
+        public double XDistance => Math.Abs(Right - Left);
+        public double YDistance => Math.Abs(Top - Bottom);
         public IScreenToCoordinateMapper Mapper { get; private set; }
         public void SetMapper(IScreenToCoordinateMapper mapper)
         {
@@ -38,7 +38,7 @@ namespace Utilities.Display
 
         private void Mapper_MapperStateChanged(IScreenToCoordinateMapper obj)
         {
-           ScreenOriginalPoint = Mapper.GetScreenLocation(0, 0);
+            ScreenOriginalPoint = Mapper.GetScreenLocation(0, 0);
             ScreenLeft = Mapper.GetScreenX(Left);
             ScreenRight = Mapper.GetScreenX(Right);
             ScreenTop = Mapper.GetScreenX(Top);

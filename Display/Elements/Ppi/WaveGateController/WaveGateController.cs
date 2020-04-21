@@ -30,7 +30,7 @@ namespace Utilities.Display
     {
         private uint currentWaveGateId = 0;
         private readonly Dictionary<LiveObject, WaveGateCoordinates> waveGateMap = new Dictionary<LiveObject, WaveGateCoordinates>();
-        private WaveGateSelector selector;
+        private WaveGateSelector1 selector;
         private Brush frameBrush, normalFillBrush, selectedFillBrush;
 
         public WaveGateController(string rotateDecoratotInstanceName = "default") : base(rotateDecoratotInstanceName)
@@ -88,7 +88,7 @@ namespace Utilities.Display
         public override void SetDisplayer(Displayer d)
         {
             base.SetDisplayer(d);
-            selector = new WaveGateSelector();
+            selector = new WaveGateSelector1();
             d.Elements.Add(LayerId, selector);
             selector.SelectionFinish += Selector_SelectionFinish;
         }
