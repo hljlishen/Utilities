@@ -33,8 +33,6 @@ namespace Utilities.Mapper
 
         public ScreenToCoordinateMapper(double screenLeft, double screenRight, double coordinateXLeft, double coordinateXRight, double screenTop, double screenBottom, double coordinateYTop, double coordinateYBottom)
         {
-            //SetCoordinateXRange(coordinateXLeft, coordinateXRight);
-            //SetCoordinateYRange(coordinateYTop, coordinateYBottom);
             SetCoordinateArea(coordinateXLeft, coordinateXRight, coordinateYTop, coordinateYBottom);
             SetScreenArea(screenLeft, screenRight, screenTop, screenBottom);
             isInitializing = false;

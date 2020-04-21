@@ -2,9 +2,9 @@
 
 namespace Utilities.Display
 {
-    public abstract class DynamicElement<T> : GraphicElement
+    public abstract class DynamicElement<T> : GraphicElement where T : new()
     {
-        protected T Model;
+        protected T Model = new T();
         protected override void DrawElement(RenderTarget rt)
         {
             lock (Locker)
@@ -17,7 +17,7 @@ namespace Utilities.Display
 
         public virtual void Update(T t)
         {
-            lock(Locker)
+            lock (Locker)
             {
                 DoUpdate(t);
                 RefreshObjects();

@@ -86,6 +86,7 @@
     <Compile Include="Display\Elements\AxisY.cs" />
     <Compile Include="Display\LiveObjects\LiveCircle.cs" />
     <Compile Include="Display\Elements\Ppi\PolarDistanceMarker.cs" />
+    <Compile Include="Display\LiveObjects\LiveGeomitry.cs" />
     <Compile Include="Display\LiveObjects\LiveLine.cs" />
     <Compile Include="Display\Elements\Ppi\MarkerModel.cs" />
     <Compile Include="Display\framework\LiveObject.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Display\Elements\Target.cs" />
     <Compile Include="Display\Elements\XAxisMarker.cs" />
     <Compile Include="Display\LiveObjects\LiveSectorRing.cs" />
+    <Compile Include="Display\MouseDragDetector.cs" />
     <Compile Include="Display\Sensors\MouseClickSensor1.cs" />
     <Compile Include="Display\Sensors\MouseClickSensor2.cs" />
     <Compile Include="Display\Sensors\MouseMoveSensor.cs" />
@@ -147,7 +149,6 @@
     <Compile Include="Rule\StringRule.cs" />
     <Compile Include="Mapper\IMapperDecorator.cs" />
     <Compile Include="Mapper\IScreenToCoordinateMapper.cs" />
-    <Compile Include="Mapper\MapperFactory.cs" />
     <Compile Include="Statistics\MultipleSeriesStatistics2D.cs" />
     <Compile Include="Statistics\SingleSeriesStatistics2D.cs" />
     <Compile Include="ValueInterval\MaxNotBiggerThanMin.cs" />

@@ -1,10 +1,11 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using System.Collections.Generic;
 using System.Drawing;
 using Brush = Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush;
 
 namespace Utilities.Display
 {
-    public class DiscreteSignalPlotter : DynamicElement<double[]>
+    public class DiscreteSignalPlotter : DynamicElement<List<double>>
     {
         private Brush signalBrush;
         private double[] data;
@@ -20,7 +21,7 @@ namespace Utilities.Display
             base.InitializeComponents(rt);
             signalBrush = rt.CreateSolidColorBrush(Color.GreenYellow.ToColorF());
         }
-        protected override void DoUpdate(double[] t) => data = t;
+        protected override void DoUpdate(List<double> t) => data = t.ToArray();
 
         protected override void DrawDynamicElement(RenderTarget rt)
         {

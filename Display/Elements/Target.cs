@@ -45,7 +45,7 @@ namespace Utilities.Display
         }
         protected override void DrawDynamicElement(RenderTarget rt)
         {
-            var r = new PolarCoordinate(Az, 0, Dis).Rectangular;
+            var r = Model.Rectangular;
             var scrP = Mapper.GetScreenLocation(r.X, r.Y);
             Ellipse e = new Ellipse(scrP.ToPoint2F(), 5, 5);
             rt.FillEllipse(e, TargetBrush);

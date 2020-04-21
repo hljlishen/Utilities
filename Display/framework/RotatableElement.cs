@@ -2,7 +2,7 @@
 
 namespace Utilities.Display
 {
-    public abstract class RotatableElement<T> : DynamicElement<T>
+    public abstract class RotatableElement<T> : DynamicElement<T> where T : new()
     {
         protected PolarRotateDecorator rotateDecorator = null;
         protected string RotateDecoratorName;
