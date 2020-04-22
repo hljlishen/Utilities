@@ -117,6 +117,14 @@ namespace Utilities.Tools
 
             return c;
         }   //两点间的距离
+        public static double DistanceBetween(Point p1, Point p2)
+        {
+            var a = Math.Pow((double)p1.X - p2.X, 2);
+            var b = Math.Pow((double)p1.Y - p2.Y, 2);
+            var c = Math.Sqrt(a + b);
+
+            return c;
+        }
 
         public static Rect MoveRect(Rect r, Point2F p) //将r横向移动p.x, 纵向移动p.y
         {

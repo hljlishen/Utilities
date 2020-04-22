@@ -66,22 +66,22 @@
   <ItemGroup>
     <Compile Include="Coordinates\PolarCoordinate.cs" />
     <Compile Include="Coordinates\RectangularCoordinate.cs" />
-    <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateSelector1.cs" />
+    <Compile Include="Display\Elements\MouseDragger.cs" />
+    <Compile Include="Display\Elements\Ppi\SectionSweepController1.cs" />
+    <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateSelector.cs" />
+    <Compile Include="Display\Elements\RotationController.cs" />
+    <Compile Include="Display\Elements\ZoomController\ZoomAnimation.cs" />
     <Compile Include="Display\framework\DisplayerGroupManager.cs" />
     <Compile Include="Display\Elements\Button\ButtenProperties.cs" />
     <Compile Include="Display\Elements\Button\ButtonElement.cs" />
     <Compile Include="Display\Elements\Chart_Bar.cs" />
     <Compile Include="Display\framework\ExclusiveSwitchableManager.cs" />
     <Compile Include="Display\Elements\MarkerElement.cs" />
-    <Compile Include="Display\Elements\MouseDragger.cs" />
     <Compile Include="Display\Elements\NorthLine.cs" />
     <Compile Include="Display\Elements\OriginalVideoDot.cs" />
     <Compile Include="Display\framework\OriginalVideoManager.cs" />
-    <Compile Include="Display\Elements\Ppi\SectionSweepController.cs" />
     <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateController.cs" />
-    <Compile Include="Display\Elements\Ppi\WaveGateController\WaveGateSelector.cs" />
     <Compile Include="Display\framework\RotatableElement.cs" />
-    <Compile Include="Display\Elements\RotationController.cs" />
     <Compile Include="Display\Elements\Signal\AnalogSignalPlotter.cs" />
     <Compile Include="Display\Elements\AxisX.cs" />
     <Compile Include="Display\Elements\AxisY.cs" />

@@ -1,5 +1,4 @@
 ﻿using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,17 +6,11 @@ namespace Utilities.Display
 {
     public class MouseDragger : GraphicElement, ISwtichable
     {
-
-        protected bool mouseDown = false;
-        Point mouseDownPos;
-        Point mouseCurrentPos;
-        bool isOn = false;
         double lastLeft;
         double lastRight;
         double lastTop;
         double lastBottom;
-
-        public bool IsOn => isOn;
+        MouseDragDetector dragDetector;
 
         public string Name { get; set; } = "拖动控制";
 
@@ -30,65 +23,39 @@ namespace Utilities.Display
         protected override void BindEvents(Panel p)
         {
             base.BindEvents(p);
-            p.MouseDown += P_MouseDown;
-            p.MouseMove += P_MouseMove; 
-            p.MouseUp += P_MouseUp;
+            dragDetector = new MouseDragDetector(p);
+            dragDetector.MouseDrag += DragDetector_MouseDrag;
+            dragDetector.MouseDown += DragDetector_MouseDown;
         }
 
-        protected override void UnbindEvents(Panel p)
-        {
-            base.UnbindEvents(p);
-            p.MouseDown -= P_MouseDown;
-            p.MouseMove -= P_MouseMove;
-            p.MouseUp -= P_MouseUp;
-        }
+        private void DragDetector_MouseDown(Point obj) => SaveMapperState();
 
-        private void P_MouseUp(object sender, MouseEventArgs e)
+        private void SaveMapperState()
         {
-            mouseDown = false;
-        }
-
-        private void P_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (!mouseDown)
-                return;
-            mouseCurrentPos = e.Location;
-            var mouseDownCoo = Mapper.GetCoordinateLocation(mouseDownPos.X, mouseDownPos.Y);
-            var mouseCurrentCoo = Mapper.GetCoordinateLocation(mouseCurrentPos.X, mouseCurrentPos.Y);
-            var xDis = mouseCurrentCoo.X - mouseDownCoo.X;
-            Console.WriteLine(xDis);
-            var yDis = mouseCurrentCoo.Y - mouseDownCoo.Y;
-
-            Mapper.SetCoordinateArea(lastLeft - xDis, lastRight - xDis, lastTop - yDis, lastBottom - yDis);
-        }
-
-        private void P_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (!isOn)
-                return;
-            mouseDown = true;
-            mouseDownPos = e.Location;
-            mouseCurrentPos = e.Location;
             lastLeft = Mapper.CoordinateLeft;
             lastRight = Mapper.CoordinateRight;
             lastTop = Mapper.CoordinateTop;
             lastBottom = Mapper.CoordinateBottom;
         }
 
-        public void On()
+        private void DragDetector_MouseDrag(Point arg1, Point arg2)
         {
-            //if (isOn)
-            //    return;
-            //BindEvents(Panel);
-            isOn = true;
+            var mouseDownCoo = Mapper.GetCoordinateLocation(arg1.X, arg1.Y);
+            var mouseCurrentCoo = Mapper.GetCoordinateLocation(arg2.X, arg2.Y);
+            var xDis = mouseCurrentCoo.X - mouseDownCoo.X;
+            var yDis = mouseCurrentCoo.Y - mouseDownCoo.Y;
+
+            Mapper.SetCoordinateArea(lastLeft - xDis, lastRight - xDis, lastTop - yDis, lastBottom - yDis);
         }
 
-        public void Off()
+        protected override void UnbindEvents(Panel p)
         {
-            //if (!isOn)
-            //    return;
-            //UnbindEvents(Panel);
-            isOn = false;
+            base.UnbindEvents(p);
+            dragDetector.MouseDrag -= DragDetector_MouseDrag;
+            dragDetector.Dispose();
         }
+        public void On() => dragDetector.On();
+        public void Off() => dragDetector.Off();
+        public bool IsOn => dragDetector.IsOn;
     }
 }

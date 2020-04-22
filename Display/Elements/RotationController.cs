@@ -12,22 +12,17 @@ namespace Utilities.Display
 {
     public class RotationController : RotatableElement<double>, ISwtichable
     {
-        private bool MouseDown = false;
-        private PointF MouseDownPos;
-        private PointF MouseCurrentPos;
+        private bool isDragging = false;
         private Brush markerBrush;
         private Brush selectedMarkerBrush;
         private TextFormat textFormat;
-        private TextLayout TextLayout;
         private Brush textBrush;
         private double lastAngle;
-        private bool isOn = false;
+        private MouseDragDetector dragDetector;
 
         public RotationController(string rotateDecoratotInstanceName = "default") : base(rotateDecoratotInstanceName)
         {
         }
-
-        public bool IsOn => isOn;
 
         public string Name { get; set; } = "旋转控制";
 
@@ -67,7 +62,7 @@ namespace Utilities.Display
                 var scrP1 = Mapper.GetScreenLocation(p1.X, p1.Y);
                 var scrP2 = Mapper.GetScreenLocation(p2.X, p2.Y);
                 var scrP3 = Mapper.GetScreenLocation(p3.X, p3.Y);
-                if (!MouseDown)
+                if (!isDragging)
                     rt.DrawLine(scrP1.ToPoint2F(), scrP2.ToPoint2F(), markerBrush, 1);
                 else
                 {
@@ -82,49 +77,38 @@ namespace Utilities.Display
         protected override void BindEvents(Panel p)
         {
             base.BindEvents(p);
-            Panel.MouseDown += Panel_MouseDown;
-            Panel.MouseMove += Panel_MouseMove;
-            Panel.MouseUp += Panel_MouseUp;
+            dragDetector = new MouseDragDetector(p);
+            dragDetector.MouseDrag += DragDetector_MouseDrag;
+            dragDetector.MouseUp += DragDetector_MouseUp;
         }
 
-        protected override void UnbindEvents(Panel p)
+        private void DragDetector_MouseUp(Point obj)
         {
-            base.UnbindEvents(p);
-            Panel.MouseDown -= Panel_MouseDown;
-            Panel.MouseMove -= Panel_MouseMove;
-            Panel.MouseUp -= Panel_MouseUp;
-        }
-
-        private void Panel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            MouseDown = false;
+            isDragging = false;
             lastAngle = (Mapper as PolarRotateDecorator).RotateAngle;
             UpdateView();
         }
 
-        private void Panel_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void DragDetector_MouseDrag(Point arg1, Point arg2)
         {
-            if (!MouseDown)
-                return;
-            MouseCurrentPos = e.Location;
-            var angle1 = Functions.AngleToNorth(ReferenceSystem.ScreenOriginalPoint, MouseDownPos);
-            var angle2 = Functions.AngleToNorth(ReferenceSystem.ScreenOriginalPoint, MouseCurrentPos);
+            isDragging = true;
+            var angle1 = Functions.AngleToNorth(ReferenceSystem.ScreenOriginalPoint, arg1);
+            var angle2 = Functions.AngleToNorth(ReferenceSystem.ScreenOriginalPoint, arg2);
             var diff = (angle2 - angle1);
             (Mapper as PolarRotateDecorator).RotateAngle = lastAngle + diff;
             UpdateView();
         }
 
-        private void Panel_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        protected override void UnbindEvents(Panel p)
         {
-            if (!IsOn)
-                return;
-            MouseDown = true;
-            MouseDownPos = e.Location;
-            MouseCurrentPos = e.Location;
+            base.UnbindEvents(p);
+            dragDetector.MouseDrag += DragDetector_MouseDrag;
+            dragDetector.MouseUp += DragDetector_MouseUp;
+            dragDetector.Dispose();
         }
 
-        public void On() => isOn = true;
-
-        public void Off() => isOn = false;
+        public void On() => dragDetector.On();
+        public void Off() => dragDetector.Off();
+        public bool IsOn => dragDetector.IsOn;
     }
 }

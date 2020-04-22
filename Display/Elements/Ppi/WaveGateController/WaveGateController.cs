@@ -30,7 +30,7 @@ namespace Utilities.Display
     {
         private uint currentWaveGateId = 0;
         private readonly Dictionary<LiveObject, WaveGateCoordinates> waveGateMap = new Dictionary<LiveObject, WaveGateCoordinates>();
-        private WaveGateSelector1 selector;
+        private WaveGateSelector selector;
         private Brush frameBrush, normalFillBrush, selectedFillBrush;
 
         public WaveGateController(string rotateDecoratotInstanceName = "default") : base(rotateDecoratotInstanceName)
@@ -88,7 +88,7 @@ namespace Utilities.Display
         public override void SetDisplayer(Displayer d)
         {
             base.SetDisplayer(d);
-            selector = new WaveGateSelector1();
+            selector = new WaveGateSelector();
             d.Elements.Add(LayerId, selector);
             selector.SelectionFinish += Selector_SelectionFinish;
         }
@@ -146,8 +146,6 @@ namespace Utilities.Display
             {
                 var scrP1 = Mapper.GetScreenLocation(w.P1.X, w.P1.Y);
                 var scrP2 = Mapper.GetScreenLocation(w.P2.X, w.P2.Y);
-                //var scrP1 = PolarRotateDecorator.GetInstance(null).GetScreenLocation(w.P1.X, w.P1.Y);
-                //var scrP2 = PolarRotateDecorator.GetInstance(null).GetScreenLocation(w.P2.X, w.P2.Y);
                 LiveSectorRing liveSectorRing = new LiveSectorRing() { ScrP1 = scrP1, Center = oPoint, ScrP2 = scrP2 };
                 waveGateMap.Add(liveSectorRing, w);
                 yield return liveSectorRing;

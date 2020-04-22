@@ -4,14 +4,16 @@ using System.Windows.Forms;
 
 namespace Utilities.Display
 {
-    public class MouseDragDetector : IDisposable
+    public class MouseDragDetector : IDisposable, ISwtichable
     {
         private bool mouseDown = false;
         private Point mouseDownPos;
         private Point mouseCurrentPos;
+        private bool isOn;
 
         public event Action<Point, Point> MouseDrag;
         public event Action<Point> MouseUp;
+        public event Action<Point> MouseDown;
         public MouseDragDetector(Panel panel)
         {
             Panel = panel;
@@ -50,10 +52,13 @@ namespace Utilities.Display
 
         private void Panel_MouseDown(object sender, MouseEventArgs e)
         {
+            if (!IsOn)
+                return;
             mouseDown = true;
             mouseDownPos = e.Location;
             mouseCurrentPos = e.Location;
             Panel.MouseMove += Panel_MouseMove;
+            MouseDown?.Invoke(e.Location);
         }
 
         public void Dispose()
@@ -63,6 +68,14 @@ namespace Utilities.Display
             Panel.MouseDoubleClick -= Panel_MouseDoubleClick;
         }
 
+        public void On() => isOn = true;
+
+        public void Off() => isOn = false;
+
         public Panel Panel { get; private set; }
+
+        public bool IsOn => isOn;
+
+        public string Name { get; set; } = "";
     }
 }

@@ -9,13 +9,11 @@ namespace Utilities.Display
 {
     public class WaveGateSelector : GraphicElement, ISwtichable
     {
-        private bool MouseDown = false;
-        private PointF MouseDownPos;
-        private PointF MouseCurrentPos;
+        private PointF corner1;
+        private PointF corner2;
         private Brush fillBrush;
-        private bool isOn = false;
 
-        public bool IsOn => isOn;
+        private MouseDragDetector dragDetector;
 
         public string Name { get; set; } = "波门选择";
 
@@ -36,58 +34,38 @@ namespace Utilities.Display
 
         protected override void BindEvents(Panel Panel)
         {
-            Panel.MouseDown += Panel_MouseDown;
-            Panel.MouseMove += Panel_MouseMove;
-            Panel.MouseUp += Panel_MouseUp;
+            dragDetector = new MouseDragDetector(Panel);
+            dragDetector.MouseDrag += DragDetector_MouseDrag;
+            dragDetector.MouseUp += DragDetector_MouseUp;
+        }
+
+        private void DragDetector_MouseUp(Point obj)
+        {
+            var dis = Functions.DistanceBetween(corner1.ToPoint2F(), corner2.ToPoint2F());
+            if (dis < 10)
+                return;
+            SelectionFinish?.Invoke(corner1, corner2);
+            corner2 = new PointF();
+            corner1 = new PointF();
+            UpdateView();
+        }
+
+        private void DragDetector_MouseDrag(Point arg1, Point arg2)
+        {
+            corner1 = arg1;
+            corner2 = arg2;
+            UpdateView();
         }
 
         protected override void UnbindEvents(Panel p)
         {
-            Panel.MouseDown -= Panel_MouseDown;
-            Panel.MouseMove -= Panel_MouseMove;
-            Panel.MouseUp -= Panel_MouseUp;
+            dragDetector.MouseDrag -= DragDetector_MouseDrag;
+            dragDetector.MouseUp -= DragDetector_MouseUp;
+            dragDetector?.Dispose();
         }
-
-        private void Panel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (!MouseDown)
-                return;
-            MouseDown = false;
-            var dis = Functions.DistanceBetween(MouseDownPos.ToPoint2F(), MouseCurrentPos.ToPoint2F());
-            if (dis < 10)
-                return;
-            SelectionFinish?.Invoke(MouseDownPos, MouseCurrentPos);
-            UpdateView();
-        }
-
-        private void Panel_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            lock (Locker)
-            {
-                if (!MouseDown)
-                    return;
-                MouseCurrentPos = e.Location;
-                UpdateView();
-            }
-        }
-
-        private void Panel_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            lock(Locker)
-            {
-                if (!IsOn)
-                    return;
-                MouseDown = true;
-                MouseDownPos = e.Location;
-                MouseCurrentPos = e.Location;
-            }
-        }
-
         protected override void DrawElement(RenderTarget rt)
         {
-            if (!MouseDown)
-                return;
-            var geo = GetPathGeometry(rt, ReferenceSystem.ScreenOriginalPoint, MouseDownPos, MouseCurrentPos);
+            var geo = GetPathGeometry(rt, ReferenceSystem.ScreenOriginalPoint, corner1, corner2);
             rt.FillGeometry(geo, fillBrush);
         }
 
@@ -178,8 +156,8 @@ namespace Utilities.Display
             return ret;
         }   //极坐标
 
-        public void On() => isOn = true;
-
-        public void Off() => isOn = false;
+        public void On() => dragDetector.On();
+        public void Off() => dragDetector.Off();
+        public bool IsOn => dragDetector.IsOn;
     }
 }
